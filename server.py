@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Restaurant, Category, Review, Restaurant_Category
 
-from api import client
+from api import yelp_client
 
 app = Flask(__name__)
 

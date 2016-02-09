@@ -83,6 +83,31 @@ class Review(db.Model):
             self.user_id)
 
 
+class Favorite(db.Model):
+    """One of single user's favorite restaurants."""
+
+    __tablename__ = "favorites"
+
+    favorite_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    restaurant_id = db.Column(db.Integer,
+        db.ForeignKey('restaurants.restaurant_id'),
+        nullable=False)
+    user_id = db.Column(db.Integer,
+        db.ForeignKey('users.user_id'),
+        nullable=False)
+
+    user = db.relationship('User', backref=db.backref('favorites'))
+    restaurant = db.relationship('Restaurant', backref=db.backref('favorites'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Favorite favorite_id=%s restaurant_id=%s user_id=%s>" % (
+            self.favorite_id,
+            self.restaurant_id,
+            self.user_id)
+
+
 class Restaurant_Category(db.Model):
     """Association class for restaurants and food categories."""
 
@@ -116,7 +141,7 @@ def connect_to_db(app):
 
     # Configuration to use PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants'
-    app.config['SQLALCHEMY_ECHO'] = True
+    # app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
 

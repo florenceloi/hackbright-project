@@ -3,7 +3,7 @@
 
 # from sqlalchemy import func
 
-from model import connect_to_db, db, Restaurant, Category, Restaurant_Category
+from model import connect_to_db, db, Restaurant
 from server import app
 
 
@@ -12,15 +12,15 @@ def load_restaurants():
 
     print "Restaurants"
 
+    # Parse through data/restaurants.txt and clean/unpack data
     for i, row in enumerate(open("data/restaurants.txt")):
         row = row.strip()
         name, address = row.split("|")
-        print name + " " + address
 
-        # Instantiate new Restaurant object based on unpacked row
+        # Instantiate new Restaurant object with unpacked data
         restaurant = Restaurant(name=name, address=address)
 
-        # Add to database session (to be stored)
+        # Add new restaurant to database session (to be stored)
         db.session.add(restaurant)
 
         # Show how many records have been add (in increments of 10)
@@ -29,6 +29,10 @@ def load_restaurants():
 
     # Commit the additions to the database
     db.session.commit()
+
+
+# def import_yelp_restaurant_info():
+#     """
 
 
 if __name__ == "__main__":
