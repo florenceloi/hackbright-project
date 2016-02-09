@@ -1,57 +1,37 @@
-import io, json
-from yelp.client import Client
-from yelp.oauth1_authenticator import Oauth1Authenticator
-from flask_sqlalchemy import SQLAlchemy
+from jinja2 import StrictUndefined
 
-db = SQLAlchemy()
+from flask import Flask, render_template, redirect, request, flash, session
+from flask_debugtoolbar import DebugToolbarExtension
 
-with io.open('yelp_secret.json') as cred:
+# from model import User, Restaurant, Category, Review, Restaurant_Category
 
-    # Loads in yelp_secret.json
-    creds = json.load(cred)
+app = Flask(__name__)
 
-    # Instantiates Oauth1Authenticator object with API keys
-    auth = Oauth1Authenticator(**creds)
+# Required to use Flask sessions and the debug toolbar
+app.secret_key = "ABC"
 
-    # Constructs client object using Oauth1Authenticator object
-    client = Client(auth)
+# Normally, if you use an undefined variable in Jinja2, it fails silently.
+# This is horrible. Fix this so that, instead, it raises an error.
+app.jinja_env.undefined = StrictUndefined
 
 
-###############################################################################
-# Model definitions
-
-class User(db.Model):
-    """User of website."""
-
-    __tablename__ = "users"
-
-    pass
 
 
-class Restaurant(db.Model):
-    """Dog-friendly restaurants."""
-
-    __tablename__ = "restaurants"
-
-    pass
 
 
-###############################################################################
-# Helper functions
-
-def connect_to_db(app):
-    """Connect the database to our Flask app."""
-
-    # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants'
-    db.app = app
-    db.init_app(app)
 
 
-if __name__ == "main":
-    # As a convenience, if we run this module interactively, it will leave
-    # you in a state of being able to work with the database directly.
 
-    from server import app
+
+
+if __name__ == "__main__":
+    # We have to set debug=True here, since it has to be True at the point
+    # that we invoke the DebugToolbarExtension
+    app.debug = True
+
     connect_to_db(app)
-    print "Connected to DB."
+
+    # Use the DebugToolbar
+    DebugToolbarExtension(app)
+
+    app.run()
