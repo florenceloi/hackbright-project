@@ -1,11 +1,9 @@
-
 from flask_sqlalchemy import SQLAlchemy
-
-from server import app
 
 # Using the Flask-SQLAlchemy helper library, this allows us to connect to the 
 # PostgreSQL database (db). Its 'session' object allows us to interact with db.
 db = SQLAlchemy()
+
 
 ###############################################################################
 # Model definitions
@@ -32,13 +30,17 @@ class Restaurant(db.Model):
 
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
     review_count = db.Column(db.Integer, nullable=True)
     rating = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Restaurant restaurant_id=%s name=%s>" % (self.restaurant_id, self.name)
+        return "<Restaurant restaurant_id=%s name=%s address=%s>" % (
+            self.restaurant_id,
+            self.name,
+            self.address)
 
 
 class Category(db.Model):
@@ -114,12 +116,13 @@ def connect_to_db(app):
 
     # Configuration to use PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants'
+    app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
 
 
-if __name__ == "main":
-    
+if __name__ == "__main__":
+
     # If in interactive mode, this allows us to interact with the database directly.
     from server import app
     connect_to_db(app)
