@@ -1,161 +1,100 @@
-3 Potato 4
-Abigail's Moroccan Cuisine
-Acquolina
-Alamo Square Cafe
-Ali's Pizzeria
-All Good Pizza
-All Star Cafe
-Aracely Cafe
-Aurora
-Back Yard Kitchen
-Balancoire
-Batter Up
-Beach Stret Grill
-Belcampo Meat Co.
-Belden Taverna
-Bender's Bar and Grill
-Black Bark BBQ
-Blanc et Rouge
-Blue Line Pizza
-Bonita Taqueria Y Rotisserie
-Boulibar
-Bread & Butter Cafe
-Broken Record
-Built Custom Burgers Stonestown
-Cafe Flore
-Cafe Me
-Cafe Rosso
-Cafe Zazo
-Calzone's Pizza Cucina
-Casey's Pizza
-Castagna
-Cat Cora's Kitchen
-CHICA
-Connecticut Yankee
-Counter Offer
-Craftsman and Wolves
-Curry Up Now
-Dusty Buns
-Dusty Buns Bistro
-El Capitan
-Elixir
-Elixiria
-EPIC Steak
-Etcetera Wine Bar
-Firehouse Pizzeria
-Firetrail Pizza
-First Cup Cafe
-Fresco Pizza Shawarma
-Giorgio's
-Golden Gate Market Deli & Liquor
-Gott's Roadside
-Grubstake
-Happy Dumplings
-Harvest & Rowe
-Hood Grub @ The Broken Record
-Hops & Hominy
-Hyde Away Blues BBQ
-iCafe San Francisco
-It's Tops Coffee Shop
-Izakaya Rintaro
-Jackson Place Cafe
-Jasmine Tea House
-Katia's Russian Tea Room
-King of Thai Noodle House
-Kitchen Story
-La Urbana
-Le Cafe du Soleil
-Liquid Gold
-Loving Hut
-Luna's Coffee House
-Machine Coffee & Deli
-Martita's Kitchen
-Mason Pacific
-Melange Market
-Melody
-Merigan Sub Shop
-Mijita
-Mission Bowling Club
-Mission Rock Resort
-MontereyPizza & AsianZap
-Moolicious
-Nano Cafe
-New Tree Cafe & Chocolate Shop
-Nopalio
-Nourish Cafe
-Novy
-Oasis Cafe
-Olea
-Osha Thai
-Outerlands
-Ovok
-Ozone Thai
-Pacific Catch
-Pacific Catch
-Park Chalet Coastal Beer Garden
-Peasant Pies
-Pesbas Fish and Chicken
-Piccino
-PierogiSF
-Pizzeria Avellino
-Pizzeria Delfina
-Players Sports Grill & Arcade
-Poc-Chuc
-Presidio Social Club
-Public House
-Red Rooster Tacos
-Rose Food Mart
-Rose Pistola
-Rose's Cafe
-Royalty Pizza
-Ruru
-San Buena Taco Truck
-San Francisco Port of Call
-Saylor's Restaurant & Bar
-SB40
-Sea Breeze Restaurant
-Senor Sisig
-Serrano's Pizza
-Sessions at the Presidio
-SF Deli & Wie
-Silver Cloud Restaurant and Karaoke Bar
-Skool
-Slider Shack
-Slurp Noodle Bar
-Small Foods
-Smitten Ice Cream
-Smokin' Warehouse Barbecue
-Soul Food City
-Spice Kit
-Station Cafe
-Stone Korean Kitchen
-Stuffed
-Sushi Taka
-Sushi Wrap
-Tacolicious
-Taj Pizza
-Talbot Cafe
-Tanguito
-Taqueria Cazadores
-Tender Greens
-The Boneyard
-The Brixton
-The Elite Cafe
-The Golden West
-The Monk's Kettle
-The Plant Cafe Organic
-The Pour House
-The Ramp
-The Royale
-The Sandwich Spot
-The Sea Star
-The Station SF
-The Steamin' Burger
-Thoughts Style Cuisine Showroom
-Torraku Ramen
-Transit Cafe
-Triptych
-Underdog
-Vinyl Coffee & Wine Bar
-We Sushi
-Yama Sushi
+Kitchen Story|3499 16th St
+Hops & Hominy|1 Tillman Pl
+Nopalio|306 Broderick St
+Stuffed|2788 Mission St
+The Monk's Kettle|3141 16th St
+Skool|1725 Alameda St
+Piccino|1001 Minnesota St
+Mason Pacific|1001 Minnesota St
+Martita's Kitchen|2560 Marin St
+Dusty Buns Bistro|4000 24th St
+Poc-Chuc|2886 16th St
+Outerlands|4001 Judah St
+Dusty Buns Bistro|11 Division St
+Craftsman and Wolves|746 Valencia St
+Olea|1494 California St
+Oasis Cafe|901 Divisadero St
+iCafe San Francisco|57 Walter U Lum Pl
+Pacific Catch|2027 Chestnut St
+Pizzeria Delfina|3611 18th St
+All Good Pizza|1605 Jerrold Ave
+Tacolicious|741 Valencia St
+Soul Food City|403 Eddy St
+Tanguito|2850 Jones St
+Izakaya Rintaro|82 14th St
+Thoughts Style Cuisine Showroom|139 8th St
+FOB Kitchen|2351 Mission St
+Taqueria Cazadores|1600 Mission St
+Batter Up|888 Geneva Ave
+El Capitan|1123 Folsom St
+Cafe Me|500 Washington St
+The Sandwich Spot|3213 Pierce St
+Underdog|1634 Irving St
+Hyde Away Blues BBQ|457 Hyde St
+Elixiria|25 Beale St
+Castagna|2015 Chestnut St
+Le Cafe du Soleil|200 Fillmore St
+Mission Rock Resort|817 Terry Francois Blvd
+Cafe Zazo|64 14th St
+Belcampo Meat Co.|1998 Polk St
+Jackson Place Cafe|633 Battery St
+Grubstake|1525 Pine St
+Bender's Bar and Grill|806 S Van Ness Ave
+The Golden West|8 Trinity Pl
+Acquolina|1600 Stockton St
+Luna's Coffee House|1101 Potrero Ave
+Mission Bowling Club|3176 17th St
+Sushi Taka|600 Kearny St
+Curry Up Now|225 Bush St
+Nourish Cafe|189 6th Ave
+Presidio Social Club|563 Ruger St
+The Ramp|855 Terry Francois St
+Back Yard Kitchen|2760 Octavia St
+CHICA|120 Green St
+Pacific Catch|1200 9th Ave
+Slurp Noodle Bar|469 Castro Street
+Aracely Cafe|401 13th St
+Rose's Cafe|2298 Union St
+Smokin' Warehouse Barbecue|1465 Carroll Ave
+Ali’s Pizzeria|407 Ellis St
+EPIC Steak|369 The Embarcadero
+The Elite Cafe|2049 Fillmore St
+Dusty Buns|428 11th St
+3 Potato 4|2800 Leavenworth St
+Bread & Butter Cafe|1901 Hayes St
+Gott's Roadside|1 Ferry Bldg
+Triptych|1155 Folsom St
+Slider Shack|400 Howard St
+The Brixton|2140 Union St
+Cafe Flore|2298 Market St
+Firetrail Pizza|428 11th St
+Calzone's Pizza Cucina|430 Columbus Ave
+Spice Kit|428 11th St
+La Urbana|661 Divisadero St
+Firehouse Pizzeria|6001 California St
+Counter Offer|800 S Van Ness Ave
+Alamo Square Cafe|711 Fillmore St
+The Station SF|596 Pacific Ave
+Pizzeria Avellino|2769 Lombard St
+Sessions at the Presidio|1 Letterman Dr
+The Plant Cafe Organic|3352 Steiner St
+Melody|3401 Mission St
+Fresco Pizza Shawarma|1338 Polk St
+Katia's Russian Tea Room|600 5th Ave
+It's Tops Coffee Shop|1801 Market St
+Public House|24 Willie Mays Plz
+Connecticut Yankee|100 Connecticut St
+Bonita Taqueria Y Rotisserie|2257 Chestnut St
+Osha Thai|311 3rd St
+Tender Greens|266 King St
+Black Bark BBQ|1325 Fillmore St
+Rose Pistola|532 Columbus Ave
+Stone Korean Kitchen|4 Embarcadero Ctr
+Peasant Pies|303 Sacramento St
+Golden Gate Market Deli & Liquor|2767 Lombard St
+Balancoire|2565 Mission St
+Hood Grub @ The Broken Record|1166 Geneva Ave
+Etcetera Wine Bar|795 Valencia St
+All Star Cafe|1500 Market St
+Ovok|2295 Market St
+Merigan Sub Shop|636 2nd St
