@@ -30,9 +30,9 @@ class Restaurant(db.Model):
 
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    address = db.Column(db.String(200), nullable=False)
-    review_count = db.Column(db.Integer, nullable=True)
-    rating = db.Column(db.Float, nullable=True)
+    address = db.Column(db.String(100), nullable=False)
+    yelp_rating = db.Column(db.Float, nullable=True)
+    yelp_review_count = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -57,6 +57,27 @@ class Category(db.Model):
         return "<Category category_id=%s category=%s>" % (self.category_id, self.category)
 
 
+class Yelp_Review(db.Model):
+    """Single Yelp review for particular restaurant."""
+
+    __tablename__ = "yelp_reviews"
+
+    yelp_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    restaurant_id = db.Column(db.Integer,
+        db.ForeignKey('restaurants.restaurant_id'),
+        nullable=False)
+    body = db.Column(db.String(2000), nullable=False)
+
+    restaurant = db.relationship('Restaurant', backref=db.backref('yelp_reviews'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Yelp_Review yelp_review_id=%s restaurant_id=%s>" % (
+            self.yelp_review_id,
+            self.restaurant_id)
+
+
 class Review(db.Model):
     """Single user's review for particular restaurant."""
 
@@ -69,6 +90,7 @@ class Review(db.Model):
     user_id = db.Column(db.Integer,
         db.ForeignKey('users.user_id'),
         nullable=False)
+    rating = db.db.Column(db.Float, nullable=False)
     body = db.Column(db.String(2000), nullable=False)
 
     user = db.relationship('User', backref=db.backref('reviews'))
@@ -77,10 +99,11 @@ class Review(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Review review_id=%s restaurant_id=%s user_id=%s>" % (
+        return "<Review review_id=%s restaurant_id=%s user_id=%s rating=%s>" % (
             self.review_id,
             self.restaurant_id,
-            self.user_id)
+            self.user_id,
+            self.rating)
 
 
 class Favorite(db.Model):

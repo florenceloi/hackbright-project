@@ -31,8 +31,11 @@ def load_restaurants():
     db.session.commit()
 
 
-# def import_yelp_restaurant_info():
-#     """
+def import_yelp_restaurant_info():
+    """Using restaurant name and address from hard-coded database,
+    import additional restaurant information from Yelp"""
+
+    
 
 
 if __name__ == "__main__":
