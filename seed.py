@@ -18,9 +18,7 @@ def populate_restaurants_table():
 
     print "Restaurants"
 
-    counter = 0
-
-    # Parse through data/restaurants.txt and clean/unpack data
+    # Parse through restaurants.txt and clean/unpack data
     for i, row in enumerate(open("data/restaurants.txt")):
         row = row.strip()
         name, address, phone = row.split("|")
@@ -28,55 +26,50 @@ def populate_restaurants_table():
         # Reformat phone number from "(XXX) XXX-XXXX" to "+1XXXXXXXXXX"
         phone = "+1" + phone[1:4] + phone[6:9] + phone[10:]
 
-        # Import yelp_id, yelp_rating, yelp_review_count from Yelp API
-        # and print how long each call takes
+        # Return response dictionary from Yelp API for given phone number
+        # Print how long the API call took
         start_time = time() * 1000
         yelp_dict = yelp_client.phone_search(phone)
+        elapsed_time = (time() * 1000) - start_time
+        print "API request %d: %d ms" % (i, elapsed_time)
 
+        # Return single business in response dictionary that matches the 
+        # name and address from restaurants.txt
         if yelp_dict.total == 1:
             yelp_object = yelp_dict.businesses[0]
-            counter += 1
-            print counter, yelp_object.name
         elif yelp_dict.total > 1:
             for i in range(len(yelp_dict.businesses)):
                 current_business = yelp_dict.businesses[i]
                 yelp_name = current_business.name
                 yelp_address = current_business.location.address
                 if name == yelp_name and address in yelp_address:
-                    # print "%s, name: %s, address: %s, phone: %s" % (
-                    #     i, name, address, phone)
-                    yelp_object = yelp_dict.businesses[i]
-                    counter += 1
-                    print counter, yelp_object.name
+                    yelp_object = yelp_dict.businesses[i]   
 
-    #     elapsed_time = (time() * 1000) - start_time
-    #     print "API request %d: %d ms" % (i, elapsed_time)
+        yelp_id = yelp_object.id
+        yelp_rating = yelp_object.rating
+        yelp_review_count = yelp_object.review_count
+        lat = yelp_object.location.coordinate.latitude
+        lng = yelp_object.location.coordinate.longitude
 
-    #     yelp_id = yelp_object.id
-    #     yelp_rating = yelp_object.rating
-    #     yelp_review_count = yelp_object.review_count
-    #     # lat = yelp_object.location.coordinate.latitude
-    #     # lng = yelp_object.location.coordinate.longitude
+        # Instantiate new Restaurant object with unpacked data
+        restaurant = Restaurant(name=name,
+                                address=address,
+                                phone=phone,
+                                yelp_id=yelp_id,
+                                yelp_rating=yelp_rating,
+                                yelp_review_count=yelp_review_count,
+                                lat=lat,
+                                lng=lng)
 
+        # Add new restaurant to database session (to be stored)
+        db.session.add(restaurant)
 
-    #     # Instantiate new Restaurant object with unpacked data
-    #     restaurant = Restaurant(name=name,
-    #                             address=address,
-    #                             phone=phone,
-    #                             yelp_id=yelp_id,
-    #                             yelp_rating=yelp_rating,
-    #                             yelp_review_count=yelp_review_count,
-    #                             )
+        # Show how many records have been add (in increments of 10)
+        if i % 10 == 0:
+            print i
 
-    #     # Add new restaurant to database session (to be stored)
-    #     db.session.add(restaurant)
-
-    #     # Show how many records have been add (in increments of 10)
-    #     if i % 10 == 0:
-    #         print i
-
-    # # Commit the additions to the database
-    # db.session.commit()
+    # Commit the additions to the database
+    db.session.commit()
 
 
 def populate_categories_table():

@@ -35,8 +35,8 @@ class Restaurant(db.Model):
     yelp_id = db.Column(db.String(100), nullable=True, unique=True)
     yelp_rating = db.Column(db.Float, nullable=True)
     yelp_review_count = db.Column(db.Integer, nullable=True)
-    # lat = db.Column(db.Float, nullable=False)
-    # lng = db.Column(db.Float, nullable=False)
+    lat = db.Column(db.Float, nullable=False)
+    lng = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
