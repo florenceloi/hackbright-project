@@ -9,18 +9,36 @@ from server import app
 from api import yelp_client
 
 
-def load_restaurants():
-    """Load restaurants from data/restaurants.txt into database"""
+def load_restaurants_and_import_yelp_id():
+    """Load restaurant info (name, address, phone, yelp_id) into database.
+
+    Additional details:
+    Importing name, address, phone from data/restaurants.txt
+    Using phone, importing yelp_id from Yelp API"""
 
     print "Restaurants"
 
     # Parse through data/restaurants.txt and clean/unpack data
     for i, row in enumerate(open("data/restaurants.txt")):
         row = row.strip()
-        name, address = row.split("|")
+        name, address, phone = row.split("|")
+
+        # Reformat phone number from "(XXX) XXX-XXXX" to "+1XXXXXXXXXX"
+        phone = "+1" + phone[1:4] + phone[6:9] + phone[10:]
+
+        # Import yelp_id, yelp_rating, yelp_review_count from Yelp API
+        yelp_object = yelp_client.phone_search(phone).businesses[0]
+        yelp_id = yelp_object.id
+        yelp_rating = yelp_object.rating
+        yelp_review_count = yelp_object.review_count
 
         # Instantiate new Restaurant object with unpacked data
-        restaurant = Restaurant(name=name, address=address)
+        restaurant = Restaurant(name=name,
+                                address=address,
+                                phone=phone,
+                                yelp_id=yelp_id,
+                                yelp_rating=yelp_rating,
+                                yelp_review_count=yelp_review_count)
 
         # Add new restaurant to database session (to be stored)
         db.session.add(restaurant)
@@ -32,37 +50,9 @@ def load_restaurants():
     # Commit the additions to the database
     db.session.commit()
 
-
-def import_yelp_restaurant_id():
-    """Using restaurant name and address from hard-coded database,
-    import restaurant id on Yelp"""
-
-    params = {
-        'term': 'dog friendly',
-        'category_filter': 'restaurants'
-    }
-
-    sf_restaurants = yelp_client.search('San Francisco', **params)
-    print sf_restaurants.total, "***************************************************"
-    # print sf_restaurants, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-
-    db_restaurants = Restaurant.query.all()
-    # print db_restaurants, "***************************************************"
-
-    counter = 0
-
-    # for restaurant in db_restaurants:
-    #     for i in range(len(sf_restaurants)):
-    #         print i, sf_restaurants[i].name
-    #         if (restaurant.name == sf_restaurants[i].name and 
-    #             restaurant.address == sf_restaurants[i].location.address):
-    #                 counter += 1
-    #                 print counter + ": " + restaurant.name + " " + restaurant.address
-
-
+      
 if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
 
-    load_restaurants()
-    import_yelp_restaurant_id()
+    load_restaurants_and_import_yelp_id()

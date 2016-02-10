@@ -7,94 +7,90 @@ Skool|1725 Alameda St|(415) 255-8800
 Piccino|1001 Minnesota St|(415) 824-4224
 Mason Pacific|1001 Minnesota St|(415) 374-7185
 Martita's Kitchen|2560 Marin St|(415) 282-1103
-Dusty Buns Bistro|4000 24th St|
-Poc-Chuc|2886 16th St|
-Outerlands|4001 Judah St|
-Dusty Buns Bistro|11 Division St|
-Craftsman and Wolves|746 Valencia St|
-Olea|1494 California St|
-Oasis Cafe|901 Divisadero St|
-iCafe San Francisco|57 Walter U Lum Pl|
-Pacific Catch|2027 Chestnut St|
-Pizzeria Delfina|3611 18th St|
-All Good Pizza|1605 Jerrold Ave|
-Tacolicious|741 Valencia St|
-Soul Food City|403 Eddy St|
-Tanguito|2850 Jones St|
-Izakaya Rintaro|82 14th St|
-Thoughts Style Cuisine Showroom|139 8th St|
-FOB Kitchen|2351 Mission St|
-Taqueria Cazadores|1600 Mission St|
-Batter Up|888 Geneva Ave|
-El Capitan|1123 Folsom St|
-Cafe Me|500 Washington St|
-The Sandwich Spot|3213 Pierce St|
-Underdog|1634 Irving St|
-Hyde Away Blues BBQ|457 Hyde St|
-Elixiria|25 Beale St|
-Castagna|2015 Chestnut St|
-Le Cafe du Soleil|200 Fillmore St|
-Mission Rock Resort|817 Terry Francois Blvd|
-Cafe Zazo|64 14th St|
-Belcampo Meat Co.|1998 Polk St|
-Jackson Place Cafe|633 Battery St|
-Grubstake|1525 Pine St|
-Bender's Bar and Grill|806 S Van Ness Ave|
-The Golden West|8 Trinity Pl|
-Acquolina|1600 Stockton St|
-Luna's Coffee House|1101 Potrero Ave|
-Mission Bowling Club|3176 17th St|
-Sushi Taka|600 Kearny St|
-Curry Up Now|225 Bush St|
-Nourish Cafe|189 6th Ave|
-Presidio Social Club|563 Ruger St|
-The Ramp|855 Terry Francois St|
-Back Yard Kitchen|2760 Octavia St|
-CHICA|120 Green St|
-Pacific Catch|1200 9th Ave|
-Slurp Noodle Bar|469 Castro Street|
-Aracely Cafe|401 13th St|
-Rose's Cafe|2298 Union St|
-Smokin' Warehouse Barbecue|1465 Carroll Ave|
-Ali's Pizzeria|407 Ellis St|
-EPIC Steak|369 The Embarcadero|
-The Elite Cafe|2049 Fillmore St|
-Dusty Buns|428 11th St|
-3 Potato 4|2800 Leavenworth St|
-Bread & Butter Cafe|1901 Hayes St|
-Gott's Roadside|1 Ferry Bldg|
-Triptych|1155 Folsom St|
-Slider Shack|400 Howard St|
-The Brixton|2140 Union St|
-Cafe Flore|2298 Market St|
-Firetrail Pizza|428 11th St|
-Calzone's Pizza Cucina|430 Columbus Ave|
-Spice Kit|428 11th St|
-La Urbana|661 Divisadero St|
-Firehouse Pizzeria|6001 California St|
-Counter Offer|800 S Van Ness Ave|
-Alamo Square Cafe|711 Fillmore St|
-The Station SF|596 Pacific Ave|
-Pizzeria Avellino|2769 Lombard St|
-Sessions at the Presidio|1 Letterman Dr|
-The Plant Cafe Organic|3352 Steiner St|
-Melody|3401 Mission St|
-Fresco Pizza Shawarma|1338 Polk St|
-Katia's Russian Tea Room|600 5th Ave|
-It's Tops Coffee Shop|1801 Market St|
-Public House|24 Willie Mays Plz|
-Connecticut Yankee|100 Connecticut St|
-Bonita Taqueria Y Rotisserie|2257 Chestnut St|
-Osha Thai|311 3rd St|
-Tender Greens|266 King St|
-Black Bark BBQ|1325 Fillmore St|
-Rose Pistola|532 Columbus Ave|
-Stone Korean Kitchen|4 Embarcadero Ctr|
-Peasant Pies|303 Sacramento St|
-Golden Gate Market Deli & Liquor|2767 Lombard St|
-Balancoire|2565 Mission St|
-Hood Grub @ The Broken Record|1166 Geneva Ave|
-Etcetera Wine Bar|795 Valencia St|
-All Star Cafe|1500 Market St|
-Ovok|2295 Market St|
-Merigan Sub Shop|636 2nd St|
+Poc-Chuc|2886 16th St|(415) 558-1583
+Outerlands|4001 Judah St|(415) 661-6140
+Dusty Buns Bistro|11 Division St|(415) 895-2867
+Craftsman and Wolves|746 Valencia St|(415) 913-7713
+Olea|1494 California St|(415) 202-8521
+Oasis Cafe|901 Divisadero St|(415) 474-4900
+iCafe San Francisco|57 Walter U Lum Pl|(415) 392-2682
+Pacific Catch|2027 Chestnut St|(415) 440-1950
+Pizzeria Delfina|3611 18th St|(415) 437-6800
+All Good Pizza|1605 Jerrold Ave|(415) 933-9384
+Tacolicious|741 Valencia St|(415) 649-6077
+Soul Food City|403 Eddy St|(415) 441-1976
+Tanguito|2850 Jones St|(415) 577-4223
+Izakaya Rintaro|82 14th St|(415) 589-7022
+Thoughts Style Cuisine Showroom|139 8th St|(415) 252-7919
+FOB Kitchen|2351 Mission St|(415) 756-9844
+Batter Up|888 Geneva Ave|(415) 205-6032
+El Capitan|1123 Folsom St|(415) 525-3676
+Cafe Me|500 Washington St|(415) 288-8628
+The Sandwich Spot|3213 Pierce St|(415) 829-2587
+Underdog|1634 Irving St|(415) 665-8881
+Elixiria|25 Beale St|(628) 444-3149
+Castagna|2015 Chestnut St|(415) 440-4290
+Le Cafe du Soleil|200 Fillmore St|(415) 934-8637
+Mission Rock Resort|817 Terry Francois Blvd|(415) 701-7625
+Cafe Zazo|64 14th St|(415) 626-5555
+Belcampo Meat Co.|1998 Polk St|(415) 660-5573
+Jackson Place Cafe|633 Battery St|(415) 225-4891
+Grubstake|1525 Pine St|(415) 673-8268
+Bender's Bar and Grill|806 S Van Ness Ave|(415) 824-1800
+The Golden West|8 Trinity Pl|(415) 216-6443
+Acquolina|1600 Stockton St|(415) 781-0331
+Luna's Coffee House|1101 Potrero Ave|(415) 710-3066
+Mission Bowling Club|3176 17th St|(415) 863-2695
+Sushi Taka|600 Kearny St|(415) 676-7460
+Curry Up Now|225 Bush St|(415) 735-3667
+Nourish Cafe|189 6th Ave|(415) 571-8780
+Presidio Social Club|563 Ruger St|(415) 885-1888
+The Ramp|855 Terry Francois St|(415) 621-2378
+Back Yard Kitchen|2760 Octavia St|(415) 655-3023
+CHICA|120 Green St|(415) 757-0510
+Pacific Catch|1200 9th Ave|(415) 504-6905
+Slurp Noodle Bar|469 Castro Street|(415) 553-6633
+Aracely Cafe|401 13th St|(415) 985-7117
+Rose's Cafe|2298 Union St|(415) 775-2200
+Smokin' Warehouse Barbecue|1465 Carroll Ave|(415) 648-8881
+Ali's Pizzeria|407 Ellis St|(415) 872-9333
+EPIC Steak|369 The Embarcadero|(415) 369-9955
+The Elite Cafe|2049 Fillmore St|(415) 346-8400
+3 Potato 4|2800 Leavenworth St|(978) 317-0502
+Bread & Butter Cafe|1901 Hayes St|(415) 221-8700
+Gott's Roadside|1 Ferry Bldg|(415) 318-3423
+Triptych|1155 Folsom St|(415) 703-0557
+Slider Shack|400 Howard St|(415) 672-2902
+The Brixton|2140 Union St|(415) 409-1114
+Cafe Flore|2298 Market St|(415) 621-8579
+Firetrail Pizza|428 11th St|(415) 967-1363
+Calzone's Pizza Cucina|430 Columbus Ave|(415) 397-3600
+Spice Kit|428 11th St|(415) 882-4581
+La Urbana|661 Divisadero St|(415) 440-4500
+Firehouse Pizzeria|6001 California St|(415) 221-7603
+Alamo Square Cafe|711 Fillmore St|(415) 447-8636
+The Station SF|596 Pacific Ave|(415) 291-0690
+Pizzeria Avellino|2769 Lombard St|(415) 776-2500
+Sessions at the Presidio|1 Letterman Dr|(415) 655-9413
+The Plant Cafe Organic|3352 Steiner St|(415) 931-2777
+Melody|3401 Mission St|(415) 310-8412
+Fresco Pizza Shawarma|1338 Polk St|(415) 440-4410
+Katia's Russian Tea Room|600 5th Ave|(415) 668-9292
+It's Tops Coffee Shop|1801 Market St|(415) 431-6395
+Public House|24 Willie Mays Plz|(415) 644-0240
+Connecticut Yankee|100 Connecticut St|(415) 552-4440
+Bonita Taqueria Y Rotisserie|2257 Chestnut St|(415) 801-5599
+Osha Thai|311 3rd St|(415) 896-6742
+Tender Greens|266 King St|(415) 230-3141
+Black Bark BBQ|1325 Fillmore St|(415) 848-9055
+Rose Pistola|532 Columbus Ave|(415) 399-0499
+Stone Korean Kitchen|4 Embarcadero Ctr|(415) 839-4070
+Peasant Pies|303 Sacramento St|(415) 730-1972
+Golden Gate Market Deli & Liquor|2767 Lombard St|(415) 346-6052
+Balancoire|2565 Mission St|(415) 920-0577
+Hood Grub @ The Broken Record|1166 Geneva Ave|(415) 347-7811
+Etcetera Wine Bar|795 Valencia St|(415) 926-5477
+All Star Cafe|1500 Market St|(415) 252-9888
+Ovok|2295 Market St|(415) 431-7700
+Merigan Sub Shop|636 2nd St|(415) 536-2991
+Beach Street Grill|380 Beach St|(415) 867-1711
