@@ -12,7 +12,6 @@ Outerlands|4001 Judah St|(415) 661-6140
 Dusty Buns Bistro|11 Division St|(415) 895-2867
 Craftsman and Wolves|746 Valencia St|(415) 913-7713
 Olea|1494 California St|(415) 202-8521
-Oasis Cafe|901 Divisadero St|(415) 474-4900
 iCafe San Francisco|57 Walter U Lum Pl|(415) 392-2682
 Pacific Catch|2027 Chestnut St|(415) 440-1950
 Pizzeria Delfina|3611 18th St|(415) 437-6800
@@ -41,7 +40,6 @@ The Golden West|8 Trinity Pl|(415) 216-6443
 Acquolina|1600 Stockton St|(415) 781-0331
 Luna's Coffee House|1101 Potrero Ave|(415) 710-3066
 Mission Bowling Club|3176 17th St|(415) 863-2695
-Sushi Taka|600 Kearny St|(415) 676-7460
 Curry Up Now|225 Bush St|(415) 735-3667
 Nourish Cafe|189 6th Ave|(415) 571-8780
 Presidio Social Club|563 Ruger St|(415) 885-1888
