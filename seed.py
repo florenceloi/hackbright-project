@@ -1,16 +1,15 @@
 """Utility file to seed hard-coded restaurants database from restaurants.txt in data/"""
 
-
 # from sqlalchemy import func
 
-from model import connect_to_db, db, Restaurant
+from model import connect_to_db, db, Restaurant, Category
 from server import app
 
 from api import yelp_client
 
 
-def load_restaurants_and_import_yelp_id():
-    """Load restaurant info (name, address, phone, yelp_id) into database.
+def populate_restaurants_table():
+    """Load restaurant info (name, address, phone, yelp_id) into restaurants table.
 
     Additional details:
     Importing name, address, phone from data/restaurants.txt
@@ -50,9 +49,45 @@ def load_restaurants_and_import_yelp_id():
     # Commit the additions to the database
     db.session.commit()
 
+
+def populate_categories_table():
+
+    # Get all restaurants from database
+    db_restaurants = Restaurant.query.all()
+    
+    # Initialize empty category_list
+    category_list = []
+
+    # Looping over each restaurant
+    for restaurant in db_restaurants:
+        yelp_object = yelp_client.get_business(restaurant.yelp_id).business
+        categories = yelp_object.categories
+
+        # While looping over each category in each restaurant,
+        # adding category to category_list if not already present
+        for category in categories:
+            name = category.name
+
+            if name in category_list:
+                continue
+
+            elif name not in category_list:
+                category_list.append(name)
+
+    # Looking over each unique category
+    for current_category in category_list:
+        new_category = Category(category=current_category)
+
+        # Add new category to database session (to be stored)
+        db.session.add(new_category)
+
+    # Commit the additions to the database
+    db.session.commit()
+
       
 if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
 
-    load_restaurants_and_import_yelp_id()
+    populate_restaurants_table()
+    populate_categories_table()
