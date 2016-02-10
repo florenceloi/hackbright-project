@@ -14,7 +14,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    username = db.Column(db.String(64), nullable=False)
+    username = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
@@ -31,6 +31,7 @@ class Restaurant(db.Model):
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100), nullable=False)
+    yelp_id = db.Column(db.String(100), nullable=True, unique=True)
     yelp_rating = db.Column(db.Float, nullable=True)
     yelp_review_count = db.Column(db.Integer, nullable=True)
 
@@ -49,7 +50,7 @@ class Category(db.Model):
     __tablename__ = "categories"
 
     category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    category = db.Column(db.String(64), nullable=False)
+    category = db.Column(db.String(64), nullable=False, unique=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -63,9 +64,9 @@ class Yelp_Review(db.Model):
     __tablename__ = "yelp_reviews"
 
     yelp_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    restaurant_id = db.Column(db.Integer,
-        db.ForeignKey('restaurants.restaurant_id'),
-        nullable=False)
+    yelp_id = db.Column(db.String(100),
+        db.ForeignKey('restaurants.yelp_id'),
+        nullable=True, unique=True)
     body = db.Column(db.String(2000), nullable=False)
 
     restaurant = db.relationship('Restaurant', backref=db.backref('yelp_reviews'))
@@ -75,7 +76,7 @@ class Yelp_Review(db.Model):
 
         return "<Yelp_Review yelp_review_id=%s restaurant_id=%s>" % (
             self.yelp_review_id,
-            self.restaurant_id)
+            self.yelp_id)
 
 
 class Review(db.Model):
@@ -90,7 +91,7 @@ class Review(db.Model):
     user_id = db.Column(db.Integer,
         db.ForeignKey('users.user_id'),
         nullable=False)
-    rating = db.db.Column(db.Float, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
     body = db.Column(db.String(2000), nullable=False)
 
     user = db.relationship('User', backref=db.backref('reviews'))
