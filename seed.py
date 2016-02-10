@@ -4,6 +4,7 @@
 
 from model import connect_to_db, db, Restaurant, Category
 from server import app
+from time import time
 
 from api import yelp_client
 
@@ -26,7 +27,12 @@ def populate_restaurants_table():
         phone = "+1" + phone[1:4] + phone[6:9] + phone[10:]
 
         # Import yelp_id, yelp_rating, yelp_review_count from Yelp API
+        # and print how long each call takes
+        start_time = time() * 1000
         yelp_object = yelp_client.phone_search(phone).businesses[0]
+        elapsed_time = (time() * 1000) - start_time
+        print "API request %d: %d ms" % (i, elapsed_time)
+
         yelp_id = yelp_object.id
         yelp_rating = yelp_object.rating
         yelp_review_count = yelp_object.review_count
@@ -87,7 +93,7 @@ def populate_categories_table():
       
 if __name__ == "__main__":
     connect_to_db(app)
-    db.create_all()
+    # db.create_all()
 
     populate_restaurants_table()
     populate_categories_table()
