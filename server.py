@@ -30,7 +30,7 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
-    return render_template("homepage.html")
+    return render_template("home.html")
 
 
 
