@@ -1,4 +1,4 @@
-"""Utility file to seed hard-coded restaurants database from restaurants.txt in data/"""
+"""Utility file to seed database model"""
 
 # from sqlalchemy import func
 
@@ -10,7 +10,7 @@ from api import yelp_client
 
 
 def populate_restaurants_table():
-    """Load restaurant info (name, address, phone, yelp_id) into restaurants table.
+    """Load restaurant info (name, address, phone, yelp_id) into database model
 
     Additional details:
     Importing name, address, phone from data/restaurants.txt

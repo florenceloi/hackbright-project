@@ -56,7 +56,8 @@ class Category(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Category category_id=%s category=%s>" % (self.category_id, self.category)
+        return "<Category category_id=%s category=%s>" % (self.category_id, 
+                                                          self.category)
 
 
 class Yelp_Review(db.Model):
@@ -64,13 +65,17 @@ class Yelp_Review(db.Model):
 
     __tablename__ = "yelp_reviews"
 
-    yelp_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    yelp_review_id = db.Column(db.Integer,
+                               autoincrement=True,
+                               primary_key=True)
     yelp_id = db.Column(db.String(100),
-        db.ForeignKey('restaurants.yelp_id'),
-        nullable=True, unique=True)
+                        db.ForeignKey('restaurants.yelp_id'),
+                        nullable=True,
+                        unique=True)
     body = db.Column(db.String(2000), nullable=False)
 
-    restaurant = db.relationship('Restaurant', backref=db.backref('yelp_reviews'))
+    restaurant = db.relationship('Restaurant',
+                                 backref=db.backref('yelp_reviews'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -87,11 +92,11 @@ class Review(db.Model):
 
     review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     restaurant_id = db.Column(db.Integer,
-        db.ForeignKey('restaurants.restaurant_id'),
-        nullable=False)
+                              db.ForeignKey('restaurants.restaurant_id'),
+                              nullable=False)
     user_id = db.Column(db.Integer,
-        db.ForeignKey('users.user_id'),
-        nullable=False)
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
     rating = db.Column(db.Float, nullable=False)
     body = db.Column(db.String(2000), nullable=False)
 
@@ -101,7 +106,7 @@ class Review(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Review review_id=%s restaurant_id=%s user_id=%s rating=%s>" % (
+        return "<Review id=%s restaurant_id=%s user_id=%s rating=%s>" % (
             self.review_id,
             self.restaurant_id,
             self.user_id,
@@ -115,11 +120,11 @@ class Favorite(db.Model):
 
     favorite_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     restaurant_id = db.Column(db.Integer,
-        db.ForeignKey('restaurants.restaurant_id'),
-        nullable=False)
+                              db.ForeignKey('restaurants.restaurant_id'),
+                              nullable=False)
     user_id = db.Column(db.Integer,
-        db.ForeignKey('users.user_id'),
-        nullable=False)
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
 
     user = db.relationship('User', backref=db.backref('favorites'))
     restaurant = db.relationship('Restaurant', backref=db.backref('favorites'))
@@ -138,27 +143,31 @@ class Restaurant_Category(db.Model):
 
     __tablename__ = "restaurant_categories"
 
-    restaurant_category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    restaurant_category_id = db.Column(db.Integer,
+                                       autoincrement=True,
+                                       primary_key=True)
     restaurant_id = db.Column(db.Integer,
-        db.ForeignKey('restaurants.restaurant_id'),
-        nullable=False)
+                              db.ForeignKey('restaurants.restaurant_id'),
+                              nullable=False)
     category_id = db.Column(db.Integer,
-        db.ForeignKey('categories.category_id'),
-        nullable=False)
+                            db.ForeignKey('categories.category_id'),
+                            nullable=False)
 
-    restaurants = db.relationship('Restaurant', backref=db.backref('restaurant_categories'))
-    categories = db.relationship('Category', backref=db.backref('restaurant_categories'))
+    restaurants = db.relationship('Restaurant',
+                                  backref=db.backref('restaurant_categories'))
+    categories = db.relationship('Category',
+                                 backref=db.backref('restaurant_categories'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Restaurant_Category id=%s restaurant_id=%s category_id=%s>" % (
+        return "<Rest_Cat id=%s restaurant_id=%s category_id=%s>" % (
             self.restaurant_category_id,
             self.restaurant_id,
             self.category_id)
 
 
-###############################################################################
+##############################################################################
 # Helper functions
 
 def connect_to_db(app):
@@ -166,14 +175,14 @@ def connect_to_db(app):
 
     # Configuration to use PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants'
-    # app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
 
 
 if __name__ == "__main__":
 
-    # If in interactive mode, this allows us to interact with the database directly.
+    # Allows us to interact with the database directly in interactive mode.
     from server import app
     connect_to_db(app)
     print "Connected to DB."
