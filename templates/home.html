@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
-
+    
     <script src="/static/js/map.js"></script>
 
 {% endblock %}
@@ -8,6 +8,12 @@
 
 {% block content %}
     
+    <div id="floating-panel">
+      <input id="address" type="textbox" placeholder="Enter location">
+      <input id="submit" type="button" value="Center map">
+      <button id="current-location" type="button">Current location</button>
+    </div>
+
     <div id="map"></div>
 
 {% endblock %}
