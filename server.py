@@ -11,7 +11,7 @@ from model import (connect_to_db,
                    Review,
                    Restaurant_Category)
 
-from api import yelp_client
+from api import yelp_client, gmaps_key
 
 app = Flask(__name__)
 
@@ -30,7 +30,9 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
-    return render_template("home.html")
+
+
+    return render_template("home.html", gmaps_key=gmaps_key)
 
 
 

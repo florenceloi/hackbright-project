@@ -2,6 +2,9 @@ import io, json
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
+# Binds gmaps_key to the contents of google_secret.txt as a string
+gmaps_key = open('google_secret.txt').read()
+
 # Opens 'yelp_secret.json' with variable name cred
 with io.open('yelp_secret.json') as cred:
 

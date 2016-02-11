@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>{% block title %}TITLE GOES HERE{% endblock %}</title>
+  <head>
     <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="http://code.jquery.com/jquery.js"></script>
-    {% block head_content %}HEAD CONTENT GOES HERE{% endblock %}
-</head>
-<body>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_key }}&callback=initMap"></script>
+    {% block head %}HEAD CONTENT GOES HERE{% endblock %}
+  </head>
+  <body>
     {% block content %}BODY CONTENT GOES HERE{% endblock %}
-</body>
+    </script>
+  </body>
 </html>
