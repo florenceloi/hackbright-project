@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import (connect_to_db, 
@@ -40,8 +40,7 @@ def bear_info():
 
     # Instantiate restaurant dictionary using dictionary comprehension
     restaurants = {
-        restaurant.marker_id: {
-            "restaurantId": restaurant.restaurant_id,
+        restaurant.restaurant_id: {
             "_name": restaurant.name,
             "address": restaurant.address,
             "phone": restaurant.phone,
