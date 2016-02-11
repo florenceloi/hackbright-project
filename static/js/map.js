@@ -1,3 +1,5 @@
+// Renders map populated with restaurants,
+// allows centering on geocoding and current location
 function initMap() {
 
     // Specify center of map
@@ -8,6 +10,7 @@ function initMap() {
         center: myLatLng,
         zoom: 13,
     });
+    var locationInfoWindow = new google.maps.InfoWindow({map: map});
 
     // Retrieve the jsonified Python dictionary of restaurants with AJAX
     $.get('/home.json', function (restaurants) {
@@ -31,17 +34,18 @@ function initMap() {
     var geocoder = new google.maps.Geocoder();
 
     // Call geocodeAddress when "Center map" button is clicked
-    $('#submit').click(function() {
+    $('#specified-location').submit(function() {
         geocodeAddress(geocoder, map);
     });
 
     // Recenter map on current location
     $('#current-location').click(function() {
-        centerOnCurrentLocation();
+        centerOnGeolocation(locationInfoWindow, map);
     });
 }
 
 
+// Processes geocode
 function geocodeAddress(geocoder, resultsMap) {
   
     // Get address value from form
@@ -63,7 +67,8 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 
 
-function centerOnCurrentLocation() {
+// Centers on geolocation
+function centerOnGeolocation(locationInfoWindow, map) {
     // If geolocation allowed:
     if (navigator.geolocation) {
         // Execute anonymous functions after getting current position
@@ -73,16 +78,26 @@ function centerOnCurrentLocation() {
               lng: position.coords.longitude
             };
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
+            locationInfoWindow.setPosition(pos);
+            locationInfoWindow.setContent('Location found.');
             map.setCenter(pos);
         }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+            handleLocationError(true, locationInfoWindow, map.getCenter());
         });
     } else {
-        handleLocationError(false, infoWindow, map.getCenter());
+        handleLocationError(false, locationInfoWindow, map.getCenter());
     }
 }
+
+
+// Handles centering on current location error
+function handleLocationError(browserHasGeolocation, locationInfoWindow, pos) {
+  locationInfoWindow.setPosition(pos);
+  locationInfoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+}
+
 
 // Render map once window finishes loading
 google.maps.event.addDomListener(window, 'load', initMap);

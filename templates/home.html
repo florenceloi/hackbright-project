@@ -9,9 +9,11 @@
 {% block content %}
     
     <div id="floating-panel">
-      <input id="address" type="textbox" placeholder="Enter location">
-      <input id="submit" type="button" value="Center map">
-      <button id="current-location" type="button">Current location</button>
+        <form id="specified-location">
+            <input id="address" type="textbox" placeholder="Enter location">
+            <input type="submit" value="Center map">
+        </form>
+        <button id="current-location" type="button">Center on current location</button>
     </div>
 
     <div id="map"></div>
