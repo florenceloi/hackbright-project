@@ -16,7 +16,7 @@ def populate_restaurants_table():
     Importing name, address, phone from data/restaurants.txt
     Using phone, importing yelp_id from Yelp API"""
 
-    print "Restaurants"
+    yelp_object_list = []
 
     # Parse through restaurants.txt and clean/unpack data
     for i, row in enumerate(open("data/restaurants.txt")):
@@ -35,16 +35,12 @@ def populate_restaurants_table():
 
         # Return single business in response dictionary that matches the 
         # name and address from restaurants.txt
-        if yelp_dict.total == 1:
-            yelp_object = yelp_dict.businesses[0]
-        elif yelp_dict.total > 1:
-            for i in range(len(yelp_dict.businesses)):
-                current_business = yelp_dict.businesses[i]
-                yelp_name = current_business.name
-                yelp_address = current_business.location.address
-                if name == yelp_name and address in yelp_address:
-                    yelp_object = yelp_dict.businesses[i]   
+        yelp_object = validate_single_business(yelp_dict, name, address) 
 
+        # Add yelp_object to yelp_object_list to be used later
+        yelp_object_list.append(yelp_object)
+
+        # Get restaurant information for each yelp_object
         yelp_id = yelp_object.id
         yelp_rating = yelp_object.rating
         yelp_review_count = yelp_object.review_count
@@ -64,25 +60,23 @@ def populate_restaurants_table():
         # Add new restaurant to database session (to be stored)
         db.session.add(restaurant)
 
-        # Show how many records have been add (in increments of 10)
+        # Show how many records have been added (in increments of 10)
         if i % 10 == 0:
             print i
 
     # Commit the additions to the database
     db.session.commit()
 
+    return yelp_object_list
 
-def populate_categories_table():
 
-    # Get all restaurants from database
-    db_restaurants = Restaurant.query.all()
-    
+def populate_categories_table(yelp_object_list):
+   
     # Initialize empty category_list
     category_list = []
 
     # Looping over each restaurant
-    for restaurant in db_restaurants:
-        yelp_object = yelp_client.get_business(restaurant.yelp_id).business
+    for yelp_object in yelp_object_list:
         categories = yelp_object.categories
 
         # While looping over each category in each restaurant,
@@ -106,10 +100,30 @@ def populate_categories_table():
     # Commit the additions to the database
     db.session.commit()
 
-      
+
+###############################################################################
+# Helper Functions
+
+def validate_single_business(yelp_dict, name, address):
+    """Takes in dictionary of corresponding business(es) for phone number,
+    returns single business with corresponding name and address."""
+
+    if yelp_dict.total == 1:
+        yelp_object = yelp_dict.businesses[0]
+    elif yelp_dict.total > 1:
+        for i in range(len(yelp_dict.businesses)):
+            current_business = yelp_dict.businesses[i]
+            yelp_name = current_business.name
+            yelp_address = current_business.location.address
+            if name == yelp_name and address in yelp_address:
+                yelp_object = yelp_dict.businesses[i]   
+
+    return yelp_object
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
 
-    populate_restaurants_table()
-    populate_categories_table()
+    yelp_object_list = populate_restaurants_table()
+    populate_categories_table(yelp_object_list)
