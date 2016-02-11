@@ -18,15 +18,14 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails silently.
-# This is horrible. Fix this so that, instead, it raises an error.
+# Raise an error if an undefined variable in Jinja2 is used.
 app.jinja_env.undefined = StrictUndefined
 
 
 ###############################################################################
 # Flask routes
 
-@app.route('/')
+@app.route('/home')
 def index():
     """Homepage."""
 
@@ -35,8 +34,24 @@ def index():
     return render_template("home.html", gmaps_key=gmaps_key)
 
 
+@app.route('/home.json')
+def bear_info():
+    """JSON information about restaurants."""
 
+    # Instantiate restaurant dictionary using dictionary comprehension
+    restaurants = {
+        restaurant.marker_id: {
+            "restaurantId": restaurant.restaurant_id,
+            "_name": restaurant.name,
+            "address": restaurant.address,
+            "phone": restaurant.phone,
+            "yelpRating": restaurant.yelp_rating,
+            "lat": restaurant.lat,
+            "lng": restaurant.lng
+        }
+        for restaurant in Restaurant.query.all()}
 
+    return jsonify(restaurants)
 
 
 if __name__ == "__main__":
