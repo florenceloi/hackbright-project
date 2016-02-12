@@ -34,6 +34,7 @@ class Restaurant(db.Model):
     phone = db.Column(db.String(14), nullable=False, unique=True)
     yelp_phone = db.Column(db.String(12), nullable=False, unique=True)
     yelp_id = db.Column(db.String(100), nullable=True, unique=True)
+    yelp_url = db.Column(db.String(200), nullable=True, unique=True)
     yelp_img_url = db.Column(db.String(200), nullable=True, unique=True)
     yelp_rating = db.Column(db.Float, nullable=True)
     yelp_review_count = db.Column(db.Integer, nullable=True)

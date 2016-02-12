@@ -42,6 +42,7 @@ def populate_restaurants_table():
 
         # Get restaurant information for each yelp_object
         yelp_id = yelp_object.id
+        yelp_url = yelp_object.url
         yelp_img_url = yelp_object.image_url
         yelp_rating = yelp_object.rating
         yelp_review_count = yelp_object.review_count
@@ -54,6 +55,7 @@ def populate_restaurants_table():
                                 phone=phone,
                                 yelp_phone=yelp_phone,
                                 yelp_id=yelp_id,
+                                yelp_url=yelp_url,
                                 yelp_img_url=yelp_img_url,
                                 yelp_rating=yelp_rating,
                                 yelp_review_count=yelp_review_count,

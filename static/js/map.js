@@ -34,7 +34,9 @@ function initMap() {
           // Define the content of the infoWindow
           html = (
               '<div class="window-content">' +
-                  '<img src="' + restaurant.yelp_img_url + '" alt="' + restaurant._name + '" style="width:150px;">' +
+                  '<a href="' + restaurant.yelpUrl + '">' +
+                      '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
+                  '</a>' +
                   '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
                   '<p><b>Address: </b>' + restaurant.address + '</p>' +
                   '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +

@@ -44,6 +44,8 @@ def bear_info():
             "_name": restaurant.name,
             "address": restaurant.address,
             "phone": restaurant.phone,
+            "yelpUrl": restaurant.yelp_url,
+            "yelpImgUrl": restaurant.yelp_img_url,
             "yelpRating": restaurant.yelp_rating,
             "reviewCount": restaurant.yelp_review_count,
             "lat": restaurant.lat,
