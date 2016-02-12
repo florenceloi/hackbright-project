@@ -13,7 +13,17 @@
             <input id="address" type="textbox" placeholder="Enter location">
             <input type="submit" value="Center map">
         </form>
+
         <button id="current-location" type="button">Center on current location</button>
+        
+        <form>
+        {% for category in categories %}
+            
+            <input type="checkbox" name="category" value="{{ category }}">{{ category }}
+
+        {% endfor %}
+        </form>
+
     </div>
 
     <div id="map"></div>

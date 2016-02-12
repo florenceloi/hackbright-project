@@ -29,9 +29,11 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
+    # Instantiate category dictionary using dictionary comprehension
+    categories = [category.category for category in Category.query.order_by('category').all()]
+    print type(categories)
 
-
-    return render_template("home.html", gmaps_key=gmaps_key)
+    return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
 
 @app.route('/home.json')
