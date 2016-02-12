@@ -11,6 +11,29 @@ function initMap() {
         zoom: 13,
     });
     
+    // Add restaurant markers
+    addRestaurantMarkers(map);
+
+    // Call geocodeAddress when "Center map" button is clicked
+    $('#specified-location').submit(function() {
+        geocodeAddress(map);
+    });
+
+    var locationInfoWindow = new google.maps.InfoWindow({
+        map: map,
+        animation: google.maps.Animation.DROP
+    });
+    locationInfoWindow.close();
+
+    // Recenter map on current location
+    $('#current-location').click(function() {
+        centerOnGeolocation(locationInfoWindow, map);
+        locationInfoWindow.open(map);
+    });
+}
+
+
+function addRestaurantMarkers(map) {
     // Instantiate info windows
     var infoWindow = new google.maps.InfoWindow();
 
@@ -48,19 +71,6 @@ function initMap() {
           bindInfoWindow(marker, map, infoWindow, html);
         }
     });
-
-    // Instantiate geocoder object
-    var geocoder = new google.maps.Geocoder();
-
-    // Call geocodeAddress when "Center map" button is clicked
-    $('#specified-location').submit(function() {
-        geocodeAddress(geocoder, map);
-    });
-
-    // Recenter map on current location
-    $('#current-location').click(function() {
-        centerOnGeolocation(map);
-    });
 }
 
 
@@ -75,11 +85,15 @@ function bindInfoWindow(marker, map, infoWindow, html) {
 
 
 // Processes geocode
-function geocodeAddress(geocoder, resultsMap) {
-  
+function geocodeAddress(resultsMap) {
+
     // Get address value from form
     var address = document.getElementById('address').value;
+    console.log('works');
     
+    // Instantiate geocoder object
+    var geocoder = new google.maps.Geocoder();
+
     // Make request to Geocoding service with address and execute anonymous callback method
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
@@ -89,6 +103,7 @@ function geocodeAddress(geocoder, resultsMap) {
                 map: resultsMap,
                 position: results[0].geometry.location
             });
+            console.log('works');
         } else {
             alert('Centering on ' + address + ' was not successful for the following reason: ' + status);
         }
@@ -97,8 +112,8 @@ function geocodeAddress(geocoder, resultsMap) {
 
 
 // Centers on geolocation
-function centerOnGeolocation(map) {
-    var locationInfoWindow = new google.maps.InfoWindow({map: map});
+function centerOnGeolocation(locationInfoWindow, map) {
+
     // If geolocation allowed:
     if (navigator.geolocation) {
         // Execute anonymous functions after getting current position

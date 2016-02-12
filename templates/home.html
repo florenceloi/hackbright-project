@@ -16,13 +16,11 @@
 
         <button id="current-location" type="button">Center on current location</button>
         
-        <form>
         {% for category in categories %}
             
             <input type="checkbox" name="category" value="{{ category }}">{{ category }}
 
         {% endfor %}
-        </form>
 
     </div>
 
