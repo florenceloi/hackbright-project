@@ -13,7 +13,6 @@ function initMap() {
     
     // Instantiate info windows
     var infoWindow = new google.maps.InfoWindow();
-    var locationInfoWindow = new google.maps.InfoWindow({map: map});
 
     // Retrieve the jsonified Python dictionary of restaurants with AJAX
     $.get('/home.json', function (restaurants) {
@@ -37,6 +36,7 @@ function initMap() {
                   '<a href="' + restaurant.yelpUrl + '">' +
                       '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
                   '</a>' +
+                  '<p>(click on image to visit Yelp page)</p>' +
                   '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
                   '<p><b>Address: </b>' + restaurant.address + '</p>' +
                   '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
@@ -59,7 +59,7 @@ function initMap() {
 
     // Recenter map on current location
     $('#current-location').click(function() {
-        centerOnGeolocation(locationInfoWindow, map);
+        centerOnGeolocation(map);
     });
 }
 
@@ -97,7 +97,8 @@ function geocodeAddress(geocoder, resultsMap) {
 
 
 // Centers on geolocation
-function centerOnGeolocation(locationInfoWindow, map) {
+function centerOnGeolocation(map) {
+    var locationInfoWindow = new google.maps.InfoWindow({map: map});
     // If geolocation allowed:
     if (navigator.geolocation) {
         // Execute anonymous functions after getting current position
@@ -106,6 +107,7 @@ function centerOnGeolocation(locationInfoWindow, map) {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
+
             locationInfoWindow.setPosition(pos);
             locationInfoWindow.setContent('Current location.');
             map.setCenter(pos);
@@ -125,3 +127,4 @@ function handleLocationError(browserHasGeolocation, locationInfoWindow, pos) {
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
 }
+
