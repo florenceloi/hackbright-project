@@ -24,7 +24,7 @@ def populate_restaurants_table():
         name, address, phone = row.split("|")
 
         # Reformat phone number from "(XXX) XXX-XXXX" to "+1XXXXXXXXXX"
-        phone = "+1" + phone[1:4] + phone[6:9] + phone[10:]
+        yelp_phone = "+1" + phone[1:4] + phone[6:9] + phone[10:]
 
         # Return response dictionary from Yelp API for given phone number
         # Print how long the API call took
@@ -42,6 +42,7 @@ def populate_restaurants_table():
 
         # Get restaurant information for each yelp_object
         yelp_id = yelp_object.id
+        yelp_img_url = yelp_object.image_url
         yelp_rating = yelp_object.rating
         yelp_review_count = yelp_object.review_count
         lat = yelp_object.location.coordinate.latitude
@@ -51,7 +52,9 @@ def populate_restaurants_table():
         restaurant = Restaurant(name=name,
                                 address=address,
                                 phone=phone,
+                                yelp_phone=yelp_phone,
                                 yelp_id=yelp_id,
+                                yelp_img_url=yelp_img_url,
                                 yelp_rating=yelp_rating,
                                 yelp_review_count=yelp_review_count,
                                 lat=lat,
@@ -59,10 +62,6 @@ def populate_restaurants_table():
 
         # Add new restaurant to database session (to be stored)
         db.session.add(restaurant)
-
-        # Show how many records have been added (in increments of 10)
-        if i % 10 == 0:
-            print i
 
     # Commit the additions to the database
     db.session.commit()

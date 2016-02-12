@@ -45,6 +45,7 @@ def bear_info():
             "address": restaurant.address,
             "phone": restaurant.phone,
             "yelpRating": restaurant.yelp_rating,
+            "reviewCount": restaurant.yelp_review_count,
             "lat": restaurant.lat,
             "lng": restaurant.lng
         }
