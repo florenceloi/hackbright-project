@@ -56,14 +56,13 @@ function addRestaurantMarkers(map) {
           // Define the content of the infoWindow
           html = (
               '<div class="window-content">' +
-                  '<a href="' + restaurant.yelpUrl + '">' +
-                      '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
-                  '</a>' +
+                  '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
                   '<p>(click on image to visit Yelp page)</p>' +
                   '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
                   '<p><b>Address: </b>' + restaurant.address + '</p>' +
                   '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
-                  '<p><b>Yelp Rating: </b>' + restaurant.yelpRating + ' (' + restaurant.reviewCount + ' reviews) </p>' +
+                  '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg + '" alt="' + restaurant.yelpRating + '">' +
+                  ' (' + restaurant.reviewCount + ' reviews) </p>' +
               '</div>');
 
           // Inside the loop we call bindInfoWindow passing it the marker,

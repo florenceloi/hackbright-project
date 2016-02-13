@@ -49,6 +49,7 @@ def bear_info():
             "yelpUrl": restaurant.yelp_url,
             "yelpImgUrl": restaurant.yelp_img_url,
             "yelpRating": restaurant.yelp_rating,
+            "yelpRatingImg": restaurant.yelp_rating_img,
             "reviewCount": restaurant.yelp_review_count,
             "lat": restaurant.lat,
             "lng": restaurant.lng

@@ -45,6 +45,7 @@ def populate_restaurants_table():
         yelp_url = yelp_object.url
         yelp_img_url = yelp_object.image_url
         yelp_rating = yelp_object.rating
+        yelp_rating_img = yelp_object.rating_img_url_small
         yelp_review_count = yelp_object.review_count
         lat = yelp_object.location.coordinate.latitude
         lng = yelp_object.location.coordinate.longitude
@@ -58,6 +59,7 @@ def populate_restaurants_table():
                                 yelp_url=yelp_url,
                                 yelp_img_url=yelp_img_url,
                                 yelp_rating=yelp_rating,
+                                yelp_rating_img=yelp_rating_img,
                                 yelp_review_count=yelp_review_count,
                                 lat=lat,
                                 lng=lng)
