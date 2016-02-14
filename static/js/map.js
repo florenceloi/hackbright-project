@@ -40,14 +40,15 @@ function addRestaurantMarkers(map) {
   // Retrieve the jsonified Python dictionary of restaurants with AJAX
   $.get('/home.json', function (restaurants) {
     var restaurant, marker;
-    console.log(restaurants);
 
     // Loop over each restaurant in dictionary
     for (var key in restaurants) {
       restaurant = restaurants[key];
-      // categories = restaurant.categories;
+      console.log(restaurant);
+      // var categories = restaurant.categories;
 
       // for (var category in categories) {
+        // console.log(category);
       //   alias = category.alias;
 
 
@@ -74,7 +75,6 @@ function addRestaurantMarkers(map) {
       // Inside the loop we call bindInfoWindow passing it the marker,
       // map, infoWindow and contentString
       bindInfoWindow(marker, map, infoWindow, html);
-      // }
     }
   });
 }

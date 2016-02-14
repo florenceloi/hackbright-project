@@ -3,6 +3,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
+import jsonpickle
+
 from model import (connect_to_db, 
                    db,
                    User,
@@ -53,9 +55,12 @@ def bear_info():
             "reviewCount": restaurant.yelp_review_count,
             "lat": restaurant.lat,
             "lng": restaurant.lng,
-            "categories": restaurant.categories
+            "categories": [jsonpickle.encode(category)
+                           for category in restaurant.categories]
         }
         for restaurant in Restaurant.query.all()}
+
+    print restaurants, "**********************************************************"
 
     return jsonify(restaurants)
 
