@@ -40,10 +40,16 @@ function addRestaurantMarkers(map) {
   // Retrieve the jsonified Python dictionary of restaurants with AJAX
   $.get('/home.json', function (restaurants) {
     var restaurant, marker;
+    console.log(restaurants);
 
     // Loop over each restaurant in dictionary
     for (var key in restaurants) {
       restaurant = restaurants[key];
+      // categories = restaurant.categories;
+
+      // for (var category in categories) {
+      //   alias = category.alias;
+
 
       // Instantiate marker for each restaurant
       marker = new google.maps.Marker({
@@ -68,6 +74,7 @@ function addRestaurantMarkers(map) {
       // Inside the loop we call bindInfoWindow passing it the marker,
       // map, infoWindow and contentString
       bindInfoWindow(marker, map, infoWindow, html);
+      // }
     }
   });
 }
@@ -139,4 +146,3 @@ function handleLocationError(browserHasGeolocation, locationInfoWindow, pos) {
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
 }
-

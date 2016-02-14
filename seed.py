@@ -76,17 +76,20 @@ def populate_restaurants_table():
 def populate_categories_table(yelp_object_list):
     """Takes in list of yelp restaurant objects and populates categories table."""
    
-    temp_category_list = []
+    temp_category_dict = {}
 
     # While looping over each category in each restaurant,
     # adding category to temporary category_list if not already present
     for yelp_object in yelp_object_list:
         categories = yelp_object.categories
-        get_unique_categories(categories, temp_category_list)
+        get_unique_categories(categories, temp_category_dict)
+
+    print temp_category_dict
 
     # Looking over each unique category
-    for current_category in temp_category_list:
-        new_category = Category(category=current_category)
+    for name, alias in temp_category_dict.iteritems():
+        new_category = Category(category=name,
+                                alias=alias)
 
         # Add new category to database session (to be stored)
         db.session.add(new_category)
@@ -115,16 +118,16 @@ def populate_restaurant_categories_table(yelp_object_list):
                 restaurant_id = restaurant.restaurant_id
                 categories_for_current_restaurant = yelp_object.categories
         
-        # Get corresponding category id for each category
-        for category in categories_for_current_restaurant:
-            category_id = category_dict[category[0]]
+                # Get corresponding category id for each category
+                for category in categories_for_current_restaurant:
+                    category_id = category_dict[category[0]]
 
-        # Instantiate new restaurant-category association
-        new_association = Restaurant_Category(restaurant_id=restaurant_id,
-                                              category_id=category_id)
+                    # Instantiate new restaurant-category association
+                    new_association = Restaurant_Category(restaurant_id=restaurant_id,
+                                                          category_id=category_id)
 
-        # Add new association to database
-        db.session.add(new_association)
+                    # Add new association to database
+                    db.session.add(new_association)
 
     # Commit the additions to the database
     db.session.commit()
@@ -150,21 +153,22 @@ def validate_single_business(yelp_dict, name, address):
     return yelp_object
 
 
-def get_unique_categories(categories, temp_category_list):
+def get_unique_categories(categories, temp_category_dict):
     """Takes in a list of categories and returns a list of unique categories."""
 
     # While looping over each category in each restaurant,
     # adding category to temporary category_list if not already present
     for category in categories:
         name = category.name
+        alias = category.alias
 
-        if name in temp_category_list:
+        if name in temp_category_dict:
             continue
 
-        elif name not in temp_category_list:
-            temp_category_list.append(name)
+        elif name not in temp_category_dict:
+            temp_category_dict[name] = alias
 
-    return temp_category_list
+    return temp_category_dict
 
 
 def get_category_and_id_dict():

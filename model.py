@@ -42,6 +42,10 @@ class Restaurant(db.Model):
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
 
+    categories = db.relationship("Category",
+                                 secondary="restaurant_categories",
+                                 backref="restaurants")
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -161,10 +165,6 @@ class Restaurant_Category(db.Model):
                             db.ForeignKey('categories.category_id'),
                             nullable=False)
 
-    restaurants = db.relationship('Restaurant',
-                                  backref=db.backref('restaurant_categories'))
-    categories = db.relationship('Category',
-                                 backref=db.backref('restaurant_categories'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""

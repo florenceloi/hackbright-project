@@ -36,37 +36,13 @@ def index():
     return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
 
-# @app.route('/home.json')
-# def bear_info():
-#     """JSON information about restaurants."""
-
-#     # Instantiate restaurant dictionary using dictionary comprehension
-#     restaurants = {
-#         restaurant.restaurant_id: {
-#             "_name": restaurant.name,
-#             "address": restaurant.address,
-#             "phone": restaurant.phone,
-#             "yelpUrl": restaurant.yelp_url,
-#             "yelpImgUrl": restaurant.yelp_img_url,
-#             "yelpRating": restaurant.yelp_rating,
-#             "yelpRatingImg": restaurant.yelp_rating_img,
-#             "reviewCount": restaurant.yelp_review_count,
-#             "lat": restaurant.lat,
-#             "lng": restaurant.lng,
-#             "categories": restaurant.restaurant_categories
-#         }
-#         for restaurant in Restaurant.query.all()}
-
-#     return jsonify(restaurants)
-
-
 @app.route('/home.json')
 def bear_info():
-    """JSON information about categories."""
+    """JSON information about restaurants."""
 
     # Instantiate restaurant dictionary using dictionary comprehension
-    categories = {
-        Category.restaurant_id: {
+    restaurants = {
+        restaurant.restaurant_id: {
             "_name": restaurant.name,
             "address": restaurant.address,
             "phone": restaurant.phone,
@@ -77,9 +53,9 @@ def bear_info():
             "reviewCount": restaurant.yelp_review_count,
             "lat": restaurant.lat,
             "lng": restaurant.lng,
-            "categories": restaurant.restaurant_categories
+            "categories": restaurant.categories
         }
-        for category in Category.query.all()}
+        for restaurant in Restaurant.query.all()}
 
     return jsonify(restaurants)
 
