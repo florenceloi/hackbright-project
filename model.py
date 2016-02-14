@@ -58,12 +58,14 @@ class Category(db.Model):
 
     category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     category = db.Column(db.String(64), nullable=False, unique=True)
+    alias = db.Column(db.String(64), nullable=False, unique=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Category category_id=%s category=%s>" % (self.category_id, 
-                                                          self.category)
+        return "<Category category_id=%s category=%s alias=%s>" % (self.category_id, 
+                                                                   self.category,
+                                                                   self.alias)
 
 
 class Yelp_Review(db.Model):

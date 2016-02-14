@@ -14,16 +14,16 @@ function initMap() {
   // Add restaurant markers
   addRestaurantMarkers(map);
 
+  // Instantiate geocoder object
+  var geocoder = new google.maps.Geocoder();
+
   // Call geocodeAddress when "Center map" button is clicked
-  $('#specified-location').submit(function() {
-    geocodeAddress(map);
+  $('#submit').click(function() {
+    geocodeAddress(geocoder, map);
   });
 
   var locationInfoWindow = new google.maps.InfoWindow({
-    map: map,
-    animation: google.maps.Animation.DROP
   });
-  locationInfoWindow.close();
 
   // Recenter map on current location
   $('#current-location').click(function() {
@@ -50,7 +50,7 @@ function addRestaurantMarkers(map) {
         position: new google.maps.LatLng(restaurant.lat, restaurant.lng),
         map: map,
         title: restaurant._name,
-        icon: '/static/img/paw.png'
+        icon: '/static/img/paw.png',
         });
 
       // Define the content of the infoWindow
@@ -62,7 +62,7 @@ function addRestaurantMarkers(map) {
           '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
           '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg + '" alt="' + restaurant.yelpRating + '">' +
           ' (' + restaurant.reviewCount + ' reviews) </p>' +
-          '<a href="' + restaurant.yelpUrl + '"> <img src="/static/img/yelp_review_btn_red.png" alt="' + restaurant._name + '">' +
+          '<a href="' + restaurant.yelpUrl + '"> <img src="/static/img/yelp_review_btn_red.png" alt="' + restaurant._name + '" style="width:125px;">' +
         '</div>');
 
       // Inside the loop we call bindInfoWindow passing it the marker,
@@ -84,15 +84,12 @@ function bindInfoWindow(marker, map, infoWindow, html) {
 
 
 // Processes geocode
-function geocodeAddress(resultsMap) {
+function geocodeAddress(geocoder, resultsMap) {
 
   // Get address value from form
   var address = document.getElementById('address').value;
   console.log('works');
   
-  // Instantiate geocoder object
-  var geocoder = new google.maps.Geocoder();
-
   // Make request to Geocoding service with address and execute anonymous callback method
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
@@ -124,6 +121,7 @@ function centerOnGeolocation(locationInfoWindow, map) {
 
       locationInfoWindow.setPosition(pos);
       locationInfoWindow.setContent('Current location.');
+      locationInfoWindow.setMap(map)
       map.setCenter(pos);
     }, function() {
       handleLocationError(true, locationInfoWindow, map.getCenter());
