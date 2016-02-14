@@ -103,32 +103,28 @@ def populate_restaurant_categories_table(yelp_object_list):
 
     # Get restaurant objects in database model
     db_restaurants = Restaurant.query.all()
-
-    # Looping over each restaurant object from Yelp API call:
-    for yelp_object in yelp_object_list:
         
-        # Find database restaurant that corresponds to the yelp restaurant object,
-        # get database restaurant's restaurant id,
-        # get yelp restaurant object's categories
-        for restaurant in db_restaurants:
+    # Find database restaurant that corresponds to the yelp restaurant object,
+    # get database restaurant's restaurant id,
+    # get yelp restaurant object's categories
+    for restaurant in db_restaurants:
+
+        # Looping over each restaurant object from Yelp API call:
+        for yelp_object in yelp_object_list:
             if yelp_object.id == restaurant.yelp_id:
                 restaurant_id = restaurant.restaurant_id
-                categories = yelp_object.categories
-
-        temp_category_list = []
-
-        get_unique_categories(categories, temp_category_list)
-
+                categories_for_current_restaurant = yelp_object.categories
+        
         # Get corresponding category id for each category
-        for current_category in temp_category_list:
-            category_id = current_category.category_id
+        for category in categories_for_current_restaurant:
+            category_id = category_dict[category[0]]
 
-            # Instantiate new restaurant-category association
-            new_association = Restaurant_Category(restaurant_id=restaurant_id,
-                                                  category_id=category_id)
+        # Instantiate new restaurant-category association
+        new_association = Restaurant_Category(restaurant_id=restaurant_id,
+                                              category_id=category_id)
 
-            # Add new association to database
-            db.session.add(new_association)
+        # Add new association to database
+        db.session.add(new_association)
 
     # Commit the additions to the database
     db.session.commit()
