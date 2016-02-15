@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+    {{ user.fname }}'S Account
+
+{% endblock %}
+
+{% block head %}
+    
+{% endblock %}
+
+
+{% block content %}
+    
+    <h2>User info</h2>
+    <ul>    
+      <li>Name: {{ user.user_id }}</li>
+    </ul>
+    <br>
+    
+    Restaurants you've favorited:<br>
+
+<!--     <ul>
+      {% for movie_score in movies_scores %}
+        <li>
+            {{ movie_score[0] }}: {{ movie_score[1] }}
+        </li>
+      {% endfor %}
+    </ul> -->
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+    
+{% endblock %}
+
+
+{% block content %}
+    
+    <h2>Sign In</h2>
+
+    <form action="/loggedin" method="POST">
+        <input type="text" name="username" placeholder="username" required><br><br>
+        <input type="password" name="password" placeholder="password" required><br><br>
+        <input type="submit">
+    </form>
+    <br>
+
+    <a href="/register">Click here to register</a>
+
+{% endblock %}

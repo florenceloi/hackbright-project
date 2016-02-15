@@ -71,22 +71,94 @@ def register_user():
 
 @app.route('/registered', methods=["POST"])
 def add_user_to_db():
-  """Add new user to table users."""
+    """Add new user to table users."""
 
-  # Get form values
-  username = request.form.get("username")
-  password = request.form.get("password")
+    # Get form values
+    username = request.form.get("username")
+    password = request.form.get("password")
+    password1 = request.form.get("password1")
+    fname = request.form.get("fname")
+    lname = request.form.get("lname")
 
-  # Instantiate new User object based on form values
-  new_user = User(username=username, password=password)
+    # Get list of usernames in database model
+    db_usernames = db.session.query(User.username).all()
+    usernames = []
+    for u in db_usernames:
+        print u
 
-  # Add new User to db
-  db.session.add(new_user)
-  db.session.commit()
+    if username in usernames:
+        flash("Username taken. Please select another.")
+        return redirect("/register")
 
-  # Redirect to homepage and confirm registration
-  flash("You've successfully registered!")
-  return redirect("/home")
+    # Validate password
+    elif password != password1:
+        flash("Your passwords do not match!")
+        return redirect("/register")
+
+    else: 
+        # Instantiate new User object based on form values
+        new_user = User(username=username,
+                        password=password,
+                        fname=fname,
+                        lname=lname)
+
+        # Add new User to db
+        db.session.add(new_user)
+        db.session.commit()
+
+        # Redirect to homepage and confirm registration
+        flash("You've successfully registered!")
+        return redirect("/home")
+
+
+@app.route('/login')
+def login():
+    """Login user."""
+    
+    return render_template("login.html")
+
+
+@app.route('/loggedin', methods=["POST"])
+def check_user_existence():
+    """Allow user to login given correct credentials."""
+
+    # Get form values
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # Get user object whose email matches form's email
+    user = User.query.filter(User.username == username).one()
+
+    # If email and password combo matches, logs in successfully
+    if user and user.password == password:
+        session["user_id"] = user.user_id
+        flash("You've successfully logged in!")
+        return redirect("/home")
+
+    elif not user or user.password != form_password:
+        flash("Invalid email or password. Please register if you do not have an account.")
+        return redirect("/login")
+
+
+@app.route('/account')
+def user_detail():
+    """Show information in user account."""
+
+    # If user in session, get User object
+    if session["user_id"]:
+        user = User.query.filter(User.user_id == session["user_id"]).one()
+
+    return render_template('account.html', user=user)
+
+
+@app.route('/logout')
+def logout():
+    """Logout user."""
+
+    del session["user_id"]
+    flash("You've successfully logged out!")
+
+    return redirect('/home')
 
 
 if __name__ == "__main__":

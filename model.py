@@ -16,11 +16,16 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     username = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
+    fname = db.Column(db.String(64), nullable=False)
+    lname = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
         """Provides helpful representation when printed."""
 
-        return "<User user_id=%s username=%s>" % (self.user_id, self.username)
+        return "<User user_id=%s username=%s fname=%s lname=%s>" % (self.user_id,
+                                                                    self.username,
+                                                                    self.fname,
+                                                                    self.lname)
 
 
 class Restaurant(db.Model):
