@@ -47,31 +47,37 @@ function addRestaurantMarkers(map) {
       var aliases = restaurant.categoryAliases;
 
       for (var i=0; i < aliases.length; i++) {
-        console.log(aliases[i]);
+        // console.log(aliases[i]);
+        // console.log(restaurant.lat);
+        // console.log(restaurant.lng);
+        // console.log(map);
+        // console.log(restaurant._name);
+        // Instantiate marker for each restaurant
+        // eval("var " + aliases[i] + "Marker = '123'");
+        eval("var " + aliases[i] + "Marker = new google.maps.Marker({ " +
+          "position: new google.maps.LatLng(" + restaurant.lat + ", " + restaurant.lng + "), " +
+          "map: " + map + ", " +
+          "title: " + restaurant._name + ", " +
+          "icon: '/static/img/paw.png'" +
+          "});");
 
-      // // Instantiate marker for each restaurant
-      // marker = new google.maps.Marker({
-      //   position: new google.maps.LatLng(restaurant.lat, restaurant.lng),
-      //   map: map,
-      //   title: restaurant._name,
-      //   icon: '/static/img/paw.png',
-      //   });
+        console.log(newamericanMarker);
 
-      // // Define the content of the infoWindow
-      // html = (
-      //   '<div class="window-content">' +
-      //     '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
-      //     '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
-      //     '<p><b>Address: </b>' + restaurant.address + '</p>' +
-      //     '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
-      //     '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg + '" alt="' + restaurant.yelpRating + '">' +
-      //     ' (' + restaurant.reviewCount + ' reviews) </p>' +
-      //     '<a href="' + restaurant.yelpUrl + '"> <img src="/static/img/yelp_review_btn_red.png" alt="' + restaurant._name + '" style="width:125px;">' +
-      //   '</div>');
+        // // Define the content of the infoWindow
+        // html = (
+        //   '<div class="window-content">' +
+        //     '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
+        //     '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
+        //     '<p><b>Address: </b>' + restaurant.address + '</p>' +
+        //     '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
+        //     '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg + '" alt="' + restaurant.yelpRating + '">' +
+        //     ' (' + restaurant.reviewCount + ' reviews) </p>' +
+        //     '<a href="' + restaurant.yelpUrl + '"> <img src="/static/img/yelp_review_btn_red.png" alt="' + restaurant._name + '" style="width:125px;">' +
+        //   '</div>');
 
-      // // Inside the loop we call bindInfoWindow passing it the marker,
-      // // map, infoWindow and contentString
-      // bindInfoWindow(marker, map, infoWindow, html);
+        // // Inside the loop we call bindInfoWindow passing it the marker,
+        // // map, infoWindow and contentString
+        // bindInfoWindow(eval(aliases[i] + "Marker"), map, infoWindow, html);
       }
     }
   });
