@@ -30,8 +30,10 @@ def index():
     """Homepage."""
 
     # Instantiate category dictionary using dictionary comprehension
-    categories = [category.category 
+    categories = [(category.category, category.alias) 
                   for category in Category.query.order_by('category').all()]
+
+    print categories, '**************************************************************'
 
     return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
