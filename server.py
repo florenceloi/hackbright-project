@@ -54,8 +54,7 @@ def bear_info():
             "reviewCount": restaurant.yelp_review_count,
             "lat": restaurant.lat,
             "lng": restaurant.lng,
-            "categories": [jsonpickle.encode(category)
-                           for category in restaurant.categories]
+            "categoryAliases": [c.alias for c in restaurant.categories]
         }
         for restaurant in Restaurant.query.all()}
 
