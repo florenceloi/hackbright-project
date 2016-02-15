@@ -45,10 +45,10 @@ function addRestaurantMarkers(map) {
     for (var key in restaurants) {
       restaurant = restaurants[key];
       console.log(restaurant);
-      // var categories = restaurant.categories;
+      var categories = restaurant.categories;
 
       // for (var category in categories) {
-        // console.log(category);
+        // console.log(category.category);
       //   alias = category.alias;
 
 
@@ -75,6 +75,7 @@ function addRestaurantMarkers(map) {
       // Inside the loop we call bindInfoWindow passing it the marker,
       // map, infoWindow and contentString
       bindInfoWindow(marker, map, infoWindow, html);
+      // }
     }
   });
 }

@@ -3,10 +3,22 @@
   <head>
     <link rel="stylesheet" href="/static/css/styles.css">
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_key }}&callback=initMap"></script>
+    <title>{% block title %}TITLE GOES HERE{% endblock %}</title>
     {% block head %}HEAD CONTENT GOES HERE{% endblock %}
   </head>
   <body>
+    {% for flash in get_flashed_messages() %}
+
+      {{ flash }}
+
+    {% endfor %}
+
+    <a href="/home">Home</a>
+    <a href="/register">Register</a>
+    <a href="/login">Sign in</a>
+    <a href="/logout">Sign Out</a>
+  <hr>
+
     {% block content %}BODY CONTENT GOES HERE{% endblock %}
     </script>
   </body>

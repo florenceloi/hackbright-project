@@ -37,7 +37,6 @@ def index():
 
     return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
-
 @app.route('/home.json')
 def bear_info():
     """JSON information about restaurants."""
@@ -60,9 +59,34 @@ def bear_info():
         }
         for restaurant in Restaurant.query.all()}
 
-    print restaurants, "**********************************************************"
-
     return jsonify(restaurants)
+
+
+@app.route('/register')
+def register_user():
+  """Allow user to register."""
+
+  return render_template('register.html')
+
+
+@app.route('/registered', methods=["POST"])
+def add_user_to_db():
+  """Add new user to table users."""
+
+  # Get form values
+  username = request.form.get("username")
+  password = request.form.get("password")
+
+  # Instantiate new User object based on form values
+  new_user = User(username=username, password=password)
+
+  # Add new User to db
+  db.session.add(new_user)
+  db.session.commit()
+
+  # Redirect to homepage and confirm registration
+  flash("You've successfully registered!")
+  return redirect("/home")
 
 
 if __name__ == "__main__":
