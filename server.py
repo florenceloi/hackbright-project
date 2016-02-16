@@ -13,6 +13,8 @@ from model import (connect_to_db,
 
 from api import yelp_client, gmaps_key
 
+import json
+
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
@@ -30,35 +32,44 @@ def index():
     """Homepage."""
 
     # Instantiate category dictionary using dictionary comprehension
-    categories = [(category.category, category.alias) 
+    categories = [category.category 
                   for category in Category.query.order_by('category').all()]
-
-    print categories, '**************************************************************'
 
     return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
 @app.route('/home.json')
 def bear_info():
-    """JSON information about restaurants."""
+    """JSON information about restaurants.
 
-    # Instantiate restaurant dictionary using dictionary comprehension
-    restaurants = {
-        restaurant.restaurant_id: {
-            "_name": restaurant.name,
-            "address": restaurant.address,
-            "phone": restaurant.phone,
-            "yelpUrl": restaurant.yelp_url,
-            "yelpImgUrl": restaurant.yelp_img_url,
-            "yelpRating": restaurant.yelp_rating,
-            "yelpRatingImg": restaurant.yelp_rating_img,
-            "reviewCount": restaurant.yelp_review_count,
-            "lat": restaurant.lat,
-            "lng": restaurant.lng,
-            "categoryAliases": [c.alias for c in restaurant.categories]
-        }
-        for restaurant in Restaurant.query.all()}
+    For each category that each restaurant in the database is in,
+    create a key-value pair in the restaurants dictionary,
+    where the value is a dictionary containing restaurant information."""
 
-    return jsonify(restaurants)
+    restaurants_lst = []
+
+    # Get all restaurants in database
+    query = Restaurant.query.all()
+  
+    # For each restaurant, get a list of its categories
+    for r in query:
+        categories = [category.category for category in r.categories]
+
+        for i in range(len(categories)):
+            restaurants_lst.append({"_name": r.name,
+                               "address": r.address,
+                               "phone": r.phone,
+                               "yelpUrl": r.yelp_url,
+                               "yelpImgUrl": r.yelp_img_url,
+                               "yelpRating": r.yelp_rating,
+                               "yelpRatingImg": r.yelp_rating_img,
+                               "reviewCount": r.yelp_review_count,
+                               "lat": r.lat,
+                               "lng": r.lng,
+                               "category": categories[i]})
+
+    restaurants_dict = {"restaurants": restaurants_lst}
+
+    return jsonify(restaurants_dict)
 
 
 @app.route('/register')

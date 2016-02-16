@@ -33,45 +33,34 @@ function initMap() {
 
 
 function addRestaurantMarkers(map) {
+  var markers = new Array();
+
   // Instantiate info windows
   var infoWindow = new google.maps.InfoWindow();
 
   // Retrieve the jsonified Python dictionary of restaurants with AJAX
-  $.get('/home.json', function (restaurants) {
-    var restaurant, marker;
+  $.get('/home.json', function (restaurants_dict) {
+
+    var restaurants = restaurants_dict["restaurants"];
 
     // Loop over each restaurant in dictionary
-    for (var key in restaurants) {
-      restaurant = restaurants[key];
-    //   var aliases = restaurant.categoryAliases;
+    for (var i = 0; i < restaurants.length; i++) {
+      var restaurant = restaurants[i];
 
       // Instantiate marker for each restaurant
-      marker = new google.maps.Marker({
+      var marker = new google.maps.Marker({
         position: new google.maps.LatLng(restaurant.lat, restaurant.lng),
         map: map,
         title: restaurant._name,
         icon: '/static/img/paw.png',
+        visible: false,
         });
 
-    //   for (var i=0; i < aliases.length; i++) {
-    //     // console.log(aliases[i]);
-    //     // console.log(restaurant.lat);
-    //     // console.log(restaurant.lng);
-    //     // console.log(map);
-    //     // console.log(restaurant._name);
-    //     // Instantiate marker for each restaurant
-    //     // eval("var " + aliases[i] + "Marker = '123'");
-    //     eval("var " + aliases[i] + "Marker = new google.maps.Marker({ " +
-    //       "position: new google.maps.LatLng(" + restaurant.lat + ", " + restaurant.lng + ")," +
-    //       "map: " + map + "," +
-    //       "title: " + restaurant._name + "," +
-    //       "icon: '/static/img/paw.png'" +
-    //       "});");
-
-    //     console.log(newamericanMarker);
+      // Add new marker to markers list
+      markers.push(marker);
 
       // Define the content of the infoWindow
-      html = (
+      var html = (
         '<div class="window-content">' +
           '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
           '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
@@ -84,10 +73,41 @@ function addRestaurantMarkers(map) {
 
       // Inside the loop we call bindInfoWindow passing it the marker,
       // map, infoWindow and contentString
-      bindInfoWindow(eval(aliases[i] + "Marker"), map, infoWindow, html);
-      // }
+      bindInfoWindow(marker, map, infoWindow, html);
     }
   });
+
+  // Show all markers of a particular category
+  function show(markers, restaurants, category) {
+    // Loop over each restaurant in dictionary
+    for (var i = 0; i < restaurants.length; i++) {
+      var restaurant = restaurants[i];
+      if (restaurant.category == category) {
+        markers[i].setVisible(true);
+      }
+    }
+  }
+
+  // Hide all markers of a particular category
+  function hide(markers, restaurants, category) {
+    // Loop over each restaurant in dictionary
+    for (var i = 0; i < restaurants.length; i++) {
+      var restaurant = restaurants[i];
+      if (restaurant.category == category) {
+        markers[i].setVisible(false);
+      }
+    }
+  }
+  
+  $(".category").click(function () {
+    var cat = $(this).attr("value");
+    if ($(this).is(":checked")) {
+      show(cat);
+    } else {
+      hide(cat);
+    }
+  });
+
 }
 
 

@@ -20,7 +20,7 @@
         
         {% for category in categories %}
             
-            <input id="{{ category[1] }}" type="checkbox" name="category" value="{{ category[0] }}">{{ category[0] }}
+            <input class="category" type="checkbox" name="category" value="{{ category }}">{{ category }}
 
         {% endfor %}
 
