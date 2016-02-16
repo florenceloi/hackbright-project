@@ -33,7 +33,7 @@ function initMap() {
 
 
 function addRestaurantMarkers(map) {
-  var markers = new Array();
+  var markers = [];
 
   // Instantiate info windows
   var infoWindow = new google.maps.InfoWindow();
@@ -75,39 +75,39 @@ function addRestaurantMarkers(map) {
       // map, infoWindow and contentString
       bindInfoWindow(marker, map, infoWindow, html);
     }
-  });
 
-  // Show all markers of a particular category
-  function show(markers, restaurants, category) {
-    // Loop over each restaurant in dictionary
-    for (var i = 0; i < restaurants.length; i++) {
-      var restaurant = restaurants[i];
-      if (restaurant.category == category) {
-        markers[i].setVisible(true);
+    // Show all markers of a particular category
+    var show = function (category) {
+      // Loop over each restaurant in dictionary
+      for (var i = 0; i < restaurants.length; i++) {
+        var restaurant = restaurants[i];
+        if (restaurant.category == category) {
+          markers[i].setVisible(true);
+        }
       }
-    }
-  }
+    };
 
-  // Hide all markers of a particular category
-  function hide(markers, restaurants, category) {
-    // Loop over each restaurant in dictionary
-    for (var i = 0; i < restaurants.length; i++) {
-      var restaurant = restaurants[i];
-      if (restaurant.category == category) {
-        markers[i].setVisible(false);
+    // Hide all markers of a particular category
+    var hide = function (category) {
+      // Loop over each restaurant in dictionary
+      for (var i = 0; i < restaurants.length; i++) {
+        var restaurant = restaurants[i];
+        if (restaurant.category == category) {
+          markers[i].setVisible(false);
+        }
       }
-    }
-  }
-  
-  $(".category").click(function () {
-    var cat = $(this).attr("value");
-    if ($(this).is(":checked")) {
-      show(cat);
-    } else {
-      hide(cat);
-    }
+    };
+    
+    $(".category").click(function () {
+      var cat = $(this).attr("value");
+      console.log(cat);
+      if ($(this).is(":checked")) {
+        show(cat);
+      } else {
+        hide(cat);
+      }
+    });
   });
-
 }
 
 
