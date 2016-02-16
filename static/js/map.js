@@ -100,12 +100,19 @@ function addRestaurantMarkers(map) {
     
     $(".category").click(function () {
       var cat = $(this).attr("value");
-      console.log(cat);
       if ($(this).is(":checked")) {
         show(cat);
       } else {
         hide(cat);
       }
+    });
+
+    $("#selectAll").toggle(function() {
+      $('.category').attr('checked', 'checked');
+      $(this).val('Uncheck all');
+    }, function() {
+      $('.category').removeAttr('checked');
+      $(this).val('Check all');
     });
   });
 }
