@@ -1,3 +1,5 @@
+"use strict";
+
 // Renders map populated with restaurants,
 // allows centering on geocoding and current location
 function initMap() {
@@ -103,7 +105,7 @@ function makeMarker(restaurant, map) {
   map: map,
   title: restaurant._name,
   icon: '/static/img/paw.png',
-  visible: false,
+  visible: true,
   });
   return temp_marker;
 }
@@ -145,7 +147,6 @@ function geocodeAddress(geocoder, resultsMap) {
 
   // Get address value from form
   var address = document.getElementById('address').value;
-  console.log('works');
   
   // Make request to Geocoding service with address and execute anonymous callback method
   geocoder.geocode({'address': address}, function(results, status) {
@@ -156,7 +157,6 @@ function geocodeAddress(geocoder, resultsMap) {
         map: resultsMap,
         position: results[0].geometry.location
       });
-      console.log('works');
     } else {
       alert('Centering on ' + address + ' was not successful for the following reason: ' + status);
     }

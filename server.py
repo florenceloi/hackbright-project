@@ -37,6 +37,7 @@ def index():
 
     return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
+
 @app.route('/home.json')
 def bear_info():
     """JSON information about restaurants.
@@ -102,7 +103,7 @@ def add_user_to_db():
 
     # Validate password
     elif password != password1:
-        flash("Your passwords do not match!")
+        flash("Passwords do not match.")
         return redirect("/register")
 
     else: 
@@ -117,8 +118,12 @@ def add_user_to_db():
         db.session.commit()
 
         # Redirect to homepage and confirm registration
-        flash("You've successfully registered!")
-        return redirect("/home")
+        if fname:
+            flash("User %s added." % fname)
+            return redirect("/home")
+        else:
+            flash("User %s added." % username)
+            return redirect("/home")
 
 
 @app.route('/login')
@@ -142,10 +147,14 @@ def check_user_existence():
     # If email and password combo matches, logs in successfully
     if user and user.password == password:
         session["user_id"] = user.user_id
-        flash("You've successfully logged in!")
-        return redirect("/home")
+        if user.fname:
+            flash("Welcome back, %s." % user.fname)
+            return redirect("/home")
+        else:
+            flash("Welcome back, %s." % user.username)
+            return redirect("/home")
 
-    elif not user or user.password != form_password:
+    elif not user or user.password != password:
         flash("Invalid email or password. Please register if you do not have an account.")
         return redirect("/login")
 
@@ -165,8 +174,16 @@ def user_detail():
 def logout():
     """Logout user."""
 
+    # Get user object whose email matches form's email
+    user = User.query.filter(User.user_id == session["user_id"]).one()
+
     del session["user_id"]
-    flash("You've successfully logged out!")
+    if user.fname:
+        flash("'til next time, %s..." % user.fname)
+        return redirect("/home")
+    else:
+        flash("'til next time, %s..." % user.username)
+        return redirect("/home")
 
     return redirect('/home')
 
