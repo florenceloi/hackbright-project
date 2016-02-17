@@ -1,8 +1,9 @@
 
-function submitRegistration(evt) {
-    evt.preventDefault();
+function checkUniqueness(evt) {
 
-    var username = $("username").val()
+    var username = $("#username").val()
+
+    $.post("")
 }
 
-$("#register-form").submit(submitRegistration);
+$("#username").keyup(checkUniqueness);
