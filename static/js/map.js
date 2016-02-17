@@ -76,7 +76,7 @@ function addRestaurantMarkers(map) {
       }
     };
     
-    $(".category").click(function () {
+    $(".category").change(function () {
       var cat = $(this).attr("value");
       if ($(this).is(":checked")) {
         show(cat);
@@ -85,12 +85,12 @@ function addRestaurantMarkers(map) {
       }
     });
 
-    $("#selectAll").toggle(function() {
-      $('.category').attr('checked', 'checked');
-      $(this).val('Uncheck all');
-    }, function() {
-      $('.category').removeAttr('checked');
-      $(this).val('Check all');
+    $("#selectAll").click(function() {
+      var all = $(this);
+      $('input:checkbox').each(function() {
+        $(this).prop("checked", all.prop("checked"));
+        $(this).change();
+      });
     });
   });
 }
