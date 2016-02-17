@@ -18,7 +18,7 @@
 
         <button id="current-location" type="button">Center on current location</button><br>
         
-        <input id="selectAll" type="button" value="Check all">
+        <input id="selectAll" type="checkbox" name="all-categories" value="Check all">Select All
         <br>
         {% for category in categories %}          
             <input class="category" type="checkbox" name="category" value="{{ category }}">{{ category }}

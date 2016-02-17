@@ -43,36 +43,14 @@ function addRestaurantMarkers(map) {
 
     var restaurants = restaurants_dict["restaurants"];
 
-    // Loop over each restaurant in dictionary
+    // Looping over each restaurant in dictionary,
+    // make marker, push marker to markers array,
+    // define content of info window and bind to marker.
     for (var i = 0; i < restaurants.length; i++) {
       var restaurant = restaurants[i];
-
-      // Instantiate marker for each restaurant
-      var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(restaurant.lat, restaurant.lng),
-        map: map,
-        title: restaurant._name,
-        icon: '/static/img/paw.png',
-        visible: false,
-        });
-
-      // Add new marker to markers list
+      var marker = makeMarker(restaurant, map);
       markers.push(marker);
-
-      // Define the content of the infoWindow
-      var html = (
-        '<div class="window-content">' +
-          '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name + '" style="width:150px;">' +
-          '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
-          '<p><b>Address: </b>' + restaurant.address + '</p>' +
-          '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
-          '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg + '" alt="' + restaurant.yelpRating + '">' +
-          ' (' + restaurant.reviewCount + ' reviews) </p>' +
-          '<a href="' + restaurant.yelpUrl + '"> <img src="/static/img/yelp_review_btn_red.png" alt="' + restaurant._name + '" style="width:125px;">' +
-        '</div>');
-
-      // Inside the loop we call bindInfoWindow passing it the marker,
-      // map, infoWindow and contentString
+      var html = makeInfoWindow(restaurant);
       bindInfoWindow(marker, map, infoWindow, html);
     }
 
@@ -115,6 +93,40 @@ function addRestaurantMarkers(map) {
       $(this).val('Check all');
     });
   });
+}
+
+
+// Instantiate marker for each restaurant
+function makeMarker(restaurant, map) {
+  var temp_marker = new google.maps.Marker({
+  position: new google.maps.LatLng(restaurant.lat, restaurant.lng),
+  map: map,
+  title: restaurant._name,
+  icon: '/static/img/paw.png',
+  visible: false,
+  });
+  return temp_marker;
+}
+
+
+// Define the content of the infoWindow for each restaurant
+function makeInfoWindow(restaurant) {
+  var temp_html = (
+    '<div class="window-content">' +
+      '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name +
+        '" style="width:150px;">' +
+      '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
+      '<p><b>Address: </b>' + restaurant.address + '</p>' +
+      '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
+      '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg +
+        '" alt="' + restaurant.yelpRating + '">' +
+        ' (' + restaurant.reviewCount + ' reviews) </p>' +
+      '<a href="' + restaurant.yelpUrl +
+        '"> <img src="/static/img/yelp_review_btn_red.png" alt="' +
+        restaurant._name + '" style="width:125px;">' +
+    '</div>'
+  );
+  return temp_html;
 }
 
 
@@ -166,7 +178,7 @@ function centerOnGeolocation(locationInfoWindow, map) {
 
       locationInfoWindow.setPosition(pos);
       locationInfoWindow.setContent('Current location.');
-      locationInfoWindow.setMap(map)
+      locationInfoWindow.setMap(map);
       map.setCenter(pos);
     }, function() {
       handleLocationError(true, locationInfoWindow, map.getCenter());
