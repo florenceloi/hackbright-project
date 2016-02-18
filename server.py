@@ -9,7 +9,8 @@ from model import (connect_to_db,
                    Restaurant,
                    Category,
                    Review,
-                   Restaurant_Category)
+                   Restaurant_Category,
+                   Favorite)
 
 from api import yelp_client, gmaps_key
 
@@ -56,7 +57,8 @@ def bear_info():
         categories = [category.category for category in r.categories]
 
         for i in range(len(categories)):
-            restaurants_lst.append({"_name": r.name,
+            restaurants_lst.append({"db_id": r.restaurant_id,
+                               "_name": r.name,
                                "address": r.address,
                                "phone": r.phone,
                                "yelpUrl": r.yelp_url,
@@ -161,18 +163,60 @@ def check_user_existence():
         return redirect("/login")
 
 
+@app.route('/favorite')
+def add_favorite():
+    """Add user's favorite restaurant to database."""
+
+    # Get restaurant id, restaurant database object, and user id
+    restaurant_id = request.args.get("restaurant_id")
+    restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
+    user_id = session["user_id"]
+
+    # Get list of user's favorites from database
+    db_user_favorites = db.session.query(Favorite.restaurant_id).filter(User.user_id == user_id).all()
+    user_favorites = []
+    for u_tuple in db_user_favorites:
+        for u_favorite in u_tuple:
+            user_favorites.append(u_favorite)
+
+    # If current restaurant is not already one of user's favorites,
+    # add it to the database
+    if restaurant_id not in user_favorites:
+        new_favorite = Favorite(restaurant_id=restaurant_id,
+                                user_id=user_id)
+
+        db.session.add(new_favorite)
+        db.session.commit()
+
+        flash("Saved %s as a favorite" % restaurant.name)
+
+    return redirect("/home")
+
+
 @app.route('/profile')
 def user_detail():
     """Show information in user profile."""
 
+    # import pdb; pdb.set_trace()
+
     # If user in session, get User object
     if session["user_id"]:
-        user = User.query.filter(User.user_id == session["user_id"]).one()
+        user_id = session["user_id"]
+        user = User.query.filter(User.user_id == user_id).one()
+        favorites = Favorite.query.filter(Favorite.user_id == user_id).all()
 
-    return render_template('account.html', user=user)
+        return render_template('profile.html', user=user, favorites=favorites)
+
+    else:
+        flash("Please register first.")
+        return redirect("/register")
 
 
+@app.route('/review')
+def review_restaurant():
+    """Allow user to review specific restaurant."""
 
+    
 
 
 @app.route('/logout')
@@ -186,6 +230,11 @@ def logout():
 
     return redirect("/home")
 
+
+###################################################################################
+# Helper functions
+
+# import pdb; pdb.set_trace()
 
 if __name__ == "__main__":
     

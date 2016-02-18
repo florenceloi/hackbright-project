@@ -13,12 +13,15 @@
 
 {% block content %}
     
-    <h2>User info</h2>
-    <ul>    
-      <li>Name: {{ user.fname + " " + user.lname }}</li>
-    </ul>
+    <h2>{{ user.fname }}'s Profile</h2>
     
     <p>Restaurants you've favorited:</p>
+
+        <ul>
+            {% for favorite in favorites %}
+                <li>{{ favorite.restaurant.name }}</li>
+            {% endfor %}
+        </ul>
 
     <p>Restaurants you've reviewed:</p>
 

@@ -30,7 +30,7 @@ function initMap() {
   // Recenter map on current location
   $('#current-location').click(function() {
     centerOnGeolocation(locationInfoWindow, map);
-    locationInfoWindow.open(map);
+    // locationInfoWindow.open(map);
   });
 }
 
@@ -126,7 +126,12 @@ function makeInfoWindow(restaurant) {
         ' (' + restaurant.reviewCount + ' reviews) </p>' +
       '<a href="' + restaurant.yelpUrl +
         '"> <img src="/static/img/yelp_review_btn_red.png" alt="' +
-        restaurant._name + '" style="width:125px;">' +
+        restaurant._name + '" style="width:125px;"></a>' +
+      '<p><form action="/favorite" method="GET">' +
+        '<input type="hidden" name="restaurant_id" value="' + restaurant.db_id + '">' +
+        '<input type="submit" value="Favorite ' + restaurant._name + '">' +
+      '</form></p>' +
+      '<button type="button>Review ' + restaurant._name + 
     '</div>'
   );
   return temp_html;
