@@ -30,6 +30,7 @@ function initMap() {
   // Recenter map on current location
   $('#current-location').click(function() {
     centerOnGeolocation(locationInfoWindow, map);
+    locationInfoWindow.open(map);
   });
 }
 
