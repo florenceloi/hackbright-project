@@ -94,9 +94,11 @@ def add_user_to_db():
     # Get list of usernames in database model
     db_usernames = db.session.query(User.username).all()
     usernames = []
-    for u in db_usernames:
-        print u
+    for u_tuple in db_usernames:
+        for u_username in u_tuple:
+            usernames.append(u_username)
 
+    # Verify username is not already in database
     if username in usernames:
         flash("Username taken. Please select another.")
         return redirect("/register")

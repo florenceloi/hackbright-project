@@ -1,9 +1,10 @@
+console.log("1");
 
-function checkUniqueness(evt) {
+function checkUniqueness() {
 
-    var username = $("#username").val()
-
-    $.post("")
+    console.log("3");
 }
 
-$("#username").keyup(checkUniqueness);
+$("#check").click(function() {
+    console.log("please???");
+});
