@@ -119,13 +119,15 @@ def add_user_to_db():
         db.session.add(new_user)
         db.session.commit()
 
+        # Add user's id and first name to session
+        db_user = User.query.filter(User.username == username,
+                                    User.password == password).one()
+        session["user_id"] = db_user.user_id
+        session["fname"] = db_user.fname
+
         # Redirect to homepage and confirm registration
-        if fname:
-            flash("User %s added." % fname)
-            return redirect("/home")
-        else:
-            flash("User %s added." % username)
-            return redirect("/home")
+        flash("User %s added." % fname)
+        return redirect("/home")
 
 
 @app.route('/login')
@@ -144,26 +146,24 @@ def check_user_existence():
     password = request.form.get("password")
 
     # Get user object whose email matches form's email
-    user = User.query.filter(User.username == username).one()
+    user = User.query.filter(User.username == username).first()
 
     # If email and password combo matches, logs in successfully
     if user and user.password == password:
         session["user_id"] = user.user_id
-        if user.fname:
-            flash("Welcome back, %s." % user.fname)
-            return redirect("/home")
-        else:
-            flash("Welcome back, %s." % user.username)
-            return redirect("/home")
+        session["fname"] = user.fname
+
+        flash("Welcome back, %s." % user.fname)
+        return redirect("/home")
 
     elif not user or user.password != password:
         flash("Invalid email or password. Please register if you do not have an account.")
         return redirect("/login")
 
 
-@app.route('/account')
+@app.route('/profile')
 def user_detail():
-    """Show information in user account."""
+    """Show information in user profile."""
 
     # If user in session, get User object
     if session["user_id"]:
@@ -172,22 +172,19 @@ def user_detail():
     return render_template('account.html', user=user)
 
 
+
+
+
 @app.route('/logout')
 def logout():
     """Logout user."""
 
     # Get user object whose email matches form's email
-    user = User.query.filter(User.user_id == session["user_id"]).one()
+    if session["user_id"]:
+        flash("See you next time, %s!" % session["fname"])
+        del session["user_id"], session["fname"]
 
-    del session["user_id"]
-    if user.fname:
-        flash("'til next time, %s..." % user.fname)
-        return redirect("/home")
-    else:
-        flash("'til next time, %s..." % user.username)
-        return redirect("/home")
-
-    return redirect('/home')
+    return redirect("/home")
 
 
 if __name__ == "__main__":

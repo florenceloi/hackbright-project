@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+    {{ user.fname }}'s Account
+
+{% endblock %}
+
+{% block head %}
+    
+{% endblock %}
+
+
+{% block content %}
+    
+    <h2>User info</h2>
+    <ul>    
+      <li>Name: {{ user.fname + " " + user.lname }}</li>
+    </ul>
+    
+    <p>Restaurants you've favorited:</p>
+
+    <p>Restaurants you've reviewed:</p>
+
+{% endblock %}
