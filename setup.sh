@@ -7,5 +7,5 @@ source env/bin/activate
 pip install -r requirements.txt
 dropdb r
 createdb r
-psql r < restaurants.sql
+python seed.py
 python server.py
