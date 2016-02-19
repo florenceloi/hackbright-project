@@ -9,9 +9,7 @@ from model import (connect_to_db,
                    db,
                    User,
                    Restaurant,
-                   Category,
                    Review,
-                   Restaurant_Category,
                    Favorite)
 
 from api import yelp_client, gmaps_key
@@ -53,7 +51,7 @@ def bear_info():
 
     # Get all restaurants in database
     query = Restaurant.query.all()
-  
+
     # For each restaurant, get a list of its categories
     for r in query:
         categories = [category.category for category in r.categories]
