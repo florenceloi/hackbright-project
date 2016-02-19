@@ -1,3 +1,6 @@
+// HUGE FIXME!!! CAN ONLY STORE YELP'S BUSINESS ID, CANNOT STORE ANYTHING ELSE
+
+
 "use strict";
 
 // Renders map populated with restaurants,
@@ -131,7 +134,7 @@ function makeInfoWindow(restaurant) {
         '<input type="hidden" name="restaurant_id" value="' + restaurant.db_id + '">' +
         '<input type="submit" value="Favorite ' + restaurant._name + '">' +
       '</form></p>' +
-      '<button type="button>Review ' + restaurant._name + '</button>' +
+      '<a href="/restaurants/' + restaurant.db_id + '">See page for ' + restaurant._name + '</a>' +
     '</div>'
   );
   return temp_html;

@@ -1,3 +1,5 @@
+# HUGE FIXME!!! CAN ONLY STORE YELP'S BUSINESS ID, CANNOT STORE ANYTHING ELSE
+
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
@@ -212,11 +214,13 @@ def user_detail():
         return redirect("/register")
 
 
-@app.route('/review')
-def review_restaurant():
+@app.route('/restaurants/<int:restaurant_id>')
+def review_restaurant(restaurant_id):
     """Allow user to review specific restaurant."""
 
-    
+    restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
+
+    return render_template("restaurant-info.html", restaurant=restaurant)
 
 
 @app.route('/logout')

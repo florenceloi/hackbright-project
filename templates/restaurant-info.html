@@ -2,7 +2,7 @@
 
 {% block title %}
 
-    {{ user.fname }}'s Account
+    {{ restaurant.name }}
 
 {% endblock %}
 
@@ -17,5 +17,17 @@
 
 
 {% block content %}
+
+    <h1>{{ restaurant.name }} Information</h1>
+
+    <form id="review-form" action="/review" method="POST">
+        <p>Rate out of 5:</p>
+        {% for n in [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] %}
+            <input id="rating" type="radio" name="rating" value="{{ n }}" required> {{ n }}
+        {% endfor %}<br><br>
+        <textarea form="review-form" rows="10" cols="50" required>Write your review here!</textarea>
+        <br><br>
+        <input type="submit">
+    </form>
     
 {% endblock %}

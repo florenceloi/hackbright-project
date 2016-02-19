@@ -1,3 +1,5 @@
+# HUGE FIXME!!! CAN ONLY STORE YELP'S BUSINESS ID, CANNOT STORE ANYTHING ELSE
+
 from flask_sqlalchemy import SQLAlchemy
 
 # Using the Flask-SQLAlchemy helper library, this allows us to connect to the 
