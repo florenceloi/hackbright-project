@@ -42,7 +42,7 @@ function addRestaurantMarkers(map) {
   var markers = [];
 
   // Instantiate info windows
-  var infoWindow = new google.maps.InfoWindow();
+  // var infoWindow = new google.maps.InfoWindow();
 
   // Retrieve the jsonified Python dictionary of restaurants with AJAX
   $.get('/home.json', function (restaurants_dict) {
@@ -56,8 +56,8 @@ function addRestaurantMarkers(map) {
       var restaurant = restaurants[i];
       var marker = makeMarker(restaurant, map);
       markers.push(marker);
-      var html = makeInfoWindow(restaurant);
-      bindInfoWindow(marker, map, infoWindow, html);
+      // var html = makeInfoWindow(restaurant);
+      // bindInfoWindow(marker, map, infoWindow, html);
     }
 
     // Show all markers of a particular category
@@ -71,33 +71,33 @@ function addRestaurantMarkers(map) {
       }
     };
 
-    // Hide all markers of a particular category
-    var hide = function (category) {
-      // Loop over each restaurant in dictionary
-      for (var i = 0; i < restaurants.length; i++) {
-        var restaurant = restaurants[i];
-        if (restaurant.category == category) {
-          markers[i].setVisible(false);
-        }
-      }
-    };
+    // // Hide all markers of a particular category
+    // var hide = function (category) {
+    //   // Loop over each restaurant in dictionary
+    //   for (var i = 0; i < restaurants.length; i++) {
+    //     var restaurant = restaurants[i];
+    //     if (restaurant.category == category) {
+    //       markers[i].setVisible(false);
+    //     }
+    //   }
+    // };
     
-    $(".category").change(function () {
-      var cat = $(this).attr("value");
-      if ($(this).is(":checked")) {
-        show(cat);
-      } else {
-        hide(cat);
-      }
-    });
+    // $(".category").change(function () {
+    //   var cat = $(this).attr("value");
+    //   if ($(this).is(":checked")) {
+    //     show(cat);
+    //   } else {
+    //     hide(cat);
+    //   }
+    // });
 
-    $("#selectAll").click(function() {
-      var all = $(this);
-      $('input:checkbox').each(function() {
-        $(this).prop("checked", all.prop("checked"));
-        $(this).change();
-      });
-    });
+    // $("#selectAll").click(function() {
+    //   var all = $(this);
+    //   $('input:checkbox').each(function() {
+    //     $(this).prop("checked", all.prop("checked"));
+    //     $(this).change();
+    //   });
+    // });
   });
 }
 

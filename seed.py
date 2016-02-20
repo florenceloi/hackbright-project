@@ -5,7 +5,7 @@
 from model import connect_to_db, db, Restaurant
 from server import app
 
-from parse_restaurants import yelp_object_list
+from helper_functions import yelp_object_list
 
 
 def populate_restaurants_table(yelp_object_list):
