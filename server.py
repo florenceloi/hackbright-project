@@ -5,16 +5,15 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import (connect_to_db, 
+from model import (connect_to_db,
                    db,
                    User,
                    Restaurant,
-                   Review,
                    Favorite)
 
-from api import yelp_client, gmaps_key
+from api import gmaps_key
 
-import json
+from parse_restaurants import yelp_object_list
 
 app = Flask(__name__)
 
@@ -33,10 +32,11 @@ def index():
     """Homepage."""
 
     # Instantiate category dictionary using dictionary comprehension
-    categories = [category.category 
-                  for category in Category.query.order_by('category').all()]
+    # categories = [category.category
+    #               for category in Category.query.order_by('category').all()]
 
-    return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
+    # return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
+    return render_template("home.html", gmaps_key=gmaps_key)
 
 
 @app.route('/home.json')
@@ -47,14 +47,7 @@ def bear_info():
     create a key-value pair in the restaurants dictionary,
     where the value is a dictionary containing restaurant information."""
 
-    restaurants_lst = []
-
-    # Get all restaurants in database
-    query = Restaurant.query.all()
-
-    # For each restaurant, get a list of its categories
-    for r in query:
-        categories = [category.category for category in r.categories]
+    for y in yelp_object_list:
 
         for i in range(len(categories)):
             restaurants_lst.append({"db_id": r.restaurant_id,
@@ -73,6 +66,43 @@ def bear_info():
     restaurants_dict = {"restaurants": restaurants_lst}
 
     return jsonify(restaurants_dict)
+
+
+
+# @app.route('/home.json')
+# def bear_info():
+#     """JSON information about restaurants.
+
+#     For each category that each restaurant in the database is in,
+#     create a key-value pair in the restaurants dictionary,
+#     where the value is a dictionary containing restaurant information."""
+
+#     restaurants_lst = []
+
+#     # Get all restaurants in database
+#     query = Restaurant.query.all()
+
+#     # For each restaurant, get a list of its categories
+#     for r in query:
+#         categories = [category.category for category in r.categories]
+
+#         for i in range(len(categories)):
+#             restaurants_lst.append({"db_id": r.restaurant_id,
+#                                "_name": r.name,
+#                                "address": r.address,
+#                                "phone": r.phone,
+#                                "yelpUrl": r.yelp_url,
+#                                "yelpImgUrl": r.yelp_img_url,
+#                                "yelpRating": r.yelp_rating,
+#                                "yelpRatingImg": r.yelp_rating_img,
+#                                "reviewCount": r.yelp_review_count,
+#                                "lat": r.lat,
+#                                "lng": r.lng,
+#                                "category": categories[i]})
+
+#     restaurants_dict = {"restaurants": restaurants_lst}
+
+#     return jsonify(restaurants_dict)
 
 
 @app.route('/register')

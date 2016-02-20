@@ -4,74 +4,24 @@
 
 from model import connect_to_db, db, Restaurant
 from server import app
-from time import time
 
-from api import yelp_client
+from parse_restaurants import yelp_object_list
 
 
-def populate_restaurants_table():
-    """Load restaurant info into database model.
+def populate_restaurants_table(yelp_object_list):
+    """Store Yelp id for yelp_object_list restaurants in database."""
 
-    Additional details:
-    Importing name, address, phone number from hard coded data/restaurants.txt
-    Using phone number, importing restaurant information from Yelp API"""
-
-    yelp_object_list = []
-
-    # Parse through restaurants.txt and clean/unpack data
-    for i, row in enumerate(open("data/restaurants.txt")):
-        row = row.strip()
-        name, address, phone = row.split("|")
-
-        # Reformat phone number from "(XXX) XXX-XXXX" to "+1XXXXXXXXXX"
-        yelp_phone = "+1" + phone[1:4] + phone[6:9] + phone[10:]
-
-        # Return response dictionary from Yelp API for given phone number
-        # Print how long the API call took
-        start_time = time() * 1000
-        yelp_dict = yelp_client.phone_search(phone)
-        elapsed_time = (time() * 1000) - start_time
-        print "API request %d: %d ms" % (i, elapsed_time)
-
-        # Return single business in response dictionary that matches the
-        # name and address from restaurants.txt
-        yelp_object = validate_single_business(yelp_dict, name, address)
-
-        # Add yelp_object to yelp_object_list to be used later
-        yelp_object_list.append(yelp_object)
-
-        # Get restaurant information for each yelp_object
-        yelp_id = yelp_object.id
-        # yelp_url = yelp_object.url
-        # yelp_img_url = yelp_object.image_url
-        # yelp_rating = yelp_object.rating
-        # yelp_rating_img = yelp_object.rating_img_url_small
-        # yelp_review_count = yelp_object.review_count
-        # lat = yelp_object.location.coordinate.latitude
-        # lng = yelp_object.location.coordinate.longitude
+    for y in yelp_object_list:
+        yelp_id = y.id
 
         # Instantiate new Restaurant object with unpacked data
-        restaurant = Restaurant(name=name,
-                                address=address,
-                                phone=phone,
-                                # yelp_phone=yelp_phone,
-                                yelp_id=yelp_id,
-                                # yelp_url=yelp_url,
-                                # yelp_img_url=yelp_img_url,
-                                # yelp_rating=yelp_rating,
-                                # yelp_rating_img=yelp_rating_img,
-                                # yelp_review_count=yelp_review_count,
-                                # lat=lat,
-                                # lng=lng)
-                                )
+        restaurant = Restaurant(yelp_id=yelp_id)
 
         # Add new restaurant to database session (to be stored)
         db.session.add(restaurant)
 
     # Commit the additions to the database
     db.session.commit()
-
-    return yelp_object_list
 
 
 # def populate_categories_table(yelp_object_list):
@@ -137,23 +87,6 @@ def populate_restaurants_table():
 ###############################################################################
 # Helper Functions
 
-def validate_single_business(yelp_dict, name, address):
-    """Takes in dictionary of corresponding business(es) for phone number,
-    returns single business with corresponding name and address."""
-
-    if yelp_dict.total == 1:
-        yelp_object = yelp_dict.businesses[0]
-    elif yelp_dict.total > 1:
-        for i in range(len(yelp_dict.businesses)):
-            current_business = yelp_dict.businesses[i]
-            yelp_name = current_business.name
-            yelp_address = current_business.location.address
-            if name == yelp_name and address in yelp_address:
-                yelp_object = yelp_dict.businesses[i]   
-
-    return yelp_object
-
-
 # def get_unique_categories(categories, temp_category_dict):
 #     """Takes in a list of categories and returns a list of unique categories."""
 
@@ -193,6 +126,6 @@ if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
 
-    yelp_object_list = populate_restaurants_table()
+    populate_restaurants_table(yelp_object_list)
     # populate_categories_table(yelp_object_list)
     # populate_restaurant_categories_table(yelp_object_list)

@@ -36,30 +36,14 @@ class Restaurant(db.Model):
     __tablename__ = "restaurants"
 
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    address = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.String(14), nullable=False, unique=True)
-    # yelp_phone = db.Column(db.String(12), nullable=False, unique=True)
     yelp_id = db.Column(db.String(100), nullable=False, unique=True)
-    # yelp_url = db.Column(db.String(200), nullable=False, unique=True)
-    # yelp_img_url = db.Column(db.String(200), nullable=False, unique=True)
-    # yelp_rating = db.Column(db.Float, nullable=False)
-    # yelp_rating_img = db.Column(db.String(200), nullable=False)
-    # yelp_review_count = db.Column(db.Integer, nullable=True)
-    # lat = db.Column(db.Float, nullable=False)
-    # lng = db.Column(db.Float, nullable=False)
-
-    # categories = db.relationship("Category",
-    #                              secondary="restaurant_categories",
-    #                              backref="restaurants")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Restaurant restaurant_id=%s name=%s address=%s>" % (
+        return "<Restaurant restaurant_id=%s yelp_id=%s>" % (
             self.restaurant_id,
-            self.name,
-            self.address)
+            self.yelp_id)
 
 
 # class Category(db.Model):
