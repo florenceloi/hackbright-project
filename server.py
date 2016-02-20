@@ -13,7 +13,7 @@ from model import (connect_to_db,
 
 from api import gmaps_key
 
-from parse_restaurants import yelp_object_list
+from parse_restaurants import yelp_object_list, category_dict
 
 app = Flask(__name__)
 
@@ -31,12 +31,10 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
-    # Instantiate category dictionary using dictionary comprehension
-    # categories = [category.category
-    #               for category in Category.query.order_by('category').all()]
+    # Instantiate category list using list comprehension
+    categories = category_dict.keys()
 
-    # return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
-    return render_template("home.html", gmaps_key=gmaps_key)
+    return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
 
 
 @app.route('/home.json')
@@ -47,21 +45,32 @@ def bear_info():
     create a key-value pair in the restaurants dictionary,
     where the value is a dictionary containing restaurant information."""
 
-    for y in yelp_object_list:
+    restaurants_lst = []
 
-        for i in range(len(categories)):
-            restaurants_lst.append({"db_id": r.restaurant_id,
-                               "_name": r.name,
-                               "address": r.address,
-                               "phone": r.phone,
-                               "yelpUrl": r.yelp_url,
-                               "yelpImgUrl": r.yelp_img_url,
-                               "yelpRating": r.yelp_rating,
-                               "yelpRatingImg": r.yelp_rating_img,
-                               "reviewCount": r.yelp_review_count,
-                               "lat": r.lat,
-                               "lng": r.lng,
-                               "category": categories[i]})
+    # # Get all restaurants in database
+    db_restaurant_list = Restaurant.query.all()
+
+    # For each restaurant, get a list of its categories
+    # for r in query:
+    for y in yelp_object_list:
+        for d in db_restaurant_list:
+            if y.id == d.yelp_id:
+                db_id = d.restaurant_id
+        # categories = [category.category for category in r.categories]
+        restaurant_categories = y.categories
+
+        for i in range(len(restaurant_categories)):
+            restaurants_lst.append({"db_id": db_id,
+                                    "_name": y.name,
+                                    "address": y.location.address[0],
+                                    "phone": y.display_phone,
+                                    "yelpUrl": y.url,
+                                    "yelpImgUrl": y.image_url,
+                                    "yelpRatingImg": y.rating_img_url_small,
+                                    "reviewCount": y.review_count,
+                                    "lat": y.location.coordinate.latitude,
+                                    "lng": y.location.coordinate.longitude,
+                                    "category": restaurant_categories[i]})
 
     restaurants_dict = {"restaurants": restaurants_lst}
 

@@ -46,48 +46,6 @@ class Restaurant(db.Model):
             self.yelp_id)
 
 
-# class Category(db.Model):
-#     """Possible food categories for restaurants."""
-
-#     __tablename__ = "categories"
-
-#     category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     category = db.Column(db.String(64), nullable=False, unique=True)
-#     alias = db.Column(db.String(64), nullable=False, unique=True)
-
-#     def __repr__(self):
-#         """Provide helpful representation when printed."""
-
-#         return "<Category category_id=%s category=%s alias=%s>" % (self.category_id, 
-#                                                                    self.category,
-#                                                                    self.alias)
-
-
-# class Yelp_Review(db.Model):
-#     """Single Yelp review for particular restaurant."""
-
-#     __tablename__ = "yelp_reviews"
-
-#     yelp_review_id = db.Column(db.Integer,
-#                                autoincrement=True,
-#                                primary_key=True)
-#     yelp_id = db.Column(db.String(100),
-#                         db.ForeignKey('restaurants.yelp_id'),
-#                         nullable=True,
-#                         unique=True)
-#     body = db.Column(db.String(2000), nullable=False)
-
-#     restaurant = db.relationship('Restaurant',
-#                                  backref=db.backref('yelp_reviews'))
-
-#     def __repr__(self):
-#         """Provide helpful representation when printed."""
-
-#         return "<Yelp_Review yelp_review_id=%s restaurant_id=%s>" % (
-#             self.yelp_review_id,
-#             self.yelp_id)
-
-
 class Review(db.Model):
     """Single user's review for particular restaurant."""
 
@@ -139,31 +97,6 @@ class Favorite(db.Model):
             self.favorite_id,
             self.restaurant_id,
             self.user_id)
-
-
-# class Restaurant_Category(db.Model):
-#     """Association class for restaurants and food categories."""
-
-#     __tablename__ = "restaurant_categories"
-
-#     restaurant_category_id = db.Column(db.Integer,
-#                                        autoincrement=True,
-#                                        primary_key=True)
-#     restaurant_id = db.Column(db.Integer,
-#                               db.ForeignKey('restaurants.restaurant_id'),
-#                               nullable=False)
-#     category_id = db.Column(db.Integer,
-#                             db.ForeignKey('categories.category_id'),
-#                             nullable=False)
-
-
-#     def __repr__(self):
-#         """Provide helpful representation when printed."""
-
-#         return "<Rest_Cat id=%s restaurant_id=%s category_id=%s>" % (
-#             self.restaurant_category_id,
-#             self.restaurant_id,
-#             self.category_id)
 
 
 ##############################################################################
