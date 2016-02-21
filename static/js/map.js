@@ -33,7 +33,6 @@ function initMap() {
   // Recenter map on current location
   $('#current-location').click(function() {
     centerOnGeolocation(locationInfoWindow, map);
-    // locationInfoWindow.open(map);
   });
 }
 
@@ -42,7 +41,7 @@ function addRestaurantMarkers(map) {
   var markers = [];
 
   // Instantiate info windows
-  // var infoWindow = new google.maps.InfoWindow();
+  var infoWindow = new google.maps.InfoWindow();
 
   // Retrieve the jsonified Python dictionary of restaurants with AJAX
   $.get('/home.json', function (restaurants_dict) {
@@ -60,44 +59,44 @@ function addRestaurantMarkers(map) {
       // bindInfoWindow(marker, map, infoWindow, html);
     }
 
-    // // Show all markers of a particular category
-    // var show = function (category) {
-    //   // Loop over each restaurant in dictionary
-    //   for (var i = 0; i < restaurants.length; i++) {
-    //     var restaurant = restaurants[i];
-    //     if (restaurant.category == category) {
-    //       markers[i].setVisible(true);
-    //     }
-    //   }
-    // };
+    // Show all markers of a particular category
+    var show = function (category) {
+      // Loop over each restaurant in dictionary
+      for (var i = 0; i < restaurants.length; i++) {
+        var restaurant = restaurants[i];
+        if (restaurant.category == category) {
+          markers[i].setVisible(true);
+        }
+      }
+    };
 
-    // // Hide all markers of a particular category
-    // var hide = function (category) {
-    //   // Loop over each restaurant in dictionary
-    //   for (var i = 0; i < restaurants.length; i++) {
-    //     var restaurant = restaurants[i];
-    //     if (restaurant.category == category) {
-    //       markers[i].setVisible(false);
-    //     }
-    //   }
-    // };
+    // Hide all markers of a particular category
+    var hide = function (category) {
+      // Loop over each restaurant in dictionary
+      for (var i = 0; i < restaurants.length; i++) {
+        var restaurant = restaurants[i];
+        if (restaurant.category == category) {
+          markers[i].setVisible(false);
+        }
+      }
+    };
     
-    // $(".category").change(function () {
-    //   var cat = $(this).attr("value");
-    //   if ($(this).is(":checked")) {
-    //     show(cat);
-    //   } else {
-    //     hide(cat);
-    //   }
-    // });
+    $(".category").change(function () {
+      var cat = $(this).attr("value");
+      if ($(this).is(":checked")) {
+        show(cat);
+      } else {
+        hide(cat);
+      }
+    });
 
-    // $("#selectAll").click(function() {
-    //   var all = $(this);
-    //   $('input:checkbox').each(function() {
-    //     $(this).prop("checked", all.prop("checked"));
-    //     $(this).change();
-    //   });
-    // });
+    $("#selectAll").click(function() {
+      var all = $(this);
+      $('input:checkbox').each(function() {
+        $(this).prop("checked", all.prop("checked"));
+        $(this).change();
+      });
+    });
   });
 }
 
@@ -176,32 +175,19 @@ function geocodeAddress(geocoder, resultsMap) {
 // Centers on geolocation
 function centerOnGeolocation(locationInfoWindow, map) {
 
-  // If geolocation allowed:
-  if (navigator.geolocation) {
-    // Execute anonymous functions after getting current position
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
+  // Execute anonymous functions after getting current position
+  navigator.geolocation.getCurrentPosition(function(position) {
+    var pos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
 
-      locationInfoWindow.setPosition(pos);
-      locationInfoWindow.setContent('Current location.');
-      locationInfoWindow.setMap(map);
-      map.setCenter(pos);
-    }, function() {
-      handleLocationError(true, locationInfoWindow, map.getCenter());
-    });
-  } else {
-    handleLocationError(false, locationInfoWindow, map.getCenter());
-  }
-}
-
-
-// Handles centering on current location error
-function handleLocationError(browserHasGeolocation, locationInfoWindow, pos) {
-  locationInfoWindow.setPosition(pos);
-  locationInfoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
-                        'Error: Your browser doesn\'t support geolocation.');
+    locationInfoWindow.setPosition(pos);
+    locationInfoWindow.setContent('Current location.');
+    locationInfoWindow.setMap(map);
+    locationInfoWindow.open(map);
+    map.setCenter(pos);
+  }, function(error) {
+    alert('Error: ' + error.message);
+  });
 }
