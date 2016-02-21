@@ -43,14 +43,14 @@ def bear_info():
     create a key-value pair in the restaurants dictionary,
     where the value is a dictionary containing restaurant information."""
     
-    # import pdb; pdb.set_trace()
     restaurants_lst = []
 
-    # # Get all restaurants in database
+    # Get all restaurants in database
     db_restaurant_list = Restaurant.query.all()
 
-    # For each restaurant, get a list of its categories
-    # for r in query:
+    # Match restaurant in yelp list with database list,
+    # then grab restaurant id from database,
+    # and get list of restaurant categories.
     for y in yelp_object_list:
         for d in db_restaurant_list:
             if y.id == d.yelp_id:
@@ -69,10 +69,10 @@ def bear_info():
                                     "reviewCount": y.review_count,
                                     "lat": y.location.coordinate.latitude,
                                     "lng": y.location.coordinate.longitude,
-                                    "category": restaurant_categories[i]})
+                                    "category": restaurant_categories[i].name})
 
     restaurants_dict = {"restaurants": restaurants_lst}
-
+    print restaurants_dict
     return jsonify(restaurants_dict)
 
 

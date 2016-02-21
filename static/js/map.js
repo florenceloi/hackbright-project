@@ -54,13 +54,14 @@ function addRestaurantMarkers(map) {
     for (var i = 0; i < restaurants.length; i++) {
       var restaurant = restaurants[i];
       var marker = makeMarker(restaurant, map);
-      // markers.push(marker);
-      // var html = makeInfoWindow(restaurant);
-      // bindInfoWindow(marker, map, infoWindow, html);
+      markers.push(marker);
+      var html = makeInfoWindow(restaurant);
+      bindInfoWindow(marker, map, infoWindow, html);
     }
 
     // Show all markers of a particular category
     var show = function (category) {
+
       // Loop over each restaurant in dictionary
       for (var i = 0; i < restaurants.length; i++) {
         var restaurant = restaurants[i];
