@@ -1,4 +1,4 @@
-cd ~/src/florence/
+cd 
 git clone https://github.com/florenceloi/hackbright-project.git
 cd hackbright-project
 git pull
