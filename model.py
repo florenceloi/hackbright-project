@@ -1,5 +1,3 @@
-# HUGE FIXME!!! CAN ONLY STORE YELP'S BUSINESS ID, CANNOT STORE ANYTHING ELSE
-
 from flask_sqlalchemy import SQLAlchemy
 
 # Using the Flask-SQLAlchemy helper library, this allows us to connect to the
@@ -36,6 +34,22 @@ class Restaurant(db.Model):
     __tablename__ = "restaurants"
 
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    yelp_id = db.Column(db.String(100), nullable=False, unique=True)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Restaurant restaurant_id=%s yelp_id=%s>" % (
+            self.restaurant_id,
+            self.yelp_id)
+
+
+class DatasetRestaurant(db.Model):
+    """Dog-friendly restaurants from Yelp Challenge dataset."""
+
+    __tablename__ = "ds_restaurants"
+
+    ds_restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     yelp_id = db.Column(db.String(100), nullable=False, unique=True)
 
     def __repr__(self):
