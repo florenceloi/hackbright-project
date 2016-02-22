@@ -7,7 +7,8 @@ from model import (connect_to_db,
                    db,
                    User,
                    Restaurant,
-                   Favorite)
+                   Favorite,
+                   Review)
 
 from api import gmaps_key, yelp_client
 
@@ -203,24 +204,44 @@ def user_detail():
         user_id = session["user_id"]
         user = User.query.filter(User.user_id == user_id).one()
 
+        # Get favorites
         db_fav_restaurants = Favorite.query.filter(Favorite.user_id == user_id).all()
 
         fav_restaurants_dict = {}
 
         for d in db_fav_restaurants:
             yelp_id = d.restaurant.yelp_id
+            restaurant_id = d.restaurant_id
             name = yelp_client.get_business(yelp_id).business.name
-            url = yelp_client.get_business(yelp_id).business.url
 
-            restaurant_dict = {
-                "name": name,
-                "url": url
-            }
+            restaurant_dict = {"r_id": restaurant_id,
+                               "name": name}
 
             fav_restaurants_dict[yelp_id] = restaurant_dict
+
+        # Get reviews
+        db_reviews = Review.query.filter(Review.user_id == user_id).all()
+
+        reviews_dict = {}
+
+        for d in db_reviews:
+            yelp_id = d.restaurant.yelp_id
+            name = yelp_client.get_business(yelp_id).business.name
+            restaurant_id = d.restaurant_id
+            rating = d.rating
+            body = d.body
+
+            rev_dict = {"name": name,
+                        "r_id": restaurant_id,
+                        "rating": rating,
+                        "body": body}
+
+            reviews_dict[yelp_id] = rev_dict
+
         return render_template('profile.html',
                                user=user,
-                               favorites=fav_restaurants_dict)
+                               favorites=fav_restaurants_dict,
+                               reviews=reviews_dict)
 
     else:
         flash("Please register first.")
@@ -241,7 +262,34 @@ def review_restaurant(restaurant_id):
 
 @app.route('/restaurants/<int:restaurant_id>/review', methods=["POST"])
 def process_review(restaurant_id):
-    """Add review to database."""
+    """Add user's review to database."""
+
+    # Get restaurant id, rating, review, and user_id
+    rating = float(request.form.get("rating"))
+    body = request.form.get("review-body")
+    user_id = session["user_id"]
+
+    # Get list of user's favorites from database
+    db_user_reviews = db.session.query(Review.restaurant_id).filter(User.user_id == user_id).all()
+    reviewed_restaurants = []
+    for u_tuple in db_user_reviews:
+        for u_review in u_tuple:
+            reviewed_restaurants.append(u_review)
+
+    # If current restaurant has not already been reviewed,
+    # add current review to the database
+    if restaurant_id not in reviewed_restaurants:
+        new_review = Review(restaurant_id=restaurant_id,
+                            user_id=user_id,
+                            rating=rating,
+                            body=body)
+
+        db.session.add(new_review)
+        db.session.commit()
+
+        restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
+        name = yelp_client.get_business(restaurant.yelp_id).business.name
+        flash("Your review of %s has been saved." % name)
 
     return redirect("/home")
 

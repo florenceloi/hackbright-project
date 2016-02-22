@@ -25,7 +25,7 @@
         {% for n in [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] %}
             <input id="rating" type="radio" name="rating" value="{{ n }}" required> {{ n }}
         {% endfor %}<br><br>
-        <textarea form="review-form" rows="10" cols="50" placeholder="Write your review here!" required></textarea>
+        <textarea form="review-form" name="review-body" rows="10" cols="50" placeholder="Write your review here!" required></textarea>
         <br><br>
         <input type="submit">
     </form>
