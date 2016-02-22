@@ -134,7 +134,7 @@ function makeInfoWindow(restaurant) {
         '<input type="hidden" name="restaurant_id" value="' + restaurant.db_id + '">' +
         '<input type="submit" value="Favorite ' + restaurant._name + '">' +
       '</form></p>' +
-      '<a href="/restaurants/' + restaurant.db_id + '">See page for ' + restaurant._name + '</a>' +
+      '<a href="/restaurants/' + restaurant.db_id + '">Review ' + restaurant._name + '</a>' +
     '</div>'
   );
   return temp_html;

@@ -2,7 +2,7 @@
 
 {% block title %}
 
-    {{ user.fname }}'s Account
+    {{ user.fname }}'s Profile
 
 {% endblock %}
 
@@ -18,8 +18,8 @@
     <p>Restaurants you've favorited:</p>
 
         <ul>
-            {% for favorite in favorites %}
-                <li>{{ favorite.restaurant.name }}</li>
+            {% for value in favorites.values() %}
+                <li><a href={{ value["url"] }}>{{ value["name"] }}</a></li>
             {% endfor %}
         </ul>
 

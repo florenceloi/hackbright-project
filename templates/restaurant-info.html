@@ -2,7 +2,7 @@
 
 {% block title %}
 
-    {{ restaurant.name }}
+    Review {{ name }}
 
 {% endblock %}
 
@@ -18,14 +18,14 @@
 
 {% block content %}
 
-    <h1>{{ restaurant.name }} Information</h1>
+    <h1>Review for {{ name }}</h1>
 
-    <form id="review-form" action="/review" method="POST">
-        <p>Rate out of 5:</p>
+    <form id="review-form" action="/restaurants/{{ restaurant.restaurant_id }}/review" method="POST">
+        <p>Rate out of 5 stars:</p>
         {% for n in [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] %}
             <input id="rating" type="radio" name="rating" value="{{ n }}" required> {{ n }}
         {% endfor %}<br><br>
-        <textarea form="review-form" rows="10" cols="50" required>Write your review here!</textarea>
+        <textarea form="review-form" rows="10" cols="50" placeholder="Write your review here!" required></textarea>
         <br><br>
         <input type="submit">
     </form>

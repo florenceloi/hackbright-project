@@ -9,7 +9,7 @@ from model import (connect_to_db,
                    Restaurant,
                    Favorite)
 
-from api import gmaps_key
+from api import gmaps_key, yelp_client
 
 from helper_functions import yelp_object_list, category_dict
 
@@ -72,7 +72,6 @@ def bear_info():
                                     "category": restaurant_categories[i].name})
 
     restaurants_dict = {"restaurants": restaurants_lst}
-    print restaurants_dict
     return jsonify(restaurants_dict)
 
 
@@ -169,7 +168,7 @@ def add_favorite():
     """Add user's favorite restaurant to database."""
 
     # Get restaurant id, restaurant database object, and user id
-    restaurant_id = request.args.get("restaurant_id")
+    restaurant_id = int(request.args.get("restaurant_id"))
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
     user_id = session["user_id"]
 
@@ -189,7 +188,8 @@ def add_favorite():
         db.session.add(new_favorite)
         db.session.commit()
 
-        flash("Saved %s as a favorite" % restaurant.name)
+        name = yelp_client.get_business(restaurant.yelp_id).business.name
+        flash("Saved %s as a favorite" % name)
 
     return redirect("/home")
 
@@ -198,15 +198,29 @@ def add_favorite():
 def user_detail():
     """Show information in user profile."""
 
-    # import pdb; pdb.set_trace()
-
     # If user in session, get User object
     if session["user_id"]:
         user_id = session["user_id"]
         user = User.query.filter(User.user_id == user_id).one()
-        favorites = Favorite.query.filter(Favorite.user_id == user_id).all()
 
-        return render_template('profile.html', user=user, favorites=favorites)
+        db_fav_restaurants = Favorite.query.filter(Favorite.user_id == user_id).all()
+
+        fav_restaurants_dict = {}
+
+        for d in db_fav_restaurants:
+            yelp_id = d.restaurant.yelp_id
+            name = yelp_client.get_business(yelp_id).business.name
+            url = yelp_client.get_business(yelp_id).business.url
+
+            restaurant_dict = {
+                "name": name,
+                "url": url
+            }
+
+            fav_restaurants_dict[yelp_id] = restaurant_dict
+        return render_template('profile.html',
+                               user=user,
+                               favorites=fav_restaurants_dict)
 
     else:
         flash("Please register first.")
@@ -218,8 +232,18 @@ def review_restaurant(restaurant_id):
     """Allow user to review specific restaurant."""
 
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
+    name = yelp_client.get_business(restaurant.yelp_id).business.name
 
-    return render_template("restaurant-info.html", restaurant=restaurant)
+    return render_template("restaurant-info.html",
+                           restaurant=restaurant,
+                           name=name)
+
+
+@app.route('/restaurants/<int:restaurant_id>/review', methods=["POST"])
+def process_review(restaurant_id):
+    """Add review to database."""
+
+    return redirect("/home")
 
 
 @app.route('/logout')
