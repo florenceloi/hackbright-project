@@ -12,7 +12,7 @@ for line in df_restautants:
 
     try:
         if line["attributes"]["Dogs Allowed"]:
-            print line["name"]
+            print line
 
     except KeyError:
         continue

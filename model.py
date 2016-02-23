@@ -44,19 +44,23 @@ class Restaurant(db.Model):
             self.yelp_id)
 
 
-class DatasetRestaurant(db.Model):
+class DSRestaurant(db.Model):
     """Dog-friendly restaurants from Yelp Challenge dataset."""
 
     __tablename__ = "ds_restaurants"
 
     ds_restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    ds_yelp_id = db.Column(db.String(100), nullable=False, unique=True)
     yelp_id = db.Column(db.String(100), nullable=False, unique=True)
+    lat = db.Column(db.Float, nullable=False)
+    lng = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Restaurant restaurant_id=%s yelp_id=%s>" % (
-            self.restaurant_id,
+        return "<DSRestaurant ds_restaurant_id=%s ds_yelp_id=%s yelp_id=%s>" % (
+            self.ds_restaurant_id,
+            self.ds_yelp_id,
             self.yelp_id)
 
 
