@@ -1,7 +1,7 @@
 """Utility file to seed database model"""
 
 from time import time
-from model import connect_to_db, db, Restaurant, Category
+from model import connect_to_db, db, Restaurant, Category, Restaurant_Category
 from server import app
 from api import yelp_client
 import json
@@ -71,7 +71,7 @@ def import_restaurants_from_hardcode_list():
     return hc_yelp_object_list
 
 
-def import_restaurants_from_datasest():
+def import_restaurants_from_dataset():
     """Import dog-friendly restaurant from Yelp Challenge Dataset."""
 
     ds_yelp_object_list = []
@@ -100,8 +100,8 @@ def import_restaurants_from_datasest():
                 for y in yelp_objects:
                     try:
                         if name == y.name:
-                            address = y.address
-                            phone = "(" + y.phone[2:5] + ") " + y.phone[5:8] + "-" + y.phone[8:]
+                            address = y.location.address[0]
+                            phone = "(" + y.phone[:3] + ") " + y.phone[3:6] + "-" + y.phone[6:]
                             yelp_id = y.id
                             yelp_url = y.url
                             yelp_img_url = y.image_url
@@ -110,13 +110,12 @@ def import_restaurants_from_datasest():
                             yelp_review_count = y.review_count
 
                             # Add yelp_object to hc_yelp_object_list to be used later
-                            hc_yelp_object_list.append(y)
+                            ds_yelp_object_list.append(y)
 
                             # Instantiate new restaurant object and add to db.
                             restaurant = Restaurant(name=name,
                                                     address=address,
                                                     phone=phone,
-                                                    yelp_phone=yelp_phone,
                                                     yelp_id=yelp_id,
                                                     ds_yelp_id=ds_yelp_id,
                                                     yelp_url=yelp_url,
@@ -130,7 +129,9 @@ def import_restaurants_from_datasest():
                             db.session.add(restaurant)
                             db.session.commit()
 
-                    except sqlalchemy.exc.IntegrityError:
+                    except (sqlalchemy.exc.IntegrityError,
+                            sqlalchemy.exc.DataError,
+                            IndexError):
                         db.session.rollback()
 
         except KeyError:
@@ -139,61 +140,61 @@ def import_restaurants_from_datasest():
     return ds_yelp_object_list
 
 
-# def populate_categories_table(yelp_object_list):
-#     """Takes in list of yelp restaurant objects and populates categories table."""
-   
-#     temp_category_list = []
+def populate_categories_table(yelp_object_list):
+    """Takes in list of yelp restaurant objects and populates categories table."""
 
-#     # While looping over each category in each restaurant,
-#     # adding category to temporary category_list if not already present
-#     for yelp_object in yelp_object_list:
-#         categories = yelp_object.categories
-#         get_unique_categories(categories, temp_category_list)
+    temp_category_list = []
 
-#     # Looking over each unique category
-#     for current_category in temp_category_list:
-#         new_category = Category(category=current_category)
+    # While looping over each category in each restaurant,
+    # adding category to temporary category_list if not already present
+    for yelp_object in yelp_object_list:
+        categories = yelp_object.categories
+        get_unique_categories(categories, temp_category_list)
 
-#         # Add new category to database session (to be stored)
-#         db.session.add(new_category)
+    # Looking over each unique category
+    for current_category in temp_category_list:
+        new_category = Category(category=current_category)
 
-#     # Commit the additions to the database
-#     db.session.commit()
+        # Add new category to database session (to be stored)
+        db.session.add(new_category)
+
+    # Commit the additions to the database
+    db.session.commit()
 
 
-# def populate_restaurant_categories_table(yelp_object_list):
-#     """Takes in list of yelp restaurant objects and populates restaurant_categories table."""
+def populate_restaurant_categories_table(yelp_object_list):
+    """Takes in list of yelp restaurant objects and populates restaurant_categories table."""
 
-#     # Get categories from database and their corresponding category ids
-#     category_dict = get_category_and_id_dict()
+    # Get categories from database and their corresponding category ids
+    category_dict = get_category_and_id_dict()
 
-#     # Get restaurant objects in database model
-#     db_restaurants = Restaurant.query.all()
+    # Get restaurant objects in database model
+    db_restaurants = Restaurant.query.all()
 
-#     # Find database restaurant that corresponds to the yelp restaurant object,
-#     # get database restaurant's restaurant id,
-#     # get yelp restaurant object's categories
-#     for restaurant in db_restaurants:
+    # Find database restaurant that corresponds to the yelp restaurant object,
+    # get database restaurant's restaurant id,
+    # get yelp restaurant object's categories
+    for restaurant in db_restaurants:
 
-#         # Looping over each restaurant object from Yelp API call:
-#         for yelp_object in yelp_object_list:
-#             if yelp_object.id == restaurant.yelp_id:
-#                 restaurant_id = restaurant.restaurant_id
-#                 categories_for_current_restaurant = yelp_object.categories
+        # Looping over each restaurant object from Yelp API call:
+        for yelp_object in yelp_object_list:
+            if yelp_object.id == restaurant.yelp_id:
+                restaurant_id = restaurant.restaurant_id
+                categories_for_current_restaurant = yelp_object.categories
 
-#         # Get corresponding category id for each category
-#         for category in categories_for_current_restaurant:
-#             category_id = category_dict[category[0]]
+        # Get corresponding category id for each category
+        for category in categories_for_current_restaurant:
+            category_id = category_dict[category[0]]
 
-#         # Instantiate new restaurant-category association
-#         new_association = Restaurant_Category(restaurant_id=restaurant_id,
-#                                               category_id=category_id)
+        # Instantiate new restaurant-category association
+        new_association = Restaurant_Category(restaurant_id=restaurant_id,
+                                              category_id=category_id)
 
-#         # Add new association to database
-#         db.session.add(new_association)
+        # Add new association to database
+        db.session.add(new_association)
 
-#     # Commit the additions to the database
-#     db.session.commit()
+    # Commit the additions to the database
+    db.session.commit()
 
 
 ###############################################################################
@@ -216,46 +217,48 @@ def validate_single_business(yelp_dict, name, address):
     return yelp_object
 
 
-# def get_unique_categories(categories, temp_category_list):
-#     """Takes in a list of categories and returns a list of unique categories."""
+def get_unique_categories(categories, temp_category_list):
+    """Takes in a list of categories and returns a list of unique categories."""
 
-#     # While looping over each category in each restaurant,
-#     # adding category to temporary category_list if not already present
-#     for category in categories:
-#         name = category.name
+    # While looping over each category in each restaurant,
+    # adding category to temporary category_list if not already present
+    for category in categories:
+        name = category.name
 
-#         if name in temp_category_list:
-#             continue
+        if name in temp_category_list:
+            continue
 
-#         elif name not in temp_category_list:
-#             temp_category_list.append(name)
+        elif name not in temp_category_list:
+            temp_category_list.append(name)
 
-#     return temp_category_list
+    return temp_category_list
 
 
-# def get_category_and_id_dict():
-#     """Returns a dictionary of category-category id key-value pairs from categories table."""
+def get_category_and_id_dict():
+    """Returns a dictionary of category-category id key-value pairs from categories table."""
 
-#     category_dict = {}
+    category_dict = {}
 
-#     # Get all categories in database
-#     db_category_list = Category.query.all()
+    # Get all categories in database
+    db_category_list = Category.query.all()
 
-#     # Get dictionary of category-category id key-value pairs
-#     for category in db_category_list:
-#         category_id = category.category_id
-#         category = category.category
-#         category_dict[category] = category_id
+    # Get dictionary of category-category id key-value pairs
+    for category in db_category_list:
+        category_id = category.category_id
+        category = category.category
+        category_dict[category] = category_id
 
-#     return category_dict
+    return category_dict
 
 
 if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
 
-    hc_yelp_object_list = import_restaurants_from_hardcode_list(hc_yelp_object_list)
-    ds_yelp_object_list = import_restaurants_from_hardcode_list(ds_yelp_object_list)
+    # import pdb; pdb.set_trace()
+    hc_yelp_object_list = import_restaurants_from_hardcode_list()
+    ds_yelp_object_list = import_restaurants_from_dataset()
+    complete_yelp_object_list = hc_yelp_object_list + ds_yelp_object_list
 
-    populate_categories_table(hc_yelp_object_list)
-    populate_categories_table(ds_yelp_object_list)
+    populate_categories_table(complete_yelp_object_list)
+    populate_restaurant_categories_table(complete_yelp_object_list)

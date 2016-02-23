@@ -131,6 +131,9 @@ class Yelp_Review(db.Model):
             self.ds_yelp_id)
 
 
+###############################################################################
+# Association tables
+
 class Favorite(db.Model):
     """One of single user's favorite restaurants."""
 
@@ -154,6 +157,30 @@ class Favorite(db.Model):
             self.favorite_id,
             self.restaurant_id,
             self.user_id)
+
+
+class Restaurant_Category(db.Model):
+    """Association class for restaurants and food categories."""
+
+    __tablename__ = "restaurant_categories"
+
+    restaurant_category_id = db.Column(db.Integer,
+                                       autoincrement=True,
+                                       primary_key=True)
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.restaurant_id'),
+                              nullable=False)
+    category_id = db.Column(db.Integer,
+                            db.ForeignKey('categories.category_id'),
+                            nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Rest_Cat id=%s restaurant_id=%s category_id=%s>" % (
+            self.restaurant_category_id,
+            self.restaurant_id,
+            self.category_id)
 
 
 ##############################################################################

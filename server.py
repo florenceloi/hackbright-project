@@ -12,8 +12,6 @@ from model import (connect_to_db,
 
 from api import gmaps_key, yelp_client
 
-from helper_functions import yelp_object_list, category_dict
-
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
