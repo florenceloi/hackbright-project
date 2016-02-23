@@ -1,3 +1,5 @@
+"""Utility file to create database model"""
+
 from flask_sqlalchemy import SQLAlchemy
 
 # Using the Flask-SQLAlchemy helper library, this allows us to connect to the
@@ -67,34 +69,12 @@ class Category(db.Model):
 
     category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     category = db.Column(db.String(64), nullable=False, unique=True)
-    alias = db.Column(db.String(64), nullable=False, unique=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Category category_id=%s category=%s alias=%s>" % (self.category_id, 
-                                                                   self.category,
-                                                                   self.alias)
-
-
-class DSRestaurant(db.Model):
-    """Dog-friendly restaurants from Yelp Challenge dataset."""
-
-    __tablename__ = "ds_restaurants"
-
-    ds_restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    ds_yelp_id = db.Column(db.String(100), nullable=False, unique=True)
-    yelp_id = db.Column(db.String(100), nullable=False, unique=True)
-    lat = db.Column(db.Float, nullable=False)
-    lng = db.Column(db.Float, nullable=False)
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<DSRestaurant ds_restaurant_id=%s ds_yelp_id=%s yelp_id=%s>" % (
-            self.ds_restaurant_id,
-            self.ds_yelp_id,
-            self.yelp_id)
+        return "<Category category_id=%s category=%s alias=%s>" % (self.category_id,
+                                                                   self.category)
 
 
 class Review(db.Model):
@@ -148,7 +128,7 @@ class Yelp_Review(db.Model):
 
         return "<Yelp_Review yelp_review_id=%s restaurant_id=%s>" % (
             self.yelp_review_id,
-            self.dsyelp_id)
+            self.ds_yelp_id)
 
 
 class Favorite(db.Model):
