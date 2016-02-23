@@ -1,5 +1,6 @@
 """Utility file to seed database model"""
 
+<<<<<<< HEAD
 from time import time
 from model import connect_to_db, db, Restaurant
 from server import app
@@ -30,6 +31,7 @@ def populate_restaurants_table():
         yelp_dict = yelp_client.phone_search(phone)
         elapsed_time = (time() * 1000) - start_time
         print "API request %d: %d ms" % (i, elapsed_time)
+
 
         # Return single business in response dictionary that matches the 
         # name and address from restaurants.txt
@@ -126,6 +128,43 @@ def populate_restaurants_table():
 
 #         except KeyError:
 #             continue
+
+
+def populate_ds_restaurants_table():
+    """Import dog-friendly restaurant from Yelp Challenge Dataset."""
+
+    for i, b in enumerate(open('data/yelp_academic_dataset_business.json')):
+        b = json.loads(b.strip())
+
+        try:
+            if b["attributes"]["Dogs Allowed"] and "Restaurants" in b["categories"]:
+                ds_yelp_id = b["business_id"]
+                name = b["name"]
+                lat = b["latitude"]
+                lng = b["longitude"]
+
+                start_time = time() * 1000
+                yelp_objects = yelp_client.search_by_coordinates(lat, lng).businesses
+                elapsed_time = (time() * 1000) - start_time
+                print "Row %d: %d ms" % (i, elapsed_time)
+
+                for y in yelp_objects:
+                    try: 
+                        if name == y.name:
+                            yelp_id = y.id
+
+                            df_restaurant = DSRestaurant(ds_yelp_id=ds_yelp_id,
+                                                         yelp_id=yelp_id,
+                                                         lat=lat,
+                                                         lng=lng)
+
+                            db.session.add(df_restaurant)
+                            db.session.commit()
+                    except sqlalchemy.exc.IntegrityError:
+                        db.session.rollback()
+
+        except KeyError:
+            continue
 
 
 ###############################################################################

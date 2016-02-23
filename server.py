@@ -43,11 +43,15 @@ def bear_info():
     For each category that each restaurant in the database is in,
     create a key-value pair in the restaurants dictionary,
     where the value is a dictionary containing restaurant information."""
-
+    
     restaurants_lst = []
 
     # Get all restaurants in database
-    sf_restaurant_list = Restaurant.query.filter(Restaurant.source == "hardcode").all()
+
+    # sf_restaurant_list = Restaurant.query.filter(Restaurant.source == "hardcode").all()
+
+    db_restaurant_list = Restaurant.query.all()
+
 
     # Match restaurant in yelp list with database list,
     # then grab restaurant id from database,

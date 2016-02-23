@@ -12,7 +12,7 @@ def populate_restaurants_table():
     yelp_object_list = []
 
     # Parse restaurants.txt and clean/unpack data
-    for i, row in enumerate(open("data/restaurants.txt")):
+    for i, row in enumerate(open("data/sample-restaurants.txt")):
         row = row.strip()
         name, address, phone = row.split("|")
 
