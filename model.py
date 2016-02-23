@@ -34,34 +34,47 @@ class Restaurant(db.Model):
     __tablename__ = "restaurants"
 
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(14), nullable=False, unique=True)
     yelp_id = db.Column(db.String(100), nullable=False, unique=True)
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<Restaurant restaurant_id=%s yelp_id=%s>" % (
-            self.restaurant_id,
-            self.yelp_id)
-
-
-class DSRestaurant(db.Model):
-    """Dog-friendly restaurants from Yelp Challenge dataset."""
-
-    __tablename__ = "ds_restaurants"
-
-    ds_restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    ds_yelp_id = db.Column(db.String(100), nullable=False, unique=True)
-    yelp_id = db.Column(db.String(100), nullable=False, unique=True)
+    ds_yelp_id = db.Column(db.String(100), unique=True)
+    yelp_url = db.Column(db.String(200), nullable=False, unique=True)
+    yelp_img_url = db.Column(db.String(200), nullable=False, unique=True)
+    yelp_rating = db.Column(db.Float, nullable=False)
+    yelp_rating_img = db.Column(db.String(200), nullable=False)
+    yelp_review_count = db.Column(db.Integer, nullable=True)
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
 
+    categories = db.relationship("Category",
+                                 secondary="restaurant_categories",
+                                 backref="restaurants")
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<DSRestaurant ds_restaurant_id=%s ds_yelp_id=%s yelp_id=%s>" % (
-            self.ds_restaurant_id,
-            self.ds_yelp_id,
-            self.yelp_id)
+        return "<Restaurant restaurant_id=%s name=%s address=%s>" % (
+            self.restaurant_id,
+            self.name,
+            self.address)
+
+
+class Category(db.Model):
+    """Possible food categories for restaurants."""
+
+    __tablename__ = "categories"
+
+    category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    category = db.Column(db.String(64), nullable=False, unique=True)
+    alias = db.Column(db.String(64), nullable=False, unique=True)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Category category_id=%s category=%s alias=%s>" % (self.category_id, 
+                                                                   self.category,
+                                                                   self.alias)
 
 
 class Review(db.Model):
@@ -90,6 +103,32 @@ class Review(db.Model):
             self.restaurant_id,
             self.user_id,
             self.rating)
+
+
+class Yelp_Review(db.Model):
+    """Single Yelp review for particular restaurant."""
+
+    __tablename__ = "yelp_reviews"
+
+    yelp_review_id = db.Column(db.Integer,
+                               autoincrement=True,
+                               primary_key=True)
+    ds_yelp_id = db.Column(db.String(100),
+                           db.ForeignKey('restaurants.ds_yelp_id'),
+                           nullable=True,
+                           unique=True)
+    rating = db.Column(db.Float, nullable=False)
+    body = db.Column(db.String(2000), nullable=False)
+
+    restaurant = db.relationship('Restaurant',
+                                 backref=db.backref('yelp_reviews'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Yelp_Review yelp_review_id=%s restaurant_id=%s>" % (
+            self.yelp_review_id,
+            self.dsyelp_id)
 
 
 class Favorite(db.Model):

@@ -43,19 +43,19 @@ def bear_info():
     For each category that each restaurant in the database is in,
     create a key-value pair in the restaurants dictionary,
     where the value is a dictionary containing restaurant information."""
-    
+
     restaurants_lst = []
 
     # Get all restaurants in database
-    db_restaurant_list = Restaurant.query.all()
+    sf_restaurant_list = Restaurant.query.filter(Restaurant.source == "hardcode").all()
 
     # Match restaurant in yelp list with database list,
     # then grab restaurant id from database,
     # and get list of restaurant categories.
     for y in yelp_object_list:
-        for d in db_restaurant_list:
-            if y.id == d.yelp_id:
-                db_id = d.restaurant_id
+        for s in sf_restaurant_list:
+            if y.id == s.yelp_id:
+                db_id = s.restaurant_id
         # categories = [category.category for category in r.categories]
         restaurant_categories = y.categories
 
@@ -78,9 +78,9 @@ def bear_info():
 
 @app.route('/register')
 def register_user():
-  """Allow user to register."""
+    """Allow user to register."""
 
-  return render_template('register.html')
+    return render_template('register.html')
 
 
 @app.route('/registered', methods=["POST"])
