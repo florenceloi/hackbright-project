@@ -11,7 +11,7 @@ from model import (connect_to_db,
                    Favorite,
                    Review)
 
-from api import gmaps_key, yelp_client
+from api import gmaps_key
 
 app = Flask(__name__)
 
@@ -29,11 +29,20 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
+    # Instantiate city set using set comprehension
+    locations = {(r.city, r.state_code, r.country_code)
+                  for r in Restaurant.query.all()}
+
+    locations = sorted(list(locations))
+
     # Instantiate category list using list comprehension
     categories = [category.category
                   for category in Category.query.order_by('category').all()]
 
-    return render_template("home.html", gmaps_key=gmaps_key, categories=categories)
+    return render_template("home.html",
+                           gmaps_key=gmaps_key,
+                           locations=locations,
+                           categories=categories)
 
 
 @app.route('/home.json')
@@ -206,31 +215,36 @@ def check_user_existence():
 def add_favorite():
     """Add user's favorite restaurant to database."""
 
-    # Get restaurant id, restaurant database object, and user id
     restaurant_id = int(request.args.get("restaurant_id"))
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
-    user_id = session["user_id"]
 
-    # Get list of user's favorites from database
-    db_user_favorites = db.session.query(Favorite.restaurant_id).filter(User.user_id == user_id).all()
-    user_favorites = []
-    for u_tuple in db_user_favorites:
-        for u_favorite in u_tuple:
-            user_favorites.append(u_favorite)
+    if not session.get("user_id"):
+        flash("Please sign in or register to favorite %s" % restaurant.name)
+        return redirect("/login")
 
-    # If current restaurant is not already one of user's favorites,
-    # add it to the database
-    if restaurant_id not in user_favorites:
-        new_favorite = Favorite(restaurant_id=restaurant_id,
-                                user_id=user_id)
+    else:
+        
+        user_id = session["user_id"]
 
-        db.session.add(new_favorite)
-        db.session.commit()
+        # Get list of user's favorites from database
+        db_user_favorites = db.session.query(Favorite.restaurant_id).filter(User.user_id == user_id).all()
+        user_favorites = []
+        for u_tuple in db_user_favorites:
+            for u_favorite in u_tuple:
+                user_favorites.append(u_favorite)
 
-        name = yelp_client.get_business(restaurant.yelp_id).business.name
-        flash("Saved %s as a favorite" % name)
+        # If current restaurant is not already one of user's favorites,
+        # add it to the database
+        if restaurant_id not in user_favorites:
+            new_favorite = Favorite(restaurant_id=restaurant_id,
+                                    user_id=user_id)
 
-    return redirect("/home")
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            flash("Saved %s as a favorite" % restaurant.name)
+
+        return redirect("/home")
 
 
 @app.route('/profile')
@@ -250,7 +264,7 @@ def user_detail():
         for d in db_fav_restaurants:
             yelp_id = d.restaurant.yelp_id
             restaurant_id = d.restaurant_id
-            name = yelp_client.get_business(yelp_id).business.name
+            name = d.restaurant.name
 
             restaurant_dict = {"r_id": restaurant_id,
                                "name": name}
@@ -264,7 +278,7 @@ def user_detail():
 
         for d in db_reviews:
             yelp_id = d.restaurant.yelp_id
-            name = yelp_client.get_business(yelp_id).business.name
+            name = d.restaurant.name
             restaurant_id = d.restaurant_id
             rating = d.rating
             body = d.body
@@ -291,11 +305,17 @@ def review_restaurant(restaurant_id):
     """Allow user to review specific restaurant."""
 
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
-    name = yelp_client.get_business(restaurant.yelp_id).business.name
 
-    return render_template("restaurant-info.html",
-                           restaurant=restaurant,
-                           name=name)
+    if not session.get("user_id"):
+
+        flash("Please sign in or register to review %s" % restaurant.name)
+        return redirect("/login")
+
+    else:
+
+        return render_template("restaurant-info.html",
+                               restaurant=restaurant,
+                               name=restaurant.name)
 
 
 @app.route('/restaurants/<int:restaurant_id>/review', methods=["POST"])
@@ -314,6 +334,8 @@ def process_review(restaurant_id):
         for u_review in u_tuple:
             reviewed_restaurants.append(u_review)
 
+    restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
+
     # If current restaurant has not already been reviewed,
     # add current review to the database
     if restaurant_id not in reviewed_restaurants:
@@ -325,9 +347,10 @@ def process_review(restaurant_id):
         db.session.add(new_review)
         db.session.commit()
 
-        restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
-        name = yelp_client.get_business(restaurant.yelp_id).business.name
-        flash("Your review of %s has been saved." % name)
+        flash("Your review of %s has been saved." % restaurant.name)
+
+    else:
+        flash("Oops! Looks like you've already reviewed %s." % restaurant.name)
 
     return redirect("/home")
 

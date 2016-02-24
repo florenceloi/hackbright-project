@@ -39,6 +39,8 @@ class Restaurant(db.Model):
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100), nullable=False)
     city = db.Column(db.String(30), nullable=False)
+    state_code = db.Column(db.String(2), nullable=False)
+    country_code = db.Column(db.String(2), nullable=False)
     phone = db.Column(db.String(14), nullable=False, unique=True)
     yelp_id = db.Column(db.String(100), nullable=False, unique=True)
     ds_yelp_id = db.Column(db.String(100), unique=True)

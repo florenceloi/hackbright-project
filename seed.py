@@ -42,6 +42,8 @@ def import_restaurants_from_hardcode_list():
         # Get restaurant information for each yelp_object
         yelp_id = yelp_object.id
         city = yelp_object.location.city
+        state_code = yelp_object.location.state_code
+        country_code = yelp_object.location.country_code
         yelp_url = yelp_object.url
         yelp_img_url = yelp_object.image_url
         yelp_rating = yelp_object.rating
@@ -54,6 +56,8 @@ def import_restaurants_from_hardcode_list():
         restaurant = Restaurant(name=name,
                                 address=address,
                                 city=city,
+                                state_code=state_code,
+                                country_code=country_code,
                                 phone=phone,
                                 yelp_id=yelp_id,
                                 yelp_url=yelp_url,
@@ -104,6 +108,8 @@ def import_restaurants_from_dataset():
                         if name == y.name:
                             address = y.location.address[0]
                             city = y.location.city
+                            state_code = y.location.state_code
+                            country_code = y.location.country_code
                             phone = "(" + y.phone[:3] + ") " + y.phone[3:6] + "-" + y.phone[6:]
                             yelp_id = y.id
                             yelp_url = y.url
@@ -119,6 +125,8 @@ def import_restaurants_from_dataset():
                             restaurant = Restaurant(name=name,
                                                     address=address,
                                                     city=city,
+                                                    state_code=state_code,
+                                                    country_code=country_code,
                                                     phone=phone,
                                                     yelp_id=yelp_id,
                                                     ds_yelp_id=ds_yelp_id,
@@ -147,14 +155,10 @@ def import_restaurants_from_dataset():
 def import_reviews_from_dataset():
     """Import reviews for dog-friendly restaurants from Yelp Challenge Dataset."""
 
-    # import pdb; pdb.set_trace()
-
     ds_yelp_id_set = {restaurant.ds_yelp_id
                       for restaurant
                       in Restaurant.query.filter(Restaurant.ds_yelp_id != None).all()}
 
-    import pdb; pdb.set_trace()
-    
     # Parse through Yelp reviews dataset
     for i, review in enumerate(open('data/yelp_academic_dataset_review.json')):
         
@@ -173,12 +177,12 @@ def import_reviews_from_dataset():
                                  rating=rating,
                                  body=body)
 
-            # db.session.add(review)
-            # db.session.commit()
+            db.session.add(review)
+            db.session.commit()
 
         # Provide some sense of progress
         if i % 10000 == 0:
-            print i
+            print "Review " + str(i)
 
     
 def populate_categories_table(yelp_object_list):
