@@ -38,6 +38,7 @@ class Restaurant(db.Model):
     restaurant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(30), nullable=False)
     phone = db.Column(db.String(14), nullable=False, unique=True)
     yelp_id = db.Column(db.String(100), nullable=False, unique=True)
     ds_yelp_id = db.Column(db.String(100), unique=True)
@@ -115,8 +116,7 @@ class Yelp_Review(db.Model):
                                primary_key=True)
     ds_yelp_id = db.Column(db.String(100),
                            db.ForeignKey('restaurants.ds_yelp_id'),
-                           nullable=True,
-                           unique=True)
+                           nullable=False)
     rating = db.Column(db.Float, nullable=False)
     body = db.Column(db.String(5000), nullable=False)
 
