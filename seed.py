@@ -1,12 +1,15 @@
 """Utility file to seed database model"""
 
-from time import time
+import json, sqlalchemy, random
+
 from model import connect_to_db, db, Restaurant, Category, Restaurant_Category, Yelp_Review, SA_Score
 from server import app
 from api import yelp_client
-import json
-import sqlalchemy
-import random
+
+from time import time
+
+from textblob import TextBlob
+from textblob.classifiers import NaiveBayesClassifier
 
 
 def import_restaurants_from_hardcode_list():
@@ -185,7 +188,7 @@ def import_reviews_from_dataset():
         if i % 10000 == 0:
             print "Review " + str(i)
 
-    
+
 def populate_categories_table(yelp_object_list):
     """Takes in list of yelp restaurant objects and populates categories table."""
 
@@ -246,12 +249,24 @@ def populate_restaurant_categories_table(yelp_object_list):
 def populate_sa_scores_table():
     """Perform sentiment analysis on reviews and populate table in database."""
 
+    categories = {
+        "dog":      ["dog", "doggy", "doggie", "canine", "hound", "pup", "puppy",
+                     "mutt", "pooch", "fido", "man's best friend"],
+        "food":     ["food"],
+        "service":  ["service", "wait", "waiter", "waitress"],
+        "ambiance": ["ambiance", "romantic", "intimate", "classy", "hipster",
+                     "divey", "touristy", "trendy", "upscale", "casual"],
+    }
+
     restaurants = Restaurant.query.filter(Restaurant.ds_yelp_id != None).all()
     for restaurant in restaurants:
-        category_dict = {"dog": [],
-                         "food": [],
-                         "service": []
-                         }
+        category_dict = {
+            "dog": [],
+            "food": [],
+            "service": [],
+            "ambiance": [],
+            "other": [],
+        }
 
         # Aggregate all sentences by category for each restaurant.
         reviews = restaurant.yelp_reviews # [{ id: 1}, { id: 2}, ...]
@@ -262,32 +277,35 @@ def populate_sa_scores_table():
                 category_dict[category].append(sentence)
 
         # Perform sentiment analysis on the aggrated sentences.
-        score_dict = {"dog": [],
-                      "food": [],
-                      "service": []
-                      }
+        score_dict = {
+            "dog": [],
+            "food": [],
+            "service": [],
+            "ambiance": [],
+            "other": [],
+        }
+
+        import pdb; pdb.set_trace()
 
         for category in category_dict.iterkeys():
             for sentence in category_dict[category]:
                 score = float(sentiment_analysis(sentence))
                 score_dict[category].append(score)
 
-        # import pdb; pdb.set_trace()
+        # # Average the scores from sentiment analysis.
+        # dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
+        # food_score = sum(score_dict["food"])/len(score_dict["food"])
+        # service_score = sum(score_dict["service"])/len(score_dict["service"])
 
-        # Average the scores from sentiment analysis.
-        dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
-        food_score = sum(score_dict["food"])/len(score_dict["food"])
-        service_score = sum(score_dict["service"])/len(score_dict["service"])
+        # # Save it to the DB.
+        # score = SA_Score(restaurant_id=restaurant.restaurant_id,
+        #                  dog_score=dog_score,
+        #                  food_score=food_score,
+        #                  service_score=service_score)
 
-        # Save it to the DB.
-        score = SA_Score(restaurant_id=restaurant.restaurant_id,
-                         dog_score=dog_score,
-                         food_score=food_score,
-                         service_score=service_score)
+    #     db.session.add(score)
 
-        db.session.add(score)
-
-    db.session.commit()
+    # db.session.commit()
 
 
 ###############################################################################
@@ -355,9 +373,10 @@ def classify_sentence(sentence):
 
 # FIXME
 def sentiment_analysis(sentence):
-    score = random.random()
+    blob = TextBlob(sentence)
+    score = blob.sentiment.polarity
 
-    return "%.1f" % score
+    return "%.2f" % score
 
 
 if __name__ == "__main__":
@@ -372,4 +391,4 @@ if __name__ == "__main__":
     # populate_restaurant_categories_table(complete_yelp_object_list)
 
     # import_reviews_from_dataset()
-    # populate_sa_scores_table()
+    populate_sa_scores_table()
