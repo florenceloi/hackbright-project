@@ -128,10 +128,35 @@ class Yelp_Review(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Yelp_Review yelp_review_id=%s restaurant_id=%s>" % (
+        return "<Yelp_Review yelp_review_id=%s ds_yelp_id=%s>" % (
             self.yelp_review_id,
             self.ds_yelp_id)
 
+
+class SA_Score(db.Model):
+    """Sentiment analysis scores (dog, food, service) for each restaurant."""
+
+    __tablename__ = "sa_scores"
+
+    sa_score_id = db.Column(db.Integer,
+                            autoincrement=True,
+                            primary_key=True)
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.restaurant_id'),
+                              nullable=False)
+    dog_score = db.Column(db.Float, nullable=False)
+    food_score = db.Column(db.Float, nullable=False)
+    service_score = db.Column(db.Float, nullable=False)
+
+    restaurant = db.relationship('Restaurant',
+                                 backref=db.backref('sa_scores'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<SA_Score sa_score_id=%s restaurant_id=%s>" % (
+            self.sa_score_id,
+            self.restaurant_id)
 
 ###############################################################################
 # Association tables

@@ -1,11 +1,12 @@
 """Utility file to seed database model"""
 
 from time import time
-from model import connect_to_db, db, Restaurant, Category, Restaurant_Category, Yelp_Review
+from model import connect_to_db, db, Restaurant, Category, Restaurant_Category, Yelp_Review, SA_Score
 from server import app
 from api import yelp_client
 import json
 import sqlalchemy
+import random
 
 
 def import_restaurants_from_hardcode_list():
@@ -161,7 +162,7 @@ def import_reviews_from_dataset():
 
     # Parse through Yelp reviews dataset
     for i, review in enumerate(open('data/yelp_academic_dataset_review.json')):
-        
+
         review = json.loads(review.strip())
 
         ds_yelp_id = review["business_id"]
@@ -242,6 +243,53 @@ def populate_restaurant_categories_table(yelp_object_list):
     db.session.commit()
 
 
+def populate_sa_scores_table():
+    """Perform sentiment analysis on reviews and populate table in database."""
+
+    restaurants = Restaurant.query.filter(Restaurant.ds_yelp_id != None).all()
+    for restaurant in restaurants:
+        category_dict = {"dog": [],
+                         "food": [],
+                         "service": []
+                         }
+
+        # Aggregate all sentences by category for each restaurant.
+        reviews = restaurant.yelp_reviews # [{ id: 1}, { id: 2}, ...]
+        for review in reviews:
+            sentences = review.body.split('.') # This is a list of sentences ['hi.', 'my food is good'.]
+            for sentence in sentences:
+                category = classify_sentence(sentence)
+                category_dict[category].append(sentence)
+
+        # Perform sentiment analysis on the aggrated sentences.
+        score_dict = {"dog": [],
+                      "food": [],
+                      "service": []
+                      }
+
+        for category in category_dict.iterkeys():
+            for sentence in category_dict[category]:
+                score = float(sentiment_analysis(sentence))
+                score_dict[category].append(score)
+
+        # import pdb; pdb.set_trace()
+
+        # Average the scores from sentiment analysis.
+        dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
+        food_score = sum(score_dict["food"])/len(score_dict["food"])
+        service_score = sum(score_dict["service"])/len(score_dict["service"])
+
+        # Save it to the DB.
+        score = SA_Score(restaurant_id=restaurant.restaurant_id,
+                         dog_score=dog_score,
+                         food_score=food_score,
+                         service_score=service_score)
+
+        db.session.add(score)
+
+    db.session.commit()
+
+
 ###############################################################################
 # Helper functions
 
@@ -298,6 +346,20 @@ def get_category_and_id_dict():
     return category_dict
 
 
+# FIXME
+def classify_sentence(sentence):
+    categories = ["dog", "food", "service"]
+    category = random.choice(categories)
+
+    return category
+
+# FIXME
+def sentiment_analysis(sentence):
+    score = random.random()
+
+    return "%.1f" % score
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     # db.create_all()
@@ -309,4 +371,5 @@ if __name__ == "__main__":
     # populate_categories_table(complete_yelp_object_list)
     # populate_restaurant_categories_table(complete_yelp_object_list)
 
-    import_reviews_from_dataset()
+    # import_reviews_from_dataset()
+    # populate_sa_scores_table()
