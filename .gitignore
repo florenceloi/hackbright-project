@@ -5,3 +5,4 @@ env/
 *.json
 *.sql
 .*/
+classifier.py

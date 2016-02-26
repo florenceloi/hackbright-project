@@ -8,9 +8,10 @@ from api import yelp_client
 
 from time import time
 
+from nltk.tokenize import sent_tokenize
 from textblob import TextBlob
 from textblob.classifiers import NaiveBayesClassifier
-
+from classifier import train, test
 
 def import_restaurants_from_hardcode_list():
     """Load restaurant info into database model.
@@ -249,63 +250,70 @@ def populate_restaurant_categories_table(yelp_object_list):
 def populate_sa_scores_table():
     """Perform sentiment analysis on reviews and populate table in database."""
 
-    categories = {
-        "dog":      ["dog", "doggy", "doggie", "canine", "hound", "pup", "puppy",
-                     "mutt", "pooch", "fido", "man's best friend"],
-        "food":     ["food"],
-        "service":  ["service", "wait", "waiter", "waitress"],
-        "ambiance": ["ambiance", "romantic", "intimate", "classy", "hipster",
-                     "divey", "touristy", "trendy", "upscale", "casual"],
-    }
+    sentence_count = 0
 
     restaurants = Restaurant.query.filter(Restaurant.ds_yelp_id != None).all()
-    for restaurant in restaurants:
+
+    for i, restaurant in enumerate(restaurants):
         category_dict = {
             "dog": [],
             "food": [],
-            "service": [],
-            "ambiance": [],
             "other": [],
         }
 
         # Aggregate all sentences by category for each restaurant.
         reviews = restaurant.yelp_reviews # [{ id: 1}, { id: 2}, ...]
-        for review in reviews:
-            sentences = review.body.split('.') # This is a list of sentences ['hi.', 'my food is good'.]
+        for j, review in enumerate(reviews):
+
+            start_time = time() * 1000
+
+            # import pdb; pdb.set_trace()
+
+            sentences = sent_tokenize(review.body) # This is a list of sentences ['hi', 'my food is good']
             for sentence in sentences:
-                category = classify_sentence(sentence)
-                category_dict[category].append(sentence)
+                if sentence != "":
+                    category = classifier.classify(sentence)
+                    category_dict[category].append(sentence)
+
+            elapsed_time = (time() * 1000) - start_time
+            print "Restaurant %d/%d, review %d/%d: %d ms" % (i,
+                                                             len(restaurants),
+                                                             j,
+                                                             len(reviews),
+                                                             elapsed_time)
 
         # Perform sentiment analysis on the aggrated sentences.
         score_dict = {
             "dog": [],
             "food": [],
-            "service": [],
-            "ambiance": [],
             "other": [],
         }
-
-        import pdb; pdb.set_trace()
 
         for category in category_dict.iterkeys():
             for sentence in category_dict[category]:
                 score = float(sentiment_analysis(sentence))
                 score_dict[category].append(score)
 
-        # # Average the scores from sentiment analysis.
-        # dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
-        # food_score = sum(score_dict["food"])/len(score_dict["food"])
-        # service_score = sum(score_dict["service"])/len(score_dict["service"])
+        # Average the scores from sentiment analysis.
+        dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
+        food_score = sum(score_dict["food"])/len(score_dict["food"])
+        other_score = sum(score_dict["other"])/len(score_dict["other"])
+
+        print "Restaurant %d: %.2f (dog), %.2f (food), %.2f (other)" % (i,
+                                                                  dog_score,
+                                                                  food_score,
+                                                                  other_score)
 
         # # Save it to the DB.
         # score = SA_Score(restaurant_id=restaurant.restaurant_id,
         #                  dog_score=dog_score,
         #                  food_score=food_score,
-        #                  service_score=service_score)
+        #                  other_score=other_score)
 
     #     db.session.add(score)
 
     # db.session.commit()
+    print sentence_count
 
 
 ###############################################################################
@@ -364,14 +372,14 @@ def get_category_and_id_dict():
     return category_dict
 
 
-# FIXME
-def classify_sentence(sentence):
-    categories = ["dog", "food", "service"]
-    category = random.choice(categories)
+# Trained classifier based on subset of review sentences
+# (followed 80:20 rule for training:test set ratio)
+classifier = NaiveBayesClassifier(train)
 
-    return category
+# Uncomment to get classifier accuracy
+# print classifier.accuracy(test) # current accuracy: 0.757575757576
 
-# FIXME
+
 def sentiment_analysis(sentence):
     blob = TextBlob(sentence)
     score = blob.sentiment.polarity
