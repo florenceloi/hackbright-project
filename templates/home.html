@@ -13,8 +13,21 @@
 {% block content %}
     
     <div id="floating-panel">
-        <input id="address" type="textbox" placeholder="Enter location">
-        <input id="submit" type="button" value="Center map">
+        <form>
+            Pick a city with dog-friendly restaurants:
+                <select id="city" name="location">
+
+                    {% for location in locations %}
+                        <option value="{{ location.city }}">
+                            {{ location.city }}, {{ location.state_code }}, {{ location.country_code }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+        </form>
+
+<!--         <input id="address" type="textbox" placeholder="Enter location">
+        <input id="submit" type="button" value="Center map"> -->
 
         <button id="current-location" type="button">Center on current location</button><br>
         

@@ -146,7 +146,7 @@ class SA_Score(db.Model):
                               nullable=False)
     dog_score = db.Column(db.Float, nullable=False)
     food_score = db.Column(db.Float, nullable=False)
-    service_score = db.Column(db.Float, nullable=False)
+    other_score = db.Column(db.Float, nullable=False)
 
     restaurant = db.relationship('Restaurant',
                                  backref=db.backref('sa_scores'))

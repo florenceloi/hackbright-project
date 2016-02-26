@@ -1,6 +1,3 @@
-// HUGE FIXME!!! CAN ONLY STORE YELP'S BUSINESS ID, CANNOT STORE ANYTHING ELSE
-
-
 "use strict";
 
 // Renders map populated with restaurants,
@@ -22,9 +19,9 @@ function initMap() {
   // Instantiate geocoder object
   var geocoder = new google.maps.Geocoder();
 
-  // Call geocodeAddress when "Center map" button is clicked
+  // Call geocodeCity when "Center map" button is clicked
   $('#submit').click(function() {
-    geocodeAddress(geocoder, map);
+    geocodeCity(geocoder, map);
   });
 
   var locationInfoWindow = new google.maps.InfoWindow({
@@ -152,13 +149,13 @@ function bindInfoWindow(marker, map, infoWindow, html) {
 
 
 // Processes geocode
-function geocodeAddress(geocoder, resultsMap) {
+function geocodeCity(geocoder, resultsMap) {
 
   // Get address value from form
-  var address = document.getElementById('address').value;
+  var city = document.getElementById('city').value;
   
-  // Make request to Geocoding service with address and execute anonymous callback method
-  geocoder.geocode({'address': address}, function(results, status) {
+  // Make request to Geocoding service with city and execute anonymous callback method
+  geocoder.geocode({'city': city}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       // Request may return multiple results; center on LatLng of first in list
       resultsMap.setCenter(results[0].geometry.location);
@@ -167,7 +164,7 @@ function geocodeAddress(geocoder, resultsMap) {
         position: results[0].geometry.location
       });
     } else {
-      alert('Centering on ' + address + ' was not successful for the following reason: ' + status);
+      alert('Centering on ' + city + ' was not successful for the following reason: ' + status);
     }
   });
 }

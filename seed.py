@@ -250,10 +250,7 @@ def populate_restaurant_categories_table(yelp_object_list):
 def populate_sa_scores_table():
     """Perform sentiment analysis on reviews and populate table in database."""
 
-    sentence_count = 0
-
     restaurants = Restaurant.query.filter(Restaurant.ds_yelp_id != None).all()
-
     for i, restaurant in enumerate(restaurants):
         category_dict = {
             "dog": [],
@@ -267,12 +264,12 @@ def populate_sa_scores_table():
 
             start_time = time() * 1000
 
-            # import pdb; pdb.set_trace()
+            import pdb; pdb.set_trace()
 
             sentences = sent_tokenize(review.body) # This is a list of sentences ['hi', 'my food is good']
             for sentence in sentences:
-                if sentence != "":
-                    category = classifier.classify(sentence)
+                if sentence != "" and type(sentence) == str:
+                    category = cl.classify(sentence)
                     category_dict[category].append(sentence)
 
             elapsed_time = (time() * 1000) - start_time
@@ -295,25 +292,35 @@ def populate_sa_scores_table():
                 score_dict[category].append(score)
 
         # Average the scores from sentiment analysis.
-        dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
-        food_score = sum(score_dict["food"])/len(score_dict["food"])
-        other_score = sum(score_dict["other"])/len(score_dict["other"])
+        if len(score_dict["dog"]) == 0:
+            dog_score = None
+        else: 
+            dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
 
-        print "Restaurant %d: %.2f (dog), %.2f (food), %.2f (other)" % (i,
-                                                                  dog_score,
-                                                                  food_score,
-                                                                  other_score)
+        if len(score_dict["food"]) == 0:
+            food_score = None
+        else:  
+            food_score = sum(score_dict["food"])/len(score_dict["food"])
 
-        # # Save it to the DB.
-        # score = SA_Score(restaurant_id=restaurant.restaurant_id,
-        #                  dog_score=dog_score,
-        #                  food_score=food_score,
-        #                  other_score=other_score)
+        if len(score_dict["other"]) == 0:
+            other_score = None
+        else: 
+            other_score = sum(score_dict["other"])/len(score_dict["other"])
 
-    #     db.session.add(score)
+        print "Restaurant %d: %.2f (d), %.2f (f), %.2f (o)" % (i,
+                                                               dog_score,
+                                                               food_score,
+                                                               other_score)
 
-    # db.session.commit()
-    print sentence_count
+        # Save it to the DB.
+        score = SA_Score(restaurant_id=restaurant.restaurant_id,
+                         dog_score=dog_score,
+                         food_score=food_score,
+                         other_score=other_score)
+
+        db.session.add(score)
+
+        db.session.commit()
 
 
 ###############################################################################
@@ -374,7 +381,7 @@ def get_category_and_id_dict():
 
 # Trained classifier based on subset of review sentences
 # (followed 80:20 rule for training:test set ratio)
-classifier = NaiveBayesClassifier(train)
+cl = NaiveBayesClassifier(train)
 
 # Uncomment to get classifier accuracy
 # print classifier.accuracy(test) # current accuracy: 0.757575757576
@@ -384,7 +391,7 @@ def sentiment_analysis(sentence):
     blob = TextBlob(sentence)
     score = blob.sentiment.polarity
 
-    return "%.2f" % score
+    return score
 
 
 if __name__ == "__main__":
