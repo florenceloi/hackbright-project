@@ -264,11 +264,11 @@ def populate_sa_scores_table():
 
             start_time = time() * 1000
 
-            import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
 
             sentences = sent_tokenize(review.body) # This is a list of sentences ['hi', 'my food is good']
             for sentence in sentences:
-                if sentence != "" and type(sentence) == str:
+                if sentence != "" and type(sentence) == unicode:
                     category = cl.classify(sentence)
                     category_dict[category].append(sentence)
 
@@ -293,17 +293,17 @@ def populate_sa_scores_table():
 
         # Average the scores from sentiment analysis.
         if len(score_dict["dog"]) == 0:
-            dog_score = None
+            dog_score = 0
         else: 
             dog_score = sum(score_dict["dog"])/len(score_dict["dog"])
 
         if len(score_dict["food"]) == 0:
-            food_score = None
+            food_score = 0
         else:  
             food_score = sum(score_dict["food"])/len(score_dict["food"])
 
         if len(score_dict["other"]) == 0:
-            other_score = None
+            other_score = 0
         else: 
             other_score = sum(score_dict["other"])/len(score_dict["other"])
 
