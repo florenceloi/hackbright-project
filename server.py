@@ -355,6 +355,47 @@ def process_review(restaurant_id):
     return redirect("/home")
 
 
+@app.route('/cities')
+def display_cities_scores():
+    """doctstring"""
+
+    return render_template("sa-score-vis.html")
+
+
+@app.route('/cities.json')
+def import_cities_scores():
+    """Display sentiment analysis scores on city-level."""
+
+    QUERY = """SELECT restaurants.city,
+                      avg(sa_scores.dog_score) as avg_dog_score,
+                      avg(sa_scores.food_score) as avg_food_score,
+                      avg(sa_scores.other_score) as avg_other_score
+               FROM sa_scores
+               JOIN restaurants
+                    USING (restaurant_id)
+               GROUP BY restaurants.city;
+            """
+
+    cursor = db.session.execute(QUERY)
+    results = cursor.fetchall()
+
+    freqData = []
+
+    for r in results:
+        freqData.append({"State": r[0],
+                         "freq": {"dog_score": r[1],
+                                  "food_score": r[2],
+                                  "other_score": r[3]}})
+
+    print freqData
+
+    # SA_Score.query.with_entities(func.avg(SA_Score.dog_score), func.avg(SA_Score.food_score), func.avg(SA_Score.other_score)).group_by(SA_Score.restaurant_id).all()
+    return jsonify(freqData)
+
+
+# SA_Score.query.with_entities(func.avg(SA_Score.dog_score), func.avg(SA_Score.food_score), func.avg(SA_Score.other_score)).group_by(SA_Score.restaurant_id).all()
+
+
 @app.route('/logout')
 def logout():
     """Logout user."""
