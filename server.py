@@ -30,7 +30,7 @@ def index():
     """Homepage."""
 
     # Instantiate city set using set comprehension
-    locations = {(r.city, r.state_code, r.country_code)
+    locations = {(r.country_code, r.state_code, r.city)
                   for r in Restaurant.query.all()}
 
     locations = sorted(list(locations))

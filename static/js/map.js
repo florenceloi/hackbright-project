@@ -19,8 +19,9 @@ function initMap() {
   // Instantiate geocoder object
   var geocoder = new google.maps.Geocoder();
 
+
   // Call geocodeCity when "Center map" button is clicked
-  $('#submit').click(function() {
+  $('select').change(function() {
     geocodeCity(geocoder, map);
   });
 
@@ -150,19 +151,24 @@ function bindInfoWindow(marker, map, infoWindow, html) {
 
 // Processes geocode
 function geocodeCity(geocoder, resultsMap) {
-
+  // debugger;
   // Get address value from form
   var city = document.getElementById('city').value;
   
   // Make request to Geocoding service with city and execute anonymous callback method
-  geocoder.geocode({'city': city}, function(results, status) {
+  geocoder.geocode({'address': city}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       // Request may return multiple results; center on LatLng of first in list
       resultsMap.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        map: resultsMap,
-        position: results[0].geometry.location
+      var cityInfoWindow = new google.maps.InfoWindow({
+        content: city,
+        position: results[0].geometry.location,
       });
+      cityInfoWindow.open(resultsMap);
+      // var marker = new google.maps.Marker({
+      //   map: resultsMap,
+      //   position: results[0].geometry.location
+      // });
     } else {
       alert('Centering on ' + city + ' was not successful for the following reason: ' + status);
     }

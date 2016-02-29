@@ -18,16 +18,19 @@
                 <select id="city" name="location">
 
                     {% for location in locations %}
-                        <option value="{{ location.city }}">
-                            {{ location.city }}, {{ location.state_code }}, {{ location.country_code }}
-                        </option>
+                        {% if location[2] == "San Francisco" %}
+                            <option value="{{ location[2] }}, {{ location[1] }}" selected="selected">
+                                {{ location[0] }}, {{ location[1] }}, {{ location[2] }}
+                            </option>
+                        {% else %}
+                            <option value="{{ location[2] }}, {{ location[1] }}">
+                                {{ location[0] }}, {{ location[1] }}, {{ location[2] }}
+                            </option>
+                        {% endif %}
                     {% endfor %}
 
                 </select>
         </form>
-
-<!--         <input id="address" type="textbox" placeholder="Enter location">
-        <input id="submit" type="button" value="Center map"> -->
 
         <button id="current-location" type="button">Center on current location</button><br>
         
