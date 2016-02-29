@@ -355,45 +355,42 @@ def process_review(restaurant_id):
     return redirect("/home")
 
 
-@app.route('/cities')
-def display_cities_scores():
-    """doctstring"""
+@app.route('/states')
+def display_states_scores():
+    """Display state-level sentiment analysis scores."""
 
-    return render_template("sa-score-vis.html")
+    return render_template("sa-score-state.html")
 
 
-@app.route('/cities.json')
-def import_cities_scores():
-    """Display sentiment analysis scores on city-level."""
+@app.route('/states.json')
+def import_states_scores():
+    """JSON information on state-level sentiment analysis scores."""
 
-    QUERY = """SELECT restaurants.city,
+    QUERY = """SELECT restaurants.state_code,
                       avg(sa_scores.dog_score) as avg_dog_score,
                       avg(sa_scores.food_score) as avg_food_score,
                       avg(sa_scores.other_score) as avg_other_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
-               GROUP BY restaurants.city;
+               GROUP BY restaurants.state_code;
             """
 
     cursor = db.session.execute(QUERY)
     results = cursor.fetchall()
 
-    freqData = []
+    score_data = []
 
     for r in results:
-        freqData.append({"State": r[0],
-                         "freq": {"dog_score": r[1],
-                                  "food_score": r[2],
-                                  "other_score": r[3]}})
 
-    print freqData
+        score_data.append({"State": r[0],
+                           "score": {"dog_score": r[1],
+                                     "food_score": r[2],
+                                     "other_score": r[3]}})
 
-    # SA_Score.query.with_entities(func.avg(SA_Score.dog_score), func.avg(SA_Score.food_score), func.avg(SA_Score.other_score)).group_by(SA_Score.restaurant_id).all()
-    return jsonify(freqData)
+    scoreData_dict = {"scoreData": score_data}
 
-
-# SA_Score.query.with_entities(func.avg(SA_Score.dog_score), func.avg(SA_Score.food_score), func.avg(SA_Score.other_score)).group_by(SA_Score.restaurant_id).all()
+    return jsonify(scoreData_dict)
 
 
 @app.route('/logout')

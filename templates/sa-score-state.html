@@ -42,6 +42,8 @@ rect:hover {  fill:blue; }
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://code.jquery.com/jquery.js"></script>
 <script>
+"use strict";
+
 function dashboard(id, fData){
     var barColor = 'steelblue';
 
@@ -49,7 +51,7 @@ function dashboard(id, fData){
     function segColor(c){ return {dog_score:"#807dba", food_score:"#e08214", other_score:"#41ab5d"}[c]; }
     
     // Compute total for each state in the list by passing each value in list to anonymous function
-    fData.forEach(function(d){d.total=d.freq.dog_score+d.freq.food_score+d.freq.other_score;});
+    fData.forEach(function(d){d.total=d.score.dog_score+d.score.food_score+d.score.other_score;});
     
     // Function to handle histogram
     function histoGram(fD){
@@ -80,7 +82,7 @@ function dashboard(id, fData){
                 .domain([0, d3.max(fD, function(d) { return d[1]; })]);
 
         // Create bars (with class bar) for histogram to contain rectangles
-        // and freq labels.
+        // and score labels.
         var bars = hGsvg.selectAll(".bar").data(fD).enter()
                 .append("g").attr("class", "bar");
 
@@ -94,7 +96,7 @@ function dashboard(id, fData){
             .on("mouseover",mouseover)// mouseover is defined below.
             .on("mouseout",mouseout);// mouseout is defined below.
             
-        // Create the frequency labels above the rectangles.
+        // Create the score labels above the rectangles.
         bars.append("text").text(function(d){ return d3.format(".3f")(d[1])})
             // Set label as 1.5 x-value 
             .attr("x", function(d) { return x(d[0])+x.rangeBand()/2; }) 
@@ -107,7 +109,7 @@ function dashboard(id, fData){
             // Filter by City and get city object
             var st = fData.filter(function(s){ return s.State == d[0];})[0],
                 // From city object, get type and value
-                nD = d3.keys(st.freq).map(function(s){ return {type:s, freq:st.freq[s]};});
+                nD = d3.keys(st.score).map(function(s){ return {type:s, score:st.score[s]};});
                
             // Update pie-chart and legend.    
             pC.update(nD);
@@ -122,7 +124,7 @@ function dashboard(id, fData){
         
         // create function to update the bars. This will be used by pie-chart.
         hG.update = function(nD, color){
-            // Update the domain of the y-axis map to reflect change in frequencies.
+            // Update the domain of the y-axis map to reflect change in scores.
             y.domain([0, d3.max(nD, function(d) { return d[1]; })]);
             
             // Attach the new data to the bars.
@@ -134,7 +136,7 @@ function dashboard(id, fData){
                 .attr("height", function(d) { return hGDim.h - y(d[1]); })
                 .attr("fill", color);
 
-            // transition the frequency labels location and change value.
+            // transition the score labels location and change value.
             bars.select("text").transition().duration(500)
                 .text(function(d){ return d3.format(".3f")(d[1])})
                 .attr("y", function(d) { return y(d[1])-5; });            
@@ -158,7 +160,7 @@ function dashboard(id, fData){
         var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
 
         // create a function to compute the pie slice angles based on key-value.
-        var pie = d3.layout.pie().sort(null).value(function(d) { return d.freq; });
+        var pie = d3.layout.pie().sort(null).value(function(d) { return d.score; });
 
         // Draw the pie slices.
         piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
@@ -178,7 +180,7 @@ function dashboard(id, fData){
         function mouseover(d){
             // call the update function of histogram with new data.
             hG.update(fData.map(function(v){ 
-                return [v.State,v.freq[d.data.type]];}),segColor(d.data.type));
+                return [v.State,v.score[d.data.type]];}),segColor(d.data.type));
         }
         //Utility function to be called on mouseout a pie slice.
         function mouseout(d){
@@ -215,9 +217,9 @@ function dashboard(id, fData){
         tr.append("td").text(function(d){ return d.type;});
 
         // create the third column for each segment.
-        tr.append("td").attr("class",'legendFreq')
-            // .text(function(d){ return d3.format(",")(d.freq);});
-            .text(function(d){ return d3.format(".3f")(d.freq);});
+        tr.append("td").attr("class",'legendScore')
+            // .text(function(d){ return d3.format(",")(d.score);});
+            .text(function(d){ return d3.format(".3f")(d.score);});
 
         // create the fourth column for each segment.
         tr.append("td").attr("class",'legendPerc')
@@ -228,26 +230,26 @@ function dashboard(id, fData){
             // update the data attached to the row elements.
             var l = legend.select("tbody").selectAll("tr").data(nD);
 
-            // update the frequencies.
-            l.select(".legendFreq").text(function(d){ return d3.format(".3f")(d.freq);});
+            // update the scores.
+            l.select(".legendScore").text(function(d){ return d3.format(".3f")(d.score);});
 
             // update the percentage column.
             l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});        
         }
         
         function getLegend(d,aD){ // Utility function to compute percentage.
-            return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+            return d3.format("%")(d.score/d3.sum(aD.map(function(v){ return v.score; })));
         }
 
         return leg;
     }
 
-    // calculate total frequency by segment for all state.
+    // calculate total scores by segment for all state.
     var tF = ['dog_score','food_score','other_score'].map(function(d){ 
-        return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+        return {type:d, score: d3.sum(fData.map(function(t){ return t.score[d];}))}; 
     });    
     
-    // calculate total frequency by state for all segment.
+    // calculate total score by state for all segment.
     var sF = fData.map(function(d){return [d.State,d.total];});
 
     var hG = histoGram(sF), // create the histogram.
@@ -260,11 +262,11 @@ function dashboard(id, fData){
 "use strict";
 
 // Retrieve the jsonified Python dictionary of restaurants with AJAX
-$.get('/cities.json', function (freqData_dict) {
-    var freqData = freqData_dict["freqData"];
+$.get('/states.json', function (scoreData_dict) {
+    var scoreData = scoreData_dict["scoreData"];
 
     // Create dashboard with id (for div element) and data
-    dashboard('#dashboard',freqData);
+    dashboard('#dashboard',scoreData);
 });
 
 </script>
