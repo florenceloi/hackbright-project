@@ -355,25 +355,33 @@ def process_review(restaurant_id):
     return redirect("/home")
 
 
-@app.route('/states')
+@app.route('/analysis')
 def display_states_scores():
     """Display state-level sentiment analysis scores."""
 
-    return render_template("sa-score-state.html")
+    # Instantiate city set using set comprehension
+    locations = {(r.state_code, r.country_code)
+                  for r in Restaurant.query.all()}
+
+    locations = sorted(list(locations))
+
+    return render_template("sa-score-state.html", locations=locations)
 
 
-@app.route('/states.json')
+@app.route('/analysis.json')
 def import_states_scores():
     """JSON information on state-level sentiment analysis scores."""
 
     QUERY = """SELECT restaurants.state_code,
+                      restaurants.country_code,
                       avg(sa_scores.dog_score) as avg_dog_score,
                       avg(sa_scores.food_score) as avg_food_score,
                       avg(sa_scores.other_score) as avg_other_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
-               GROUP BY restaurants.state_code;
+               GROUP BY (restaurants.state_code, restaurants.country_code)
+               ORDER BY restaurants.state_code;
             """
 
     cursor = db.session.execute(QUERY)
@@ -382,11 +390,11 @@ def import_states_scores():
     score_data = []
 
     for r in results:
-
-        score_data.append({"State": r[0],
-                           "score": {"dog_score": r[1],
-                                     "food_score": r[2],
-                                     "other_score": r[3]}})
+        location = r[0] + ", " + r[1]
+        score_data.append({"State": location,
+                           "score": {"dog_score": r[2],
+                                     "food_score": r[3],
+                                     "other_score": r[4]}})
 
     scoreData_dict = {"scoreData": score_data}
 
