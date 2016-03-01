@@ -356,21 +356,21 @@ def process_review(restaurant_id):
 
 
 @app.route('/analysis')
-def display_states_scores():
-    """Display state-level sentiment analysis scores."""
+def display_overall_scores():
+    """Display overall sentiment analysis scores."""
 
     # Instantiate city set using set comprehension
     locations = {(r.state_code, r.country_code)
-                  for r in Restaurant.query.all()}
+                  for r in Restaurant.query.all() if r.state_code != 'CA'}
 
     locations = sorted(list(locations))
 
-    return render_template("sa-score-state.html", locations=locations)
+    return render_template("sa-score-states.html", locations=locations)
 
 
 @app.route('/analysis.json')
-def import_states_scores():
-    """JSON information on state-level sentiment analysis scores."""
+def import_overall_scores():
+    """JSON information on overall sentiment analysis scores."""
 
     QUERY = """SELECT restaurants.state_code,
                       restaurants.country_code,
@@ -399,6 +399,104 @@ def import_states_scores():
     scoreData_dict = {"scoreData": score_data}
 
     return jsonify(scoreData_dict)
+
+
+@app.route('/analysis/state')
+def display_state_scores():
+    """JSON information on state-level sentiment analysis scores."""
+
+    state = request.args.get("location")
+    session["state"] = state
+
+    # Instantiate city set using set comprehension
+    locations = {r.city for r in Restaurant.query.all() if r.state_code == state}
+
+    locations = sorted(list(locations))
+
+    return render_template("sa-score-cities.html", locations=locations)
+
+
+@app.route('/analysis/state.json')
+def import_state_scores():
+    """JSON information on state-level sentiment analysis scores."""
+
+    state = session["state"]
+
+    QUERY = """SELECT restaurants.city,
+                      avg(sa_scores.dog_score) as avg_dog_score,
+                      avg(sa_scores.food_score) as avg_food_score,
+                      avg(sa_scores.other_score) as avg_other_score
+               FROM sa_scores
+               JOIN restaurants
+                    USING (restaurant_id)
+               WHERE restaurants.state_code = '%s'
+               GROUP BY (restaurants.city)
+               ORDER BY restaurants.city;
+            """ % state
+
+    cursor = db.session.execute(QUERY)
+    results = cursor.fetchall()
+
+    score_data = []
+
+    for r in results:
+        score_data.append({"State": r[0],
+                           "score": {"dog_score": r[1],
+                                     "food_score": r[2],
+                                     "other_score": r[3]}})
+
+    scoreData_dict = {"scoreData": score_data}
+
+    return jsonify(scoreData_dict)
+
+
+@app.route('/analysis/state/city')
+def display_city_scores():
+    """JSON information on city-level sentiment analysis scores."""
+
+    state = request.args.get("location")
+    session["state"] = state
+
+    # Instantiate city set using set comprehension
+    locations = {r.city for r in Restaurant.query.all() if r.state_code == state}
+
+    locations = sorted(list(locations))
+
+    return render_template("sa-score-cities.html", locations=locations)
+
+
+@app.route('/analysis/state/city.json')
+def import_city_scores():
+    """JSON information on city-level sentiment analysis scores."""
+
+    # state = session["state"]
+
+    # QUERY = """SELECT restaurants.city,
+    #                   avg(sa_scores.dog_score) as avg_dog_score,
+    #                   avg(sa_scores.food_score) as avg_food_score,
+    #                   avg(sa_scores.other_score) as avg_other_score
+    #            FROM sa_scores
+    #            JOIN restaurants
+    #                 USING (restaurant_id)
+    #            WHERE restaurants.state_code = '%s'
+    #            GROUP BY (restaurants.city)
+    #            ORDER BY restaurants.city;
+    #         """ % state
+
+    # cursor = db.session.execute(QUERY)
+    # results = cursor.fetchall()
+
+    # score_data = []
+
+    # for r in results:
+    #     score_data.append({"State": r[0],
+    #                        "score": {"dog_score": r[1],
+    #                                  "food_score": r[2],
+    #                                  "other_score": r[3]}})
+
+    # scoreData_dict = {"scoreData": score_data}
+
+    # return jsonify(scoreData_dict)
 
 
 @app.route('/logout')

@@ -21,7 +21,7 @@ function initMap() {
 
 
   // Call geocodeCity when "Center map" button is clicked
-  $('select').change(function() {
+  $('#city').change(function() {
     geocodeCity(geocoder, map);
   });
 

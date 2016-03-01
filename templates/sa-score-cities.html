@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}City Scores{% endblock %}
+
+{% block head %}
+    
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="/static/js/sa-score.js"></script>
+
+    <script>
+        // Retrieve the jsonified Python dictionary of restaurants with AJAX
+        $.get('/analysis/state.json', function (scoreData_dict) {
+            var scoreData = scoreData_dict["scoreData"];
+
+            // Create dashboard with id (for div element) and data
+            dashboard('#dashboard',scoreData);
+        });
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    
+    <form action="/analysis/state/city">
+        Pick a city:
+            <select id="city" name="location">
+                    <option value="" selected="selected">Select your option</option>
+                {% for location in locations %}
+                    <option value="{{ location }}">{{ location }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit">
+    <form>
+
+    <div id='dashboard'></div>
+
+
+
+{% endblock %}
