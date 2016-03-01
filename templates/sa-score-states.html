@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}State Scores{% endblock %}
+{% block title %}Overall Scores{% endblock %}
 
 {% block head %}
     
@@ -33,12 +33,5 @@
     <form>
 
     <div id='dashboard'></div>
-
-    <script>
-        $('#state').change(function() {
-            var state = document.getElementById('state').value;
-            console.log(state);
-        });
-    </script>
 
 {% endblock %}

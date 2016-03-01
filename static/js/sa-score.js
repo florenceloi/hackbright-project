@@ -171,7 +171,7 @@ function dashboard(id, fData){
             .attr("fill",function(d){ return segColor(d.type); });
             
         // create the second column for each segment.
-        tr.append("td").text(function(d){ return d.type.split("_").join(" ");});
+        tr.append("td").text(function(d){ return d.type.split("_")[0] + " related";});
 
         // create the third column for each segment.
         tr.append("td").attr("class",'legendScore')

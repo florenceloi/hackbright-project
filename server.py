@@ -413,7 +413,9 @@ def display_state_scores():
 
     locations = sorted(list(locations))
 
-    return render_template("sa-score-cities.html", locations=locations)
+    return render_template("sa-score-cities.html",
+                           state=state,
+                           locations=locations)
 
 
 @app.route('/analysis/state.json')
@@ -454,49 +456,44 @@ def import_state_scores():
 def display_city_scores():
     """JSON information on city-level sentiment analysis scores."""
 
-    state = request.args.get("location")
-    session["state"] = state
+    city = request.args.get("location")
+    session["city"] = city
 
-    # Instantiate city set using set comprehension
-    locations = {r.city for r in Restaurant.query.all() if r.state_code == state}
-
-    locations = sorted(list(locations))
-
-    return render_template("sa-score-cities.html", locations=locations)
+    return render_template("sa-score-restaurants.html", city=city)
 
 
 @app.route('/analysis/state/city.json')
 def import_city_scores():
     """JSON information on city-level sentiment analysis scores."""
 
-    # state = session["state"]
+    city = session["city"]
 
-    # QUERY = """SELECT restaurants.city,
-    #                   avg(sa_scores.dog_score) as avg_dog_score,
-    #                   avg(sa_scores.food_score) as avg_food_score,
-    #                   avg(sa_scores.other_score) as avg_other_score
-    #            FROM sa_scores
-    #            JOIN restaurants
-    #                 USING (restaurant_id)
-    #            WHERE restaurants.state_code = '%s'
-    #            GROUP BY (restaurants.city)
-    #            ORDER BY restaurants.city;
-    #         """ % state
+    QUERY = """SELECT restaurants.name,
+                      avg(sa_scores.dog_score) as avg_dog_score,
+                      avg(sa_scores.food_score) as avg_food_score,
+                      avg(sa_scores.other_score) as avg_other_score
+               FROM sa_scores
+               JOIN restaurants
+                    USING (restaurant_id)
+               WHERE restaurants.city = '%s'
+               GROUP BY (restaurants.name)
+               ORDER BY restaurants.name;
+            """ % city
 
-    # cursor = db.session.execute(QUERY)
-    # results = cursor.fetchall()
+    cursor = db.session.execute(QUERY)
+    results = cursor.fetchall()
 
-    # score_data = []
+    score_data = []
 
-    # for r in results:
-    #     score_data.append({"State": r[0],
-    #                        "score": {"dog_score": r[1],
-    #                                  "food_score": r[2],
-    #                                  "other_score": r[3]}})
+    for r in results:
+        score_data.append({"State": r[0],
+                           "score": {"dog_score": r[1],
+                                     "food_score": r[2],
+                                     "other_score": r[3]}})
 
-    # scoreData_dict = {"scoreData": score_data}
+    scoreData_dict = {"scoreData": score_data}
 
-    # return jsonify(scoreData_dict)
+    return jsonify(scoreData_dict)
 
 
 @app.route('/logout')
@@ -511,7 +508,7 @@ def logout():
     return redirect("/home")
 
 
-###################################################################################
+###############################################################################
 # Helper functions
 
 # import pdb; pdb.set_trace()
