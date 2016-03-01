@@ -16,9 +16,11 @@ function initMap() {
   // Add restaurant markers
   addRestaurantMarkers(map);
 
+  // Color heart red when restaurant is favorited
+  $('.favorite-btn').click(colorHeart);
+
   // Instantiate geocoder object
   var geocoder = new google.maps.Geocoder();
-
 
   // Call geocodeCity when "Center map" button is clicked
   $('#city').change(function() {
@@ -128,10 +130,8 @@ function makeInfoWindow(restaurant) {
       '<a href="' + restaurant.yelpUrl +
         '"> <img src="/static/img/yelp_review_btn_red.png" alt="' +
         restaurant._name + '" style="width:125px;"></a>' +
-      '<p><form action="/favorite" method="GET">' +
-        '<input type="hidden" name="restaurant_id" value="' + restaurant.db_id + '">' +
-        '<input type="submit" value="Favorite ' + restaurant._name + '">' +
-      '</form></p>' +
+      '<p><button id="' + restaurant.db_id + '" class="favorite-btn">' +
+          '&hearts; Favorite</button></p>' +
       '<a href="/restaurants/' + restaurant.db_id + '">Review ' + restaurant._name + '</a>' +
     '</div>'
   );
@@ -148,10 +148,17 @@ function bindInfoWindow(marker, map, infoWindow, html) {
   });
 }
 
+// Color heart red when favorited
+function colorHeart(evt) {
+  debugger;
+  var id = this.id;
+  $('#' + id).css('color', 'red'); // give our user some feedback
+}
+
 
 // Processes geocode
 function geocodeCity(geocoder, resultsMap) {
-  // debugger;
+
   // Get address value from form
   var city = document.getElementById('city').value;
   

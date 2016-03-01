@@ -223,7 +223,7 @@ def add_favorite():
         return redirect("/login")
 
     else:
-        
+
         user_id = session["user_id"]
 
         # Get list of user's favorites from database
@@ -521,6 +521,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run()
