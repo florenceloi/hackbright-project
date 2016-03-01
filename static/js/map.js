@@ -172,10 +172,6 @@ function geocodeCity(geocoder, resultsMap) {
         position: results[0].geometry.location,
       });
       cityInfoWindow.open(resultsMap);
-      // var marker = new google.maps.Marker({
-      //   map: resultsMap,
-      //   position: results[0].geometry.location
-      // });
     } else {
       alert('Centering on ' + city + ' was not successful for the following reason: ' + status);
     }

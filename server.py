@@ -31,19 +31,31 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
-    # import pdb; pdb.set_trace()
-    # Instantiate city set using set comprehension
-    # locations = {(r.country_code, r.state_code, r.city)
-    #              for r in Restaurant.query.all()}
-    locations = {(r.city, states_dict[r.state_code], r.country_code)
-                 for r in Restaurant.query.all()}
-    print locations
+    us_az_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "AZ"}
+    us_ca_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "CA"}
+    us_il_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "IL"}
+    us_nc_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "NC"}
+    us_nv_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "NV"}
+    us_pa_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "PA"}
+    us_wi_cities = {(r.city) for r in Restaurant.query.all()
+                    if r.country_code == "US" and r.state_code == "WI"}
+    ca_cities = {(r.city, states_dict[r.state_code])
+                  for r in Restaurant.query.all() if r.country_code == "CA"}
 
-    # us_locations = {(l[0], l[1]) for l in locations if l[2] == "US"}
-    # ca_locations = {(l[0], l[1]) for l in locations if l[2] == "CA"}
-
-    # us_locations = sorted(us_locations, key=lambda us_location: us_location[1])
-    # ca_locations = sorted(ca_locations, key=lambda ca_location: ca_location[1])
+    us_az_cities = sorted(us_az_cities)
+    us_ca_cities = sorted(us_ca_cities)
+    us_il_cities = sorted(us_il_cities)
+    us_nc_cities = sorted(us_nc_cities)
+    us_nv_cities = sorted(us_nv_cities)
+    us_pa_cities = sorted(us_pa_cities)
+    us_wi_cities = sorted(us_wi_cities)
+    ca_cities = sorted(ca_cities)
 
     # Instantiate category list using list comprehension
     categories = [category.category
@@ -51,9 +63,14 @@ def index():
 
     return render_template("home.html",
                            gmaps_key=gmaps_key,
-                           locations=locations,
-                           # us_locations=us_locations,
-                           # ca_locations=ca_locations,
+                           us_az_cities=us_az_cities,
+                           us_ca_cities=us_ca_cities,
+                           us_il_cities=us_il_cities,
+                           us_nc_cities=us_nc_cities,
+                           us_nv_cities=us_nv_cities,
+                           us_pa_cities=us_pa_cities,
+                           us_wi_cities=us_wi_cities,
+                           ca_cities=ca_cities,
                            categories=categories)
 
 
@@ -374,7 +391,7 @@ def display_overall_scores():
     # Instantiate city set using set comprehension
     locations = {(r.state_code, states_dict[r.state_code], r.country_code)
                   for r in Restaurant.query.all() if r.state_code != 'CA'}
-    print locations
+
     us_locations = {l[0]: l[1] for l in locations if l[2] == "US"}
     ca_locations = {l[0]: l[1] for l in locations if l[2] == "CA"}
 
@@ -529,7 +546,9 @@ def logout():
 
 ###############################################################################
 # Helper functions/definitions
+
 states_dict = {"AZ": "Arizona",
+               "CA": "California",
                "IL": "Illinois",
                "NC": "North Carolina",
                "NV": "Nevada",
