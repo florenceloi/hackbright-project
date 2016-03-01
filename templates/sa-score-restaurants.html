@@ -9,7 +9,7 @@
 
     <script>
         // Retrieve the jsonified Python dictionary of restaurants with AJAX
-        $.get('/analysis/state.json', function (scoreData_dict) {
+        $.get('/analysis/state/city.json', function (scoreData_dict) {
             var scoreData = scoreData_dict["scoreData"];
 
             // Create dashboard with id (for div element) and data

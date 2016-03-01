@@ -169,9 +169,13 @@ function dashboard(id, fData){
         tr.append("td").append("svg").attr("width", '16').attr("height", '16')
             .append("rect").attr("width", '16').attr("height", '16')
             .attr("fill",function(d){ return segColor(d.type); });
-            
+
         // create the second column for each segment.
-        tr.append("td").text(function(d){ return d.type.split("_")[0] + " related";});
+        tr.append("td").text(function(d){
+            var firstWord = d.type.split("_")[0];
+            firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+            return firstWord + " Related";
+        });
 
         // create the third column for each segment.
         tr.append("td").attr("class",'legendScore')
