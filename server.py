@@ -13,6 +13,8 @@ from model import (connect_to_db,
 
 from api import gmaps_key
 
+import operator
+
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
@@ -29,11 +31,19 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
+    # import pdb; pdb.set_trace()
     # Instantiate city set using set comprehension
-    locations = {(r.country_code, r.state_code, r.city)
-                  for r in Restaurant.query.all()}
+    # locations = {(r.country_code, r.state_code, r.city)
+    #              for r in Restaurant.query.all()}
+    locations = {(r.city, states_dict[r.state_code], r.country_code)
+                 for r in Restaurant.query.all()}
+    print locations
 
-    locations = sorted(list(locations))
+    # us_locations = {(l[0], l[1]) for l in locations if l[2] == "US"}
+    # ca_locations = {(l[0], l[1]) for l in locations if l[2] == "CA"}
+
+    # us_locations = sorted(us_locations, key=lambda us_location: us_location[1])
+    # ca_locations = sorted(ca_locations, key=lambda ca_location: ca_location[1])
 
     # Instantiate category list using list comprehension
     categories = [category.category
@@ -42,6 +52,8 @@ def index():
     return render_template("home.html",
                            gmaps_key=gmaps_key,
                            locations=locations,
+                           # us_locations=us_locations,
+                           # ca_locations=ca_locations,
                            categories=categories)
 
 
@@ -183,7 +195,7 @@ def add_user_to_db():
 @app.route('/login')
 def login():
     """Login user."""
-    
+
     return render_template("login.html")
 
 
@@ -360,12 +372,18 @@ def display_overall_scores():
     """Display overall sentiment analysis scores."""
 
     # Instantiate city set using set comprehension
-    locations = {(r.state_code, r.country_code)
+    locations = {(r.state_code, states_dict[r.state_code], r.country_code)
                   for r in Restaurant.query.all() if r.state_code != 'CA'}
+    print locations
+    us_locations = {l[0]: l[1] for l in locations if l[2] == "US"}
+    ca_locations = {l[0]: l[1] for l in locations if l[2] == "CA"}
 
-    locations = sorted(list(locations))
+    us_locations = sorted(us_locations.items(), key=operator.itemgetter(1))
+    ca_locations = sorted(ca_locations.items(), key=operator.itemgetter(1))
 
-    return render_template("sa-score-states.html", locations=locations)
+    return render_template("sa-score-states.html",
+                           us_locations=us_locations,
+                           ca_locations=ca_locations)
 
 
 @app.route('/analysis.json')
@@ -390,7 +408,8 @@ def import_overall_scores():
     score_data = []
 
     for r in results:
-        location = r[0] + ", " + r[1]
+        state = states_dict[r[0]]
+        location = state + ", " + r[1]
         score_data.append({"State": location,
                            "score": {"dog_score": r[2],
                                      "food_score": r[3],
@@ -403,7 +422,7 @@ def import_overall_scores():
 
 @app.route('/analysis/state')
 def display_state_scores():
-    """JSON information on state-level sentiment analysis scores."""
+    """Display state-level sentiment analysis scores."""
 
     state = request.args.get("location")
     session["state"] = state
@@ -454,7 +473,7 @@ def import_state_scores():
 
 @app.route('/analysis/state/city')
 def display_city_scores():
-    """JSON information on city-level sentiment analysis scores."""
+    """Display city-level sentiment analysis scores."""
 
     city = request.args.get("location")
     session["city"] = city
@@ -509,7 +528,15 @@ def logout():
 
 
 ###############################################################################
-# Helper functions
+# Helper functions/definitions
+states_dict = {"AZ": "Arizona",
+               "IL": "Illinois",
+               "NC": "North Carolina",
+               "NV": "Nevada",
+               "ON": "Ontario",
+               "PA": "Pennsylvania",
+               "QC": "Quebec",
+               "WI": "Wisconsin"}
 
 # import pdb; pdb.set_trace()
 

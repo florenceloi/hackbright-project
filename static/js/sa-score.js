@@ -17,14 +17,16 @@ function dashboard(id, fData){
             
         // Select element with passed in id and within that element,
         // create svg for histogram with following attributes
-        var hGsvg = d3.select(id).append("svg")
+        var hGsvg = d3.select(id)
+            .append("svg")
             .attr("width", hGDim.w + hGDim.l + hGDim.r)
-            .attr("height", hGDim.h + hGDim.t + hGDim.b).append("g")
+            .attr("height", hGDim.h + hGDim.t + hGDim.b)
+            .append("g")
             .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
 
         // Create x-axis mapping with range and domain (states in this case).
         // Notation: rangeRoundBands(interval[, padding[, outerPadding]])
-        var x = d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
+        var x = d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.2)
                 .domain(fD.map(function(d) { return d[0]; }));
 
         // Add x-axis to the histogram svg.

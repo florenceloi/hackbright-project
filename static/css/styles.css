@@ -3,10 +3,10 @@ div#map {
     width: 100%;
 }
 
-/*#dashboard {
+#dashboard {
     width:1060px;
     margin:50px auto;
-}*/
+}
 
 path {
     stroke: #fff;
