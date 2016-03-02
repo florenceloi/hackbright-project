@@ -145,12 +145,12 @@ function bindInfoWindow(marker, map, infoWindow, html) {
     infoWindow.close();
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
+    $('.favorite-btn').click(colorHeart);
   });
 }
 
 // Color heart red when favorited
 function colorHeart(evt) {
-  debugger;
   var id = this.id;
   $('#' + id).css('color', 'red'); // give our user some feedback
 }
