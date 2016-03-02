@@ -11,8 +11,8 @@ function dashboard(id, fData){
     
     // Function to handle histogram
     function histoGram(fD){
-        var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
-        hGDim.w = 500 - hGDim.l - hGDim.r,
+        var hG={},    hGDim = {t: 30, r: 0, b: 30, l: 0};
+        hGDim.w = 1400 - hGDim.l - hGDim.r,
         hGDim.h = 300 - hGDim.t - hGDim.b;
             
         // Select element with passed in id and within that element,
@@ -26,13 +26,19 @@ function dashboard(id, fData){
 
         // Create x-axis mapping with range and domain (states in this case).
         // Notation: rangeRoundBands(interval[, padding[, outerPadding]])
-        var x = d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.2)
+        var x = d3.scale.ordinal().rangeRoundBands([30, hGDim.w], 0.2)
                 .domain(fD.map(function(d) { return d[0]; }));
 
         // Add x-axis to the histogram svg.
-        hGsvg.append("g").attr("class", "x axis")
-            .attr("transform", "translate(0," + hGDim.h + ")")
-            .call(d3.svg.axis().scale(x).orient("bottom"));
+        hGsvg.append("g")
+             .attr("class", "x axis")
+             .attr("transform", "translate(0," + hGDim.h + ")")
+             .call(d3.svg.axis().scale(x).orient("bottom"))
+            .selectAll("text")
+             .attr("font-weight", "bold");
+             // .attr("y", 20)
+             // .attr("dy", ".35em")
+             // .attr("transform", "rotate(-45)");
 
         // Create y-axis mapping with range (y-axis starts from top)
         // and domain (d.total).
@@ -48,7 +54,7 @@ function dashboard(id, fData){
         bars.append("rect")
             .attr("x", function(d) { return x(d[0]); }) // state
             .attr("y", function(d) { return y(d[1]); }) // total
-            .attr("width", x.rangeBand())
+            .attr("width", 50)
             .attr("height", function(d) { return hGDim.h - y(d[1]); })
             .attr('fill',barColor) // defined above
             .on("mouseover",mouseover)// mouseover is defined below.

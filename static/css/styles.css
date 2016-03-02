@@ -4,7 +4,7 @@ div#map {
 }
 
 #dashboard {
-    width:1060px;
+    width:1400px;
     margin:50px auto;
 }
 
@@ -21,7 +21,7 @@ rect:hover {
 }
 
 .axis {
-    font: 10px sans-serif;
+    font: 10px ubuntu;
 }
 
 .legend tr {
