@@ -3,6 +3,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
+from sqlalchemy.sql import func
+
 from model import (connect_to_db,
                    db,
                    User,
@@ -75,80 +77,72 @@ def index():
 
 
 @app.route('/home.json')
-def bear_info():
-    """JSON information about restaurants.
-    For each category that each restaurant in the database is in,
-    create a key-value pair in the restaurants dictionary,
-    where the value is a dictionary containing restaurant information."""
-
-    restaurants_lst = []
-
-    # Get all restaurants in database
-    restaurants = Restaurant.query.all()
-
-    # For each restaurant, get a list of its categories
-    for r in restaurants:
-        categories = [category.category for category in r.categories]
-
-        for i in range(len(categories)):
-            restaurants_lst.append({"db_id": r.restaurant_id,
-                                    "_name": r.name,
-                                    "address": r.address,
-                                    "phone": r.phone,
-                                    "yelpUrl": r.yelp_url,
-                                    "yelpImgUrl": r.yelp_img_url,
-                                    "yelpRating": r.yelp_rating,
-                                    "yelpRatingImg": r.yelp_rating_img,
-                                    "reviewCount": r.yelp_review_count,
-                                    "lat": r.lat,
-                                    "lng": r.lng,
-                                    "category": categories[i]})
-
-    restaurants_dict = {"restaurants": restaurants_lst}
-
-    return jsonify(restaurants_dict)
-
-
-@app.route('/home.json')
 def restaurant_info():
     """JSON information about restaurants.
-
     For each category that each restaurant in the database is in,
     create a key-value pair in the restaurants dictionary,
     where the value is a dictionary containing restaurant information."""
 
     restaurants_lst = []
 
-    # Get all restaurants in database
+    if session.get("user_id"):
 
-    # sf_restaurant_list = Restaurant.query.filter(Restaurant.source == "hardcode").all()
+        user_id = session["user_id"]
 
-    db_restaurant_list = Restaurant.query.all()
+        stmt = db.session.query(Favorite.restaurant_id).filter(Favorite.user_id == 1).subquery()
+        restaurants = db.session.query(Restaurant).outerjoin(stmt).all()
 
-    # Match restaurant in yelp list with database list,
-    # then grab restaurant id from database,
-    # and get list of restaurant categories.
-    for y in yelp_object_list:
-        for s in sf_restaurant_list:
-            if y.id == s.yelp_id:
-                db_id = s.restaurant_id
-        # categories = [category.category for category in r.categories]
-        restaurant_categories = y.categories
+        for r in restaurants:
 
-        for i in range(len(restaurant_categories)):
-            restaurants_lst.append({"db_id": db_id,
-                                    "_name": y.name,
-                                    "address": y.location.address[0],
-                                    "phone": y.display_phone,
-                                    "yelpUrl": y.url,
-                                    "yelpImgUrl": y.image_url,
-                                    "yelpRatingImg": y.rating_img_url_small,
-                                    "reviewCount": y.review_count,
-                                    "lat": y.location.coordinate.latitude,
-                                    "lng": y.location.coordinate.longitude,
-                                    "category": restaurant_categories[i].name})
+            # Get boolean value for whether user has favorited this restaurant
+            if r.favorites:
+                fav = True
+            else:
+                fav = False
+
+            # Get a list of restaurant's categories
+            categories = [category.category for category in r.categories]
+
+            for i in range(len(categories)):
+                restaurants_lst.append({"db_id": r.restaurant_id,
+                                        "_name": r.name,
+                                        "address": r.address,
+                                        "phone": r.phone,
+                                        "yelpUrl": r.yelp_url,
+                                        "yelpImgUrl": r.yelp_img_url,
+                                        "yelpRating": r.yelp_rating,
+                                        "yelpRatingImg": r.yelp_rating_img,
+                                        "reviewCount": r.yelp_review_count,
+                                        "lat": r.lat,
+                                        "lng": r.lng,
+                                        "favorite": fav,
+                                        "category": categories[i]})
+
+    else:
+
+        # Get all restaurants in database
+        restaurants = Restaurant.query.all()
+
+        # For each restaurant, get a list of its categories
+        for r in restaurants:
+            categories = [category.category for category in r.categories]
+
+            for i in range(len(categories)):
+                restaurants_lst.append({"db_id": r.restaurant_id,
+                                        "_name": r.name,
+                                        "address": r.address,
+                                        "phone": r.phone,
+                                        "yelpUrl": r.yelp_url,
+                                        "yelpImgUrl": r.yelp_img_url,
+                                        "yelpRating": r.yelp_rating,
+                                        "yelpRatingImg": r.yelp_rating_img,
+                                        "reviewCount": r.yelp_review_count,
+                                        "lat": r.lat,
+                                        "lng": r.lng,
+                                        "category": categories[i]})
 
     restaurants_dict = {"restaurants": restaurants_lst}
+
     return jsonify(restaurants_dict)
 
 
@@ -560,7 +554,7 @@ states_dict = {"AZ": "Arizona",
 # import pdb; pdb.set_trace()
 
 if __name__ == "__main__":
-    
+
     # Set debug=True here to invoke the DebugToolbarExtension later
     app.debug = True
 

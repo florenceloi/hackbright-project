@@ -56,7 +56,7 @@ function addRestaurantMarkers(map) {
       var marker = makeMarker(restaurant, map);
       markers.push(marker);
       var html = makeInfoWindow(restaurant);
-      bindInfoWindow(marker, map, infoWindow, html);
+      bindInfoWindow(marker, map, infoWindow, html, restaurant);
     }
 
     // Show all markers of a particular category
@@ -119,9 +119,9 @@ function makeMarker(restaurant, map) {
 function makeInfoWindow(restaurant) {
   var temp_html = (
     '<div class="window-content">' +
+      '<h3><b>' + restaurant._name + '</b></h3>' +
       '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name +
-        '" style="width:150px;">' +
-      '<p><b>Restaurant: </b>' + restaurant._name + '</p>' +
+        '" style="width:150px;"><br>' +
       '<p><b>Address: </b>' + restaurant.address + '</p>' +
       '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
       '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg +
@@ -130,8 +130,8 @@ function makeInfoWindow(restaurant) {
       '<a href="' + restaurant.yelpUrl +
         '"> <img src="/static/img/yelp_review_btn_red.png" alt="' +
         restaurant._name + '" style="width:125px;"></a>' +
-      '<p><button id="' + restaurant.db_id + '" class="favorite-btn">' +
-          '&hearts; Favorite</button></p>' +
+      '<p><button id="' + restaurant.db_id + '" class="favorite-btn" value="' +
+          restaurant.favorite + '">' + '&hearts; Favorite</button></p>' +
       '<a href="/restaurants/' + restaurant.db_id + '">Review ' + restaurant._name + '</a>' +
     '</div>'
   );
@@ -140,18 +140,23 @@ function makeInfoWindow(restaurant) {
 
 
 // Processes restaurant info windows
-function bindInfoWindow(marker, map, infoWindow, html) {
+function bindInfoWindow(marker, map, infoWindow, html, restaurant) {
   google.maps.event.addListener(marker, 'click', function () {
     infoWindow.close();
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
+    checkFavorites(marker, restaurant.db_id, restaurant.favorite);
     $('.favorite-btn').click(colorHeart);
   });
 }
 
-// function checkFavorites() {
-//   $.get('/favorite', colorHeart)
-// }
+
+function checkFavorites(marker, id, isFavorited) {
+  if (isFavorited === true) {
+      $('#' + id).css('color', 'red');
+  }
+}
+
 
 // Color heart red when favorited
 function colorHeart(evt) {
