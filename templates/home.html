@@ -67,7 +67,7 @@
 
             </select>
 
-        <button id="current-location" type="button">Center on current location</button><br>
+        <button id="current-location" type="button">Center on current location</button><br><br>
         
         <input id="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All
         <br>
@@ -76,8 +76,10 @@
         <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}
     {% endfor %}
     
+    </div><br>
+
+    <div style="width: 100%; overflow: hidden;">
+        <div id="map" style="width: 50%; float: left;"> Left </div>
+        <div style="margin-left: 51%;"> Reviews </div>
     </div>
-
-    <div id="map"></div>
-
 {% endblock %}

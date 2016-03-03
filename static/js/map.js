@@ -149,6 +149,10 @@ function bindInfoWindow(marker, map, infoWindow, html) {
   });
 }
 
+// function checkFavorites() {
+//   $.get('/favorite', colorHeart)
+// }
+
 // Color heart red when favorited
 function colorHeart(evt) {
   var id = this.id;

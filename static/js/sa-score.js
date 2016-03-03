@@ -11,9 +11,9 @@ function dashboard(id, fData){
     
     // Function to handle histogram
     function histoGram(fD){
-        var hG={},    hGDim = {t: 60, r: 0, b: 60, l: 0};
+        var hG={},    hGDim = {t: 60, r: 7, b: 150, l: 60};
         hGDim.w = 800 - hGDim.l - hGDim.r,
-        hGDim.h = 300 - hGDim.t - hGDim.b;
+        hGDim.h = 400 - hGDim.t - hGDim.b;
             
         // Select element with passed in id and within that element,
         // create svg for histogram with following attributes
@@ -33,11 +33,13 @@ function dashboard(id, fData){
         hGsvg.append("g")
              .attr("class", "x axis")
              .attr("transform", "translate(0," + hGDim.h + ")")
-             .call(d3.svg.axis().scale(x).orient("bottom"));
-            // .selectAll("text")
-            //  .attr("font-weight", "bold")
-            //  .attr("dy", 40)
-            //  .attr("transform", "rotate(-45)");
+             .call(d3.svg.axis().scale(x).orient("bottom"))
+            .selectAll("text")
+             .attr("font-weight", "bold")
+             .attr("dx", -5)
+             .attr("dy", -.1)
+             .attr("transform", "rotate(-45)")
+             .style("text-anchor", "end");
 
         // Create y-axis mapping with range (y-axis starts from top)
         // and domain (d.total).
@@ -65,6 +67,7 @@ function dashboard(id, fData){
             .attr("x", function(d) { return x(d[0])+x.rangeBand()/2; })
             // Set label as 5 units above y-value
             .attr("y", function(d) { return y(d[1])-5; })
+            .attr("font-size", "13px")
             .attr("text-anchor", "middle");
 
         function mouseover(d){  // utility function to be called on mouseover.
@@ -109,7 +112,7 @@ function dashboard(id, fData){
     
     // function to handle pieChart.
     function pieChart(pD){
-        var pC ={},    pieDim = {w:250, h: 250};
+        var pC ={},    pieDim = {w:250, h: 500};
         pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
         
         // create svg for pie chart.

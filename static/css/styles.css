@@ -1,11 +1,12 @@
 div#map {
     height: 500px;
-    width: 100%;
+    width: 50%;
 }
 
 #dashboard {
-    width:1400px;
-    margin:50px auto;
+    width: 1400px;
+    margin: 50px auto;
+    position: relative;
 }
 
 path {
@@ -43,7 +44,7 @@ rect:hover {
 }
 
 .legend {
-    margin-bottom:76px;
+    margin-bottom:200px;
     display:inline-block;
     border-collapse: collapse;
     border-spacing: 0px;
