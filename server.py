@@ -146,6 +146,28 @@ def restaurant_info():
     return jsonify(restaurants_dict)
 
 
+@app.route('/get-reviews')
+def get_reviews():
+    """Given a restaurant id, get reviews from database for AJAX response"""
+
+    restaurant_id = int(request.args.get("restaurant_id"))
+    restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
+
+    reviews = restaurant.reviews
+
+    reviews_lst = []
+
+    for r in reviews:
+        reviews_lst.append({"user_id": r.user.username,
+                            "rating": str(r.rating),
+                            "_body": r.body})
+
+    reviews_dict = {"name": restaurant.name,
+                    "reviews": reviews_lst}
+
+    return jsonify(reviews_dict)
+
+
 @app.route('/register')
 def register_user():
     """Allow user to register."""

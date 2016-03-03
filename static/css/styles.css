@@ -3,6 +3,13 @@ div#map {
     width: 50%;
 }
 
+div#review-display {
+    height: 500px;
+    border-style: solid;
+    border-width: thin;
+    overflow: scroll;
+}
+
 #dashboard {
     width: 1400px;
     margin: 50px auto;
