@@ -153,7 +153,7 @@ function bindInfoWindow(marker, map, infoWindow, html, restaurant) {
 
 function checkFavorites(marker, id, isFavorited) {
   if (isFavorited === true) {
-      $('#' + id).css('color', 'red');
+    $('#' + id).css('color', 'red');
   }
 }
 
@@ -161,7 +161,13 @@ function checkFavorites(marker, id, isFavorited) {
 // Color heart red when favorited
 function colorHeart(evt) {
   var id = this.id;
-  $('#' + id).css('color', 'red'); // give our user some feedback
+    if ($('#' + id).css('color') === "rgb(255, 0, 0)") {
+      $('#' + id).css('color', 'black');
+      console.log("not anymore...");
+    } else {
+      $('#' + id).css('color', 'red');
+      console.log("now it's red!");
+    }
 }
 
 
