@@ -1,5 +1,6 @@
 """Utility file to create database model"""
 
+import os
 from flask_sqlalchemy import SQLAlchemy
 
 # Using the Flask-SQLAlchemy helper library, this allows us to connect to the
@@ -217,7 +218,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configuration to use PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///r'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'postgresql:///r'
     # app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)

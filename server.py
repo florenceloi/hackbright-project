@@ -1,3 +1,5 @@
+import os
+
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
@@ -591,5 +593,7 @@ if __name__ == "__main__":
 
     # Use the DebugToolbar
     # DebugToolbarExtension(app)
+    port = int(os.environ.get('PORT', 5000))
 
-    app.run()
+    app.run(host='0.0.0.0', port=port, debug=True)
+    
