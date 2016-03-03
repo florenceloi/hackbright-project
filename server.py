@@ -238,6 +238,8 @@ def check_user_existence():
 def add_favorite():
     """Add user's favorite restaurant to database."""
 
+    # import pdb; pdb.set_trace()
+
     restaurant_id = int(request.args.get("restaurant_id"))
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
 
@@ -265,9 +267,14 @@ def add_favorite():
             db.session.add(new_favorite)
             db.session.commit()
 
-            flash("Saved %s as a favorite" % restaurant.name)
+        else:
+            fav = Favorite.query.filter(Favorite.restaurant_id == restaurant_id,
+                                        Favorite.user_id == user_id).one()
 
-        return redirect("/home")
+            db.session.delete(fav)
+            db.session.commit()
+
+        return str(restaurant_id)
 
 
 @app.route('/profile')

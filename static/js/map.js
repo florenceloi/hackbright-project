@@ -160,13 +160,17 @@ function checkFavorites(marker, id, isFavorited) {
 
 // Color heart red when favorited
 function colorHeart(evt) {
-  var id = this.id;
-    if ($('#' + id).css('color') === "rgb(255, 0, 0)") {
-      $('#' + id).css('color', 'black');
-      console.log("not anymore...");
+  var r_id = this.id;
+    if ($('#' + r_id).css('color') === "rgb(255, 0, 0)") {
+      $.get('/favorite', {"restaurant_id": r_id}, function(r_id) {
+        $('#' + r_id).css('color', 'black');
+        console.log("not anymore...");
+      });
     } else {
-      $('#' + id).css('color', 'red');
-      console.log("now it's red!");
+      $.get('/favorite', {"restaurant_id": r_id}, function(r_id) {
+        $('#' + r_id).css('color', 'red');
+        console.log("now it's red!");
+      });
     }
 }
 
