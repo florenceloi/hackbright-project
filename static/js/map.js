@@ -163,11 +163,11 @@ function populateReviews(marker, id) {
   $.get('/get-reviews', {"restaurant_id": id}, function(reviews_dict) {
     var name = reviews_dict["name"];
     var reviews = reviews_dict["reviews"];
-    var finalHtml = '<h3 style="text-align:center;" >'+ name + ' Reviews</h3><hr>';
+    var finalHtml = '<h3 style="text-align:center;">FETCH Reviews for '+ name + '</h3><hr>';
     for (var i = 0; i < reviews.length; i++) {
       var currentHtml = '<div class="two-columns">' +
                           '<div class="right">User ' + reviews[i].username + '</div>' +
-                          '<div class="left">Rating: ' + reviews[i].rating + '<br>' +
+                          '<div class="left"><b>Rating: ' + reviews[i].rating + '</b><br>' +
                           reviews[i]._body + '</div>' +
                         '</div><hr>';
       finalHtml = finalHtml.concat(currentHtml);

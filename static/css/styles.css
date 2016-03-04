@@ -1,10 +1,10 @@
 div#map {
-    height: 500px;
+    height: 460px;
     width: 50%;
 }
 
 div#review-display {
-    height: 500px;
+    height: 460px;
     border-style: solid;
     border-width: thin;
     overflow: scroll;
@@ -12,7 +12,8 @@ div#review-display {
 }
 
 div.two-columns {
-    width: 100%;
+    margin-left: 1%;
+    width: 98%;
     overflow: hidden;
 }
 
