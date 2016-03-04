@@ -13,7 +13,10 @@ from model import (connect_to_db,
                    Restaurant,
                    Category,
                    Favorite,
-                   Review)
+                   Review,
+                   SA_Score)
+
+# from normalize_scores import min_score, max_score, normalize_data
 
 from api import gmaps_key
 
@@ -160,7 +163,7 @@ def get_reviews():
     reviews_lst = []
 
     for r in reviews:
-        reviews_lst.append({"user_id": r.user.username,
+        reviews_lst.append({"username": r.user.username,
                             "rating": str(r.rating),
                             "_body": r.body})
 
@@ -452,6 +455,7 @@ def import_overall_scores():
     for r in results:
         state = states_dict[r[0]]
         location = state + ", " + r[1]
+
         score_data.append({"State": location,
                            "score": {"dog_score": r[2],
                                      "food_score": r[3],
@@ -572,6 +576,8 @@ def logout():
 ###############################################################################
 # Helper functions/definitions
 
+# import pdb; pdb.set_trace()
+
 states_dict = {"AZ": "Arizona",
                "CA": "California",
                "IL": "Illinois",
@@ -582,7 +588,6 @@ states_dict = {"AZ": "Arizona",
                "QC": "Quebec",
                "WI": "Wisconsin"}
 
-# import pdb; pdb.set_trace()
 
 if __name__ == "__main__":
 
@@ -595,5 +600,5 @@ if __name__ == "__main__":
     # DebugToolbarExtension(app)
     port = int(os.environ.get('PORT', 5000))
 
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port)
     

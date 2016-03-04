@@ -165,8 +165,11 @@ function populateReviews(marker, id) {
     var reviews = reviews_dict["reviews"];
     var finalHtml = '<h3 style="text-align:center;" >'+ name + ' Reviews</h3><hr>';
     for (var i = 0; i < reviews.length; i++) {
-      var currentHtml = '<div><div style="width: 50%;">User id: ' + reviews[i].user_id + '</div>' +
-                        '<div style="margin-left: 51%;">User id: ' + reviews[i].user_id + '</div></div><hr>';
+      var currentHtml = '<div class="two-columns">' +
+                          '<div class="right">User ' + reviews[i].username + '</div>' +
+                          '<div class="left">Rating: ' + reviews[i].rating + '<br>' +
+                          reviews[i]._body + '</div>' +
+                        '</div><hr>';
       finalHtml = finalHtml.concat(currentHtml);
     }
     $('#review-display').html(finalHtml);

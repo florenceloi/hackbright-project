@@ -214,6 +214,7 @@ class Restaurant_Category(db.Model):
 ##############################################################################
 # Helper functions
 
+
 def connect_to_db(app):
     """Connect the database to our Flask app."""
 

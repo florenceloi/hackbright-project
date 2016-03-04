@@ -8,6 +8,21 @@ div#review-display {
     border-style: solid;
     border-width: thin;
     overflow: scroll;
+    text-align: center;
+}
+
+div.two-columns {
+    width: 100%;
+    overflow: hidden;
+}
+
+div.right {
+    width: 50%;
+    float: left;
+}
+
+div.left {
+    margin-left: 51%;
 }
 
 #dashboard {

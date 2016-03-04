@@ -323,6 +323,55 @@ def populate_sa_scores_table():
         db.session.commit()
 
 
+def extend_sa_scores_table():
+    """Add new columns to SA Scores table."""
+
+    d_STMT = "ALTER TABLE sa_scores ADD norm_dog_score FLOAT;"
+    f_STMT = "ALTER TABLE sa_scores ADD norm_food_score FLOAT;"
+    o_STMT = "ALTER TABLE sa_scores ADD norm_other_score FLOAT;"
+
+    db.session.execute(d_STMT)
+    db.session.execute(f_STMT)
+    db.session.execute(o_STMT)
+
+    db.session.commit()
+
+    return None
+
+def normalize_sa_scores():
+    """Normalize sa scores and add new scores as new fields in new columns."""
+
+    min_scores = db.session.query(db.func.min(SA_Score.dog_score),
+                                  db.func.min(SA_Score.food_score),
+                                  db.func.min(SA_Score.other_score)).all()
+
+    max_scores = db.session.query(db.func.max(SA_Score.dog_score),
+                                  db.func.max(SA_Score.food_score),
+                                  db.func.max(SA_Score.other_score)).all()
+
+    min_score = min(min_scores[0])
+    max_score = max(max_scores[0])
+
+    sa_scores = SA_Score.query.all()
+
+    for s in sa_scores:
+        dog = normalize_data(s.dog_score, min_score, max_score)
+        food = normalize_data(s.food_score, min_score, max_score)
+        other = normalize_data(s.other_score, min_score, max_score)
+
+        dog, food, other = str(dog), str(food), str(other)
+
+        STMT = """UPDATE sa_scores
+                  SET norm_dog_score=%s,
+                      norm_food_score=%s,
+                      norm_other_score=%s
+                  WHERE sa_score_id=%s;""" % (dog, food, other, str(s.sa_score_id))
+
+        db.session.execute(STMT)
+
+    db.session.commit()
+
+
 ###############################################################################
 # Helper functions
 
@@ -394,6 +443,14 @@ def sentiment_analysis(sentence):
     return score
 
 
+def normalize_data(score, min_score, max_score):
+    """Normalize sentiment analysis scores."""
+
+    new_score = (score - min_score) / (max_score - min_score)
+
+    return new_score
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     # db.create_all()
@@ -406,4 +463,6 @@ if __name__ == "__main__":
     # populate_restaurant_categories_table(complete_yelp_object_list)
 
     # import_reviews_from_dataset()
-    populate_sa_scores_table()
+    # populate_sa_scores_table()
+    # extend_sa_scores_table()
+    normalize_sa_scores()
