@@ -437,9 +437,9 @@ def import_overall_scores():
 
     QUERY = """SELECT restaurants.state_code,
                       restaurants.country_code,
-                      avg(sa_scores.dog_score) as avg_dog_score,
-                      avg(sa_scores.food_score) as avg_food_score,
-                      avg(sa_scores.other_score) as avg_other_score
+                      avg(sa_scores.norm_dog_score) as avg_dog_score,
+                      avg(sa_scores.norm_food_score) as avg_food_score,
+                      avg(sa_scores.norm_other_score) as avg_other_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
@@ -490,9 +490,9 @@ def import_state_scores():
     state = session["state"]
 
     QUERY = """SELECT restaurants.city,
-                      avg(sa_scores.dog_score) as avg_dog_score,
-                      avg(sa_scores.food_score) as avg_food_score,
-                      avg(sa_scores.other_score) as avg_other_score
+                      avg(sa_scores.norm_dog_score) as avg_dog_score,
+                      avg(sa_scores.norm_food_score) as avg_food_score,
+                      avg(sa_scores.norm_other_score) as avg_other_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
@@ -534,9 +534,9 @@ def import_city_scores():
     city = session["city"]
 
     QUERY = """SELECT restaurants.name,
-                      avg(sa_scores.dog_score) as avg_dog_score,
-                      avg(sa_scores.food_score) as avg_food_score,
-                      avg(sa_scores.other_score) as avg_other_score
+                      avg(sa_scores.norm_dog_score) as avg_dog_score,
+                      avg(sa_scores.norm_food_score) as avg_food_score,
+                      avg(sa_scores.norm_other_score) as avg_other_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
