@@ -265,8 +265,6 @@ def check_user_existence():
 def add_favorite():
     """Add user's favorite restaurant to database."""
 
-    # import pdb; pdb.set_trace()
-
     restaurant_id = int(request.args.get("restaurant_id"))
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
 
@@ -275,15 +273,13 @@ def add_favorite():
         return redirect("/login")
 
     else:
-
         user_id = session["user_id"]
 
         # Get list of user's favorites from database
-        db_user_favorites = db.session.query(Favorite.restaurant_id).filter(User.user_id == user_id).all()
+        db_user_favorites = Favorite.query.filter(Favorite.user_id == user_id).all()
         user_favorites = []
-        for u_tuple in db_user_favorites:
-            for u_favorite in u_tuple:
-                user_favorites.append(u_favorite)
+        for d in db_user_favorites:
+            user_favorites.append(d.restaurant_id)
 
         # If current restaurant is not already one of user's favorites,
         # add it to the database
@@ -384,12 +380,11 @@ def process_review(restaurant_id):
     body = request.form.get("review-body")
     user_id = session["user_id"]
 
-    # Get list of user's favorites from database
-    db_user_reviews = db.session.query(Review.restaurant_id).filter(User.user_id == user_id).all()
+    # Get list of user's reviews from database
+    db_user_reviews = Review.query.filter(Review.user_id == user_id).all()
     reviewed_restaurants = []
-    for u_tuple in db_user_reviews:
-        for u_review in u_tuple:
-            reviewed_restaurants.append(u_review)
+    for d in db_user_reviews:
+        reviewed_restaurants.append(d.restaurant_id)
 
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
 
