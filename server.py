@@ -200,15 +200,15 @@ def add_user_to_db():
 
     # Verify username is not already in database
     if username in usernames:
-        flash("Username taken. Please select another.")
+        flash("Username taken. Please select another.", "error")
         return redirect("/register")
 
     # Validate password
     elif password != password1:
-        flash("Passwords do not match.")
+        flash("Passwords do not match.", "error")
         return redirect("/register")
 
-    else: 
+    else:
         # Instantiate new User object based on form values
         new_user = User(username=username,
                         password=password,
@@ -226,7 +226,7 @@ def add_user_to_db():
         session["fname"] = db_user.fname
 
         # Redirect to homepage and confirm registration
-        flash("User %s added." % fname)
+        flash("User %s added." % fname, "success")
         return redirect("/home")
 
 
@@ -253,11 +253,11 @@ def check_user_existence():
         session["user_id"] = user.user_id
         session["fname"] = user.fname
 
-        flash("Welcome back, %s." % user.fname)
+        flash("Welcome back, %s." % user.fname, "success")
         return redirect("/home")
 
     elif not user or user.password != password:
-        flash("Invalid email or password. Please register if you do not have an account.")
+        flash("Invalid email or password. Please register if you do not have an account.", "error")
         return redirect("/login")
 
 
@@ -269,7 +269,7 @@ def add_favorite():
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
 
     if not session.get("user_id"):
-        flash("Please sign in or register to favorite %s" % restaurant.name)
+        flash("Please sign in or register to favorite %s" % restaurant.name, "error")
         return redirect("/login")
 
     else:
@@ -349,7 +349,7 @@ def user_detail():
                                reviews=reviews_dict)
 
     else:
-        flash("Please register first.")
+        flash("Please register first.", "error")
         return redirect("/register")
 
 
@@ -361,7 +361,7 @@ def review_restaurant(restaurant_id):
 
     if not session.get("user_id"):
 
-        flash("Please sign in or register to review %s" % restaurant.name)
+        flash("Please sign in or register to review %s" % restaurant.name, "error")
         return redirect("/login")
 
     else:
@@ -399,10 +399,10 @@ def process_review(restaurant_id):
         db.session.add(new_review)
         db.session.commit()
 
-        flash("Your review of %s has been saved." % restaurant.name)
+        flash("Your review of %s has been saved." % restaurant.name, "success")
 
     else:
-        flash("Oops! Looks like you've already reviewed %s." % restaurant.name)
+        flash("Oops! Looks like you've already reviewed %s." % restaurant.name, "error")
 
     return redirect("/home")
 
@@ -465,11 +465,13 @@ def import_overall_scores():
 def display_state_scores():
     """Display state-level sentiment analysis scores."""
 
-    state = request.args.get("location")
-    session["state"] = state
+    abbrev_state = request.args.get("location")
+    session["state"] = abbrev_state
+
+    state = states_dict[abbrev_state]
 
     # Instantiate city set using set comprehension
-    locations = {r.city for r in Restaurant.query.all() if r.state_code == state}
+    locations = {r.city for r in Restaurant.query.all() if r.state_code == abbrev_state}
 
     locations = sorted(list(locations))
 
@@ -519,7 +521,13 @@ def display_city_scores():
     city = request.args.get("location")
     session["city"] = city
 
-    return render_template("sa-score-restaurants.html", city=city)
+    abbrev_state = session["state"]
+    state = states_dict[abbrev_state]
+
+    return render_template("sa-score-restaurants.html",
+                           city=city,
+                           abbrev_state=abbrev_state,
+                           state=state)
 
 
 @app.route('/analysis/state/city.json')
@@ -562,7 +570,7 @@ def logout():
 
     # Get user object whose email matches form's email
     if session["user_id"]:
-        flash("See you next time, %s!" % session["fname"])
+        flash("See you next time, %s!" % session["fname"], "success")
         del session["user_id"], session["fname"]
 
     return redirect("/home")

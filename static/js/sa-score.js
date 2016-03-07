@@ -182,9 +182,10 @@ function dashboard(id, fData){
 
         // create the second column for each segment.
         tr.append("td").text(function(d){
-            var firstWord = d.type.split("_")[0];
-            firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
-            return firstWord + " Related";
+            // var firstWord = d.type.split("_")[0];
+            // firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+            // return firstWord + " Related";
+            return d.type;
         });
 
         // create the third column for each segment.
@@ -216,7 +217,7 @@ function dashboard(id, fData){
     }
 
     // calculate total scores by segment for all state.
-    var tF = ['dog_score','food_score','other_score'].map(function(d){
+    var tF = ['Dog Friendliness','Food Quality','Other'].map(function(d){
         return {type:d, score: d3.sum(fData.map(function(t){ return t.score[d];}))};
     });
     

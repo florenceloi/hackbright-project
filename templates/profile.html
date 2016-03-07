@@ -28,7 +28,7 @@
         <ul>
             {% for value in reviews.values() %}
                 <li><a href='/restaurants/{{ value["r_id"] }}'>{{ value["name"] }}</a>: {{ value["rating"] }}</li>
-                <br>{{ value["body"] }}<br>
+                {{ value["body"] }}<br><br>
             {% endfor %}
         </ul>
 

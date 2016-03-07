@@ -3,6 +3,20 @@ div#map {
     width: 50%;
 }
 
+/*#floating-panel {
+    position: absolute;
+    top: 38.5%;
+    left: 12%;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    font-family: 'ubuntu','sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+}*/
+
 div#review-display {
     height: 500px;
     border-style: solid;

@@ -7,6 +7,12 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="/static/js/sa-score.js"></script>
 
+    <ul class="breadcrumb">
+      <li><a href="/analysis">States</a></li>
+      <li><a href="/analysis/state?location={{ abbrev_state }}">{{ state }}</a></li>
+      <li class="active">{{ city }}</li>
+    </ul>
+
     <script>
         // Retrieve the jsonified Python dictionary of restaurants with AJAX
         $.get('/analysis/state/city.json', function (scoreData_dict) {

@@ -50,9 +50,34 @@
   </head>
   <body>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    {% for flash in get_flashed_messages() %}
+<!--     {% for flash in get_flashed_messages() %}
       {{ flash }}<br>
-    {% endfor %}
+    {% endfor %} -->
+
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+    <div class="alert-message block-message error">
+      <a class="close">×</a>
+      {%- for msg in errors %}
+        <div class="alert alert-dismissible alert-danger">
+          <button type="button" class="close" data-dismiss="alert"></button>
+          <strong>Oh snap!</strong> {{ msg }}
+        </div>
+      {% endfor -%}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% with successes = get_flashed_messages(category_filter=["success"]) %}
+    {% if successes %}
+      {%- for msg in successes %}
+        <div class="alert alert-dismissible alert-success">
+          <button type="button" class="close" data-dismiss="alert">X</button>
+          <strong>Well done!</strong> {{ msg }}
+        </div>
+      {% endfor -%}
+    {% endif %}
+    {% endwith %}
 
     {% block content %}BODY CONTENT GOES HERE{% endblock %}
     </script>

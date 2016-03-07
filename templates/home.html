@@ -4,7 +4,7 @@
 
 {% block head %}
     
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_key }}&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_key }}&libraries=visualization&callback=initMap"></script>
     <script src="/static/js/map.js"></script>
 
 {% endblock %}
@@ -12,7 +12,7 @@
 
 {% block content %}
     
-    <div id="floating-panel">
+    <div>
 
         Pick a city with dog-friendly restaurants:
             <select id="city" name="location" required>
@@ -67,7 +67,7 @@
 
             </select>
 
-        <button id="current-location" type="button">Center on current location</button><br><br>
+        <button id="current-location" class="btn btn-primary btn-sm" type="button">Center on current location</button><br><br>
         
         <input id="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All
         <br>
@@ -79,7 +79,15 @@
     </div><br>
 
     <div class="two-columns">
+<!--         <div id="floating-panel">
+          <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+          <button onclick="changeGradient()">Change gradient</button>
+          <button onclick="changeRadius()">Change radius</button>
+          <button onclick="changeOpacity()">Change opacity</button>
+        </div> -->
+
         <div id="map" class="right">Map should render here</div>
+
         <div id="review-display" class="left"> Click on a restaurant to display its reviews. </div>
     </div>
 {% endblock %}

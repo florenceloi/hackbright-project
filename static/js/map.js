@@ -37,6 +37,9 @@ function initMap() {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Handle markers
+
 function addRestaurantMarkers(map) {
   var markers = [];
 
@@ -152,28 +155,13 @@ function bindInfoWindow(marker, map, infoWindow, html, restaurant) {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Handle favorites
+
 function checkFavorites(marker, id, isFavorited) {
   if (isFavorited === true) {
     $('#' + id).css('color', 'red');
   }
-}
-
-
-function populateReviews(marker, id) {
-  $.get('/get-reviews', {"restaurant_id": id}, function(reviews_dict) {
-    var name = reviews_dict["name"];
-    var reviews = reviews_dict["reviews"];
-    var finalHtml = '<h3 style="text-align:center;">FETCH Reviews for '+ name + '</h3><hr>';
-    for (var i = 0; i < reviews.length; i++) {
-      var currentHtml = '<div class="two-columns">' +
-                          '<div class="right">User ' + reviews[i].username + '</div>' +
-                          '<div class="left"><b>Rating: ' + reviews[i].rating + '</b><br>' +
-                          reviews[i]._body + '</div>' +
-                        '</div><hr>';
-      finalHtml = finalHtml.concat(currentHtml);
-    }
-    $('#review-display').html(finalHtml);
-  });
 }
 
 
@@ -193,6 +181,30 @@ function colorHeart(evt) {
     }
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// Handle reviews
+
+function populateReviews(marker, id) {
+  $.get('/get-reviews', {"restaurant_id": id}, function(reviews_dict) {
+    var name = reviews_dict["name"];
+    var reviews = reviews_dict["reviews"];
+    var finalHtml = '<h3 style="text-align:center;">FETCH Reviews for '+ name + '</h3><hr>';
+    for (var i = 0; i < reviews.length; i++) {
+      var currentHtml = '<div class="two-columns">' +
+                          '<div class="right">User ' + reviews[i].username + '</div>' +
+                          '<div class="left"><b>Rating: ' + reviews[i].rating + '</b><br>' +
+                          reviews[i]._body + '</div>' +
+                        '</div><hr>';
+      finalHtml = finalHtml.concat(currentHtml);
+    }
+    $('#review-display').html(finalHtml);
+  });
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Handle locating
 
 // Processes geocode
 function geocodeCity(geocoder, resultsMap) {
