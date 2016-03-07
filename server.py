@@ -452,9 +452,9 @@ def import_overall_scores():
         location = state + ", " + r[1]
 
         score_data.append({"State": location,
-                           "score": {"dog_score": r[2],
-                                     "food_score": r[3],
-                                     "other_score": r[4]}})
+                           "score": {"Dog Friendliness": r[2],
+                                     "Food Quality": r[3],
+                                     "Other": r[4]}})
 
     scoreData_dict = {"scoreData": score_data}
 
@@ -505,9 +505,9 @@ def import_state_scores():
 
     for r in results:
         score_data.append({"State": r[0],
-                           "score": {"dog_score": r[1],
-                                     "food_score": r[2],
-                                     "other_score": r[3]}})
+                           "score": {"Dog Friendliness": r[1],
+                                     "Food Quality": r[2],
+                                     "Other": r[3]}})
 
     scoreData_dict = {"scoreData": score_data}
 
@@ -555,9 +555,9 @@ def import_city_scores():
 
     for r in results:
         score_data.append({"State": r[0],
-                           "score": {"dog_score": r[1],
-                                     "food_score": r[2],
-                                     "other_score": r[3]}})
+                           "score": {"Dog Friendliness": r[1],
+                                     "Food Quality": r[2],
+                                     "Other": r[3]}})
 
     scoreData_dict = {"scoreData": score_data}
 

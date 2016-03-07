@@ -4,10 +4,10 @@ function dashboard(id, fData){
     var barColor = 'steelblue';
 
     // Set colors for updates from pie chart
-    function segColor(c){ return {dog_score:"#807dba", food_score:"#e08214", other_score:"#41ab5d"}[c]; }
+    function segColor(c){ return {"Dog Friendliness":"#807dba", "Food Quality":"#e08214", "Other":"#41ab5d"}[c]; }
     
     // Compute total for each state in the list by passing each value in list to anonymous function
-    fData.forEach(function(d){d.total=d.score.dog_score+d.score.food_score+d.score.other_score;});
+    fData.forEach(function(d){d.total=d.score["Dog Friendliness"]+d.score["Food Quality"]+d.score["Other"];});
     
     // Function to handle histogram
     function histoGram(fD){
