@@ -68,6 +68,11 @@ def index():
     categories = [category.category
                   for category in Category.query.order_by('category').all()]
 
+    selected_categories = ["American (New)", "American (Traditional)", "Breakfast & Brunch",
+        "Chinese", "Diners", "French", "German", "Greek", "Indian", "Italian",
+        "Japanese", "Korean", "Mediterranean", "Mexican", "Pizza", "Southern",
+        "Steakhouse", "Thai", "Vietnamese"]
+
     return render_template("home.html",
                            gmaps_key=gmaps_key,
                            us_az_cities=us_az_cities,
@@ -78,7 +83,8 @@ def index():
                            us_pa_cities=us_pa_cities,
                            us_wi_cities=us_wi_cities,
                            ca_cities=ca_cities,
-                           categories=categories)
+                           categories=categories,
+                           selected_categories=selected_categories)
 
 
 @app.route('/home.json')

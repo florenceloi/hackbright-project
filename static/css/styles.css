@@ -17,6 +17,32 @@ div#map {
     padding-left: 10px;
 }*/
 
+#someCategories, #moreCategories {
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+       -moz-column-count: 3; /* Firefox */
+            column-count: 3;
+
+    -webkit-column-width: 100px; /* Chrome, Safari, Opera */
+       -moz-column-width: 100px; /* Firefox */
+            column-width: 100px;
+}
+
+/*.more {
+  display: none;
+}
+a.showLink, a.hideLink {
+  text-decoration: none;
+  color: #36f;
+  padding-left: 8px;
+  background: transparent url(down.gif) no-repeat left;
+}
+a.hideLink {
+    background: transparent url(up.gif) no-repeat left;
+}
+a.showLink:hover, a.hideLink:hover {
+    border-bottom: 1px dotted #36f;
+}*/
+
 div#review-display {
     height: 500px;
     border-style: solid;

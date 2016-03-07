@@ -94,7 +94,7 @@ function addRestaurantMarkers(map) {
       }
     });
 
-    $("#selectAll").click(function() {
+    $(".selectAll").click(function() {
       var all = $(this);
       $('input:checkbox').each(function() {
         $(this).prop("checked", all.prop("checked"));
@@ -154,6 +154,12 @@ function bindInfoWindow(marker, map, infoWindow, html, restaurant) {
   });
 }
 
+
+$(document).ready(function() {
+    $("#moreCategories").click(function() {
+        $("#myModal").modal();
+    });
+});
 
 ///////////////////////////////////////////////////////////////////////////////
 // Handle favorites
