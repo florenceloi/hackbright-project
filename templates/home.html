@@ -68,64 +68,66 @@
             </select>
 
         <button id="current-location" class="btn btn-primary btn-sm" type="button">Center on current location</button>
-    
-    <h3>Filter by Categories</h3>
-
-        <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All
-        </p>
-
-    <div id="someCategories">
-    {% for category in categories %}
-        {% if category in selected_categories %}          
-            <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
-        {% endif %}
-    {% endfor %}
     </div>
 
-    <!-- Trigger the modal with a button -->
-    <a data-toggle="modal" href="#myModal">See more categories</a>
+    <div class="two-columns">
+        <div class="left">
+            <h3>Filter by Categories</h3>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+                <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All
+                </p>
 
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">More Categories</h4>
-        </div>
-        <div class="modal-body">
-            <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All</p>
-            <div id="moreCategories">
-                {% for category in categories %}
-                    {% if category not in selected_categories %}         
-                        <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
-                    {% endif %}
-                {% endfor %}
+            <div id="someCategories">
+            {% for category in categories %}
+                {% if category in selected_categories %}          
+                    <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
+                {% endif %}
+            {% endfor %}
+            </div>
+
+            <!-- Trigger the modal with a button -->
+            <a data-toggle="modal" href="#myModal">See more categories</a>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">More Categories</h4>
+                </div>
+                <div class="modal-body">
+                    <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All</p>
+                    <div id="moreCategories">
+                        {% for category in categories %}
+                            {% if category not in selected_categories %}         
+                                <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              
+            </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+        <div id="rec-display" class="right">
+            
         </div>
-      </div>
-      
-    </div>
-    </div>
 
     </div><br>
 
     <div class="two-columns">
-<!--         <div id="floating-panel">
-          <button onclick="toggleHeatmap()">Toggle Heatmap</button>
-          <button onclick="changeGradient()">Change gradient</button>
-          <button onclick="changeRadius()">Change radius</button>
-          <button onclick="changeOpacity()">Change opacity</button>
-        </div> -->
 
-        <div id="map" class="right">Map should render here</div>
+        <div id="map" class="left">Map should render here</div>
 
-        <div id="review-display" class="left"> Click on a restaurant to display its reviews. </div>
+        <div id="review-display" class="right"> Click on a restaurant to display its reviews. </div>
     </div>
 
 {% endblock %}

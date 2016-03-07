@@ -157,6 +157,50 @@ def restaurant_info():
     return jsonify(restaurants_dict)
 
 
+@app.route('/get-recs')
+def get_recs():
+    """Given a city, get top restaurants from database for AJAX response"""
+    # import pdb; pdb.set_trace()
+    city = request.args.get("city")
+
+    QUERY = """SELECT restaurants.restaurant_id,
+                      restaurants.name,
+                      restaurants.address,
+                      restaurants.yelp_url,
+                      sa_scores.norm_dog_score,
+                      sa_scores.norm_food_score,
+                      sa_scores.norm_other_score,
+                      sa_scores.total_norm_score,
+                      restaurants.city
+               FROM restaurants
+               JOIN sa_scores
+                    USING (restaurant_id)
+               WHERE restaurants.city = '%s'
+               ORDER BY sa_scores.total_norm_score
+               LIMIT 5;
+            """ % (city)
+
+    cursor = db.session.execute(QUERY)
+    recommendations = cursor.fetchall()
+
+    rec_list = []
+
+    for r in recommendations:
+        rec_list.append({"r_id": r[0],
+                         "_name": r[1],
+                         "address": r[2],
+                         "yelpUrl": r[3],
+                         "dog": r[4],
+                         "food": r[5],
+                         "other": r[6],
+                         "total": r[7],
+                         "city": r[8]})
+
+    rec_dict = {"recs": rec_list}
+
+    return jsonify(rec_dict)
+
+
 @app.route('/get-reviews')
 def get_reviews():
     """Given a restaurant id, get reviews from database for AJAX response"""

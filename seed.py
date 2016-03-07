@@ -371,6 +371,41 @@ def normalize_sa_scores():
 
     db.session.commit()
 
+def total_norm_scores():
+    """Add new column to SA Scores table and insert total of normalized sa scores."""
+
+    # STMT = "ALTER TABLE sa_scores ADD total_norm_score FLOAT;"
+
+    # db.session.execute(STMT)
+
+    min_scores = db.session.query(db.func.min(SA_Score.dog_score),
+                                  db.func.min(SA_Score.food_score),
+                                  db.func.min(SA_Score.other_score)).all()
+
+    max_scores = db.session.query(db.func.max(SA_Score.dog_score),
+                                  db.func.max(SA_Score.food_score),
+                                  db.func.max(SA_Score.other_score)).all()
+
+    min_score = min(min_scores[0])
+    max_score = max(max_scores[0])
+
+    sa_scores = SA_Score.query.all()
+
+    for s in sa_scores:
+        dog = normalize_data(s.dog_score, min_score, max_score)
+        food = normalize_data(s.food_score, min_score, max_score)
+        other = normalize_data(s.other_score, min_score, max_score)
+
+        total_norm_score = dog + food + other
+
+        s_STMT = """UPDATE sa_scores
+                  SET total_norm_score=%s
+                  WHERE sa_score_id=%s;""" % (total_norm_score, str(s.sa_score_id))
+
+        db.session.execute(s_STMT)
+
+    db.session.commit()
+
 
 ###############################################################################
 # Helper functions
@@ -465,4 +500,5 @@ if __name__ == "__main__":
     # import_reviews_from_dataset()
     # populate_sa_scores_table()
     # extend_sa_scores_table()
-    normalize_sa_scores()
+    # normalize_sa_scores()
+    total_norm_scores()

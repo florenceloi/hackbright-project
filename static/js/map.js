@@ -23,8 +23,10 @@ function initMap() {
   var geocoder = new google.maps.Geocoder();
 
   // Call geocodeCity when "Center map" button is clicked
-  $('#city').change(function() {
+  $('#city').change( function() {
+    var city = $('#city option:selected').text();
     geocodeCity(geocoder, map);
+    updateRecommendations(city);
   });
 
   var locationInfoWindow = new google.maps.InfoWindow({
@@ -187,6 +189,28 @@ function colorHeart(evt) {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Handle recommendations
+
+function updateRecommendations(city) {
+  $.get('/get-recs', {"city": city}, function (rec_dict) {
+    var recs = rec_dict["recs"];
+    var finalHtml = '<h3 style="text-align:center;">FETCH Recommendations for '+ recs[0].city + '</h3><hr>';
+    for (var i = 0; i < recs.length; i++) {
+      var currentHtml = '<div>' +
+                          '<p>' + recs[i]._name + '</p>' +
+                          recs[i].address + '<br>' +
+                          '<a href="' + recs[i].yelpUrl +'"> ' +
+                            '<img src="/static/img/yelp_review_btn_red.png" alt="' +
+                            recs[i]._name + '" style="width:125px;"></a><br>' +
+                          'Dog-friendliness: ' + recs[i].dog.toFixed(2) + ' Food Quality: ' + recs[i].food.toFixed(2) + ' Other: ' + recs[i].other.toFixed(2) + '<br>' +
+                          'Total: ' + recs[i].total.toFixed(2) +
+                        '</div><hr>';
+      finalHtml = finalHtml.concat(currentHtml);
+    }
+    $('#rec-display').html(finalHtml);
+  })
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Handle reviews

@@ -22,9 +22,9 @@ div#map {
        -moz-column-count: 3; /* Firefox */
             column-count: 3;
 
-    -webkit-column-width: 100px; /* Chrome, Safari, Opera */
-       -moz-column-width: 100px; /* Firefox */
-            column-width: 100px;
+    -webkit-column-width: 50px; /* Chrome, Safari, Opera */
+       -moz-column-width: 50px; /* Firefox */
+            column-width: 50px;
 }
 
 /*.more {
@@ -43,6 +43,14 @@ a.showLink:hover, a.hideLink:hover {
     border-bottom: 1px dotted #36f;
 }*/
 
+div#rec-display {
+    height: 225px;
+    border-style: solid;
+    border-width: thin;
+    overflow: scroll;
+    text-align: center;
+}
+
 div#review-display {
     height: 500px;
     border-style: solid;
@@ -57,12 +65,12 @@ div.two-columns {
     overflow: hidden;
 }
 
-div.right {
+div.left {
     width: 50%;
     float: left;
 }
 
-div.left {
+div.right {
     margin-left: 51%;
 }
 
