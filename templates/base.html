@@ -25,6 +25,14 @@
             {% if not session.get("fname") %}
               <li><a href="/register">Register</a></li>
               <li><a href="/login">Sign In</a></li>
+<!--               <li class="dropdown" id="menuLogin"><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Sign In</a></li>
+              <div class="dropdown-menu" style="padding:17px;">
+                <form action="/loggedin" method="POST">
+                  <input type="text" name="username" placeholder="username" required><br><br>
+                  <input type="password" name="password" placeholder="password" required><br><br>
+                  <input type="submit">
+                </form>
+              </div> -->
             {% endif %}
 
             {% if session.get("fname") %}
@@ -50,17 +58,12 @@
   </head>
   <body>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<!--     {% for flash in get_flashed_messages() %}
-      {{ flash }}<br>
-    {% endfor %} -->
 
     {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
-    <div class="alert-message block-message error">
-      <a class="close">×</a>
       {%- for msg in errors %}
         <div class="alert alert-dismissible alert-danger">
-          <button type="button" class="close" data-dismiss="alert"></button>
+          <button type="button" class="close" data-dismiss="alert">x</button>
           <strong>Oh snap!</strong> {{ msg }}
         </div>
       {% endfor -%}
@@ -72,7 +75,7 @@
     {% if successes %}
       {%- for msg in successes %}
         <div class="alert alert-dismissible alert-success">
-          <button type="button" class="close" data-dismiss="alert">X</button>
+          <button type="button" class="close" data-dismiss="alert">x</button>
           <strong>Well done!</strong> {{ msg }}
         </div>
       {% endfor -%}
@@ -83,4 +86,3 @@
     </script>
   </body>
 </html>
-
