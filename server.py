@@ -176,7 +176,7 @@ def get_recs():
                JOIN sa_scores
                     USING (restaurant_id)
                WHERE restaurants.city = '%s'
-               ORDER BY sa_scores.total_norm_score
+               ORDER BY sa_scores.total_norm_score DESC
                LIMIT 5;
             """ % (city)
 

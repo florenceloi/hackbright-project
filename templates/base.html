@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    
+    <!-- Stylesheets -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/united-bootswatch.css">
     <link rel="stylesheet" href="/static/css/styles.css">
 
+    <!-- Navbar elements -->
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -15,26 +19,19 @@
           </button>
           <a class="navbar-brand" href="/home">FETCH</a>
         </div>
-
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/analysis">Analysis <span class="sr-only">(current)</span></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
 
+            <!-- Navbar elements if NO user signed in -->
             {% if not session.get("fname") %}
               <li><a href="/register">Register</a></li>
               <li><a href="/login">Sign In</a></li>
-<!--               <li class="dropdown" id="menuLogin"><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Sign In</a></li>
-              <div class="dropdown-menu" style="padding:17px;">
-                <form action="/loggedin" method="POST">
-                  <input type="text" name="username" placeholder="username" required><br><br>
-                  <input type="password" name="password" placeholder="password" required><br><br>
-                  <input type="submit">
-                </form>
-              </div> -->
             {% endif %}
 
+            <!-- Navbar elements if user IS signed in -->
             {% if session.get("fname") %}
               <li class="dropdown">
                 <a href="/profile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ session["fname"] }}<span class="caret"></span></a>
@@ -45,20 +42,22 @@
                 </ul>
               </li>
             {% endif %}
-
           </ul>
         </div>
       </div>
     </nav>
 
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <title>{% block title %}TITLE GOES HERE{% endblock %}</title>
     {% block head %}HEAD CONTENT GOES HERE{% endblock %}
   </head>
-  <body>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+  <body>
+
+    <!-- Handling flash messages -->
     {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
       {%- for msg in errors %}
@@ -82,7 +81,8 @@
     {% endif %}
     {% endwith %}
 
+    <!-- Placeholder for body content -->
     {% block content %}BODY CONTENT GOES HERE{% endblock %}
-    </script>
+
   </body>
 </html>

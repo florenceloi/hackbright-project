@@ -126,18 +126,18 @@ function makeInfoWindow(restaurant) {
     '<div class="window-content">' +
       '<h3><b>' + restaurant._name + '</b></h3>' +
       '<img src="' + restaurant.yelpImgUrl + '" alt="' + restaurant._name +
-        '" style="width:150px;"><br>' +
-      '<p><b>Address: </b>' + restaurant.address + '</p>' +
-      '<p><b>Phone Number: </b>' + restaurant.phone + '</p>' +
-      '<p><b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg +
+        '" style="width:100px;"><br>' +
+      '<b>Address: </b>' + restaurant.address + '<br>' +
+      '<b>Phone Number: </b>' + restaurant.phone + '<br>' +
+      '<b>Yelp Rating: </b><img src="' + restaurant.yelpRatingImg +
         '" alt="' + restaurant.yelpRating + '">' +
-        ' (' + restaurant.reviewCount + ' reviews) </p>' +
+        ' (' + restaurant.reviewCount + ' reviews) <br>' +
       '<a href="' + restaurant.yelpUrl +
         '"> <img src="/static/img/yelp_review_btn_red.png" alt="' +
-        restaurant._name + '" style="width:125px;"></a>' +
-      '<p><button id="' + restaurant.db_id + '" class="favorite-btn" value="' +
-          restaurant.favorite + '">' + '&hearts; Favorite</button></p>' +
-      '<a href="/restaurants/' + restaurant.db_id + '">Review ' + restaurant._name + '</a>' +
+        restaurant._name + '" style="width:125px;"></a><br>' +
+      '<a href="/restaurants/' + restaurant.db_id + '">Review ' + restaurant._name + '</a><br>' +
+      '<button id="' + restaurant.db_id + '" class="favorite-btn" value="' +
+          restaurant.favorite + '">' + '&hearts; Favorite</button><br>' +
     '</div>'
   );
   return temp_html;
@@ -198,11 +198,11 @@ function updateRecommendations(city) {
     var finalHtml = '<h3 style="text-align:center;">FETCH Recommendations for '+ recs[0].city + '</h3><hr>';
     for (var i = 0; i < recs.length; i++) {
       var currentHtml = '<div>' +
-                          '<p>' + recs[i]._name + '</p>' +
+                          '<p><b>' + (i+1) + ". " + recs[i]._name + '</b></p>' +
                           recs[i].address + '<br>' +
                           '<a href="' + recs[i].yelpUrl +'"> ' +
                             '<img src="/static/img/yelp_review_btn_red.png" alt="' +
-                            recs[i]._name + '" style="width:125px;"></a><br>' +
+                            recs[i]._name + '" style="width:100px;"></a><br>' +
                           'Dog-friendliness: ' + recs[i].dog.toFixed(2) + ' Food Quality: ' + recs[i].food.toFixed(2) + ' Other: ' + recs[i].other.toFixed(2) + '<br>' +
                           'Total: ' + recs[i].total.toFixed(2) +
                         '</div><hr>';
@@ -211,6 +211,33 @@ function updateRecommendations(city) {
     $('#rec-display').html(finalHtml);
   })
 }
+
+// function updateRecommendations(city) {
+//   $.get('/get-recs', {"city": city}, function (rec_dict) {
+//     var recs = rec_dict["recs"];
+//     if (recs = "San Francisco") {
+//       var finalHtml = '<h3 style="text-align:center;">FETCH Recommendations for ' + city + '</h3><hr>';
+//       var currentHtml = '<div>' +
+//                           '<p><b>Sorry! No sentiment analysis scores available for '+ .city + ' yet...</b></p>' +
+//                         '</div><hr>';
+//     } else {
+//       var finalHtml = '<h3 style="text-align:center;">FETCH Recommendations for '+ recs[0].city + '</h3><hr>';
+//       for (var i = 0; i < recs.length; i++) {
+//         var currentHtml = '<div>' +
+//                             '<p><b>' + (i+1) + ". " + recs[i]._name + '</b></p>' +
+//                             recs[i].address + '<br>' +
+//                             '<a href="' + recs[i].yelpUrl +'"> ' +
+//                               '<img src="/static/img/yelp_review_btn_red.png" alt="' +
+//                               recs[i]._name + '" style="width:125px;"></a><br>' +
+//                             'Dog-friendliness: ' + recs[i].dog.toFixed(2) + ' Food Quality: ' + recs[i].food.toFixed(2) + ' Other: ' + recs[i].other.toFixed(2) + '<br>' +
+//                             'Total: ' + recs[i].total.toFixed(2) +
+//                           '</div><hr>';
+//         finalHtml = finalHtml.concat(currentHtml);
+//       }
+//     }
+//     $('#rec-display').html(finalHtml);
+//   })
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Handle reviews
@@ -222,8 +249,8 @@ function populateReviews(marker, id) {
     var finalHtml = '<h3 style="text-align:center;">FETCH Reviews for '+ name + '</h3><hr>';
     for (var i = 0; i < reviews.length; i++) {
       var currentHtml = '<div class="two-columns">' +
-                          '<div class="right">User ' + reviews[i].username + '</div>' +
-                          '<div class="left"><b>Rating: ' + reviews[i].rating + '</b><br>' +
+                          '<div class="left">User ' + reviews[i].username + '</div>' +
+                          '<div class="right"><b>Rating: ' + reviews[i].rating + '</b><br>' +
                           reviews[i]._body + '</div>' +
                         '</div><hr>';
       finalHtml = finalHtml.concat(currentHtml);
