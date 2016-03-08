@@ -7,11 +7,15 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="/static/js/sa-score.js"></script>
 
-    <ul class="breadcrumb">
-      <li><a href="/analysis">States</a></li>
-      <li><a href="/analysis/state?location={{ abbrev_state }}">{{ state }}</a></li>
-      <li class="active">{{ city }}</li>
-    </ul>
+    <div class="container">
+        <div class="row">
+            <ul class="breadcrumb">
+                <li><a href="/analysis">States</a></li>
+                <li><a href="/analysis/state?location={{ abbrev_state }}">{{ state }}</a></li>
+                <li class="active">{{ city }}</li>
+            </ul>
+        </div>
+    </div>
 
     <script>
         // Retrieve the jsonified Python dictionary of restaurants with AJAX
@@ -27,6 +31,12 @@
 
 {% block content %}
 
-    <div id='dashboard'></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id='dashboard'></div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

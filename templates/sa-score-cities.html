@@ -7,10 +7,14 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="/static/js/sa-score.js"></script>
 
-    <ul class="breadcrumb">
-      <li><a href="/analysis">States</a></li>
-      <li class="active">{{ state }}</li>
-    </ul>
+    <div class="container">
+        <div class="row">
+            <ul class="breadcrumb">
+                <li><a href="/analysis">States</a></li>
+                <li class="active">{{ state }}</li>
+            </ul>
+        </div>
+    </div>
 
     <script>
         // Retrieve the jsonified Python dictionary of restaurants with AJAX
@@ -26,17 +30,31 @@
 
 {% block content %}
     
-    <form action="/analysis/state/city">
-        Pick a city:
-            <select id="city" name="location" required>
-                    <option value="" selected="selected">Select your option</option>
-                {% for location in locations %}
-                    <option value="{{ location }}">{{ location }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit">
-    <form>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <form action="/analysis/state/city">
+                    Pick a city:
+                        <select id="city" name="location" required>
+                                <option value="" selected="selected">Select your option</option>
+                            {% for location in locations %}
+                                <option value="{{ location }}">{{ location }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit">
+                <form>
 
-    <div id='dashboard'></div>
+                <h3>Dog Friendly Restaurants in the {{ state }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id='dashboard'></div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
