@@ -213,7 +213,7 @@ function dashboard(id, fData){
     }
 
     // calculate total scores by segment for all state.
-    var tF = ['Dog Friendliness','Food Quality'].map(function(d){
+    var tF = ["", 'Dog Friendliness','Food Quality'].map(function(d){
         return {type:d, score: d3.sum(fData.map(function(t){ return t.score[d];}))};
     });
     

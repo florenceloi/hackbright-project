@@ -1,3 +1,7 @@
+div.round {
+    border-radius: 15px 50px;
+}
+
 #map {
     height: 400px;
 }
@@ -35,12 +39,11 @@ div.two-columns {
 }
 
 div.left {
-    width: 50%;
-    float: left;
+    padding-right: 5%;
 }
 
 div.right {
-    margin-left: 51%;
+    padding-left: 5%;
 }
 
 #dashboard {
@@ -67,10 +70,6 @@ rect:hover {
 
 .legend tr {
     border-bottom:1px solid grey;
-}
-
-.legend tr:first-child { 
-    border-top:1px solid grey;
 }
 
 .axis path, .axis line {
