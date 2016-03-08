@@ -163,38 +163,42 @@ def get_recs():
     # import pdb; pdb.set_trace()
     city = request.args.get("city")
 
-    QUERY = """SELECT restaurants.restaurant_id,
-                      restaurants.name,
-                      restaurants.address,
-                      restaurants.yelp_url,
-                      sa_scores.norm_dog_score,
-                      sa_scores.norm_food_score,
-                      sa_scores.norm_other_score,
-                      sa_scores.total_norm_score,
-                      restaurants.city
-               FROM restaurants
-               JOIN sa_scores
-                    USING (restaurant_id)
-               WHERE restaurants.city = '%s'
-               ORDER BY sa_scores.total_norm_score DESC
-               LIMIT 5;
-            """ % (city)
+    if city != "San Francisco":
+        QUERY = """SELECT restaurants.restaurant_id,
+                          restaurants.name,
+                          restaurants.address,
+                          restaurants.yelp_url,
+                          sa_scores.norm_dog_score,
+                          sa_scores.norm_food_score,
+                          sa_scores.norm_other_score,
+                          sa_scores.total_norm_score,
+                          restaurants.city
+                   FROM restaurants
+                   JOIN sa_scores
+                        USING (restaurant_id)
+                   WHERE restaurants.city = '%s'
+                   ORDER BY sa_scores.total_norm_score DESC
+                   LIMIT 5;
+                """ % (city)
 
-    cursor = db.session.execute(QUERY)
-    recommendations = cursor.fetchall()
+        cursor = db.session.execute(QUERY)
+        recommendations = cursor.fetchall()
 
-    rec_list = []
+        rec_list = []
 
-    for r in recommendations:
-        rec_list.append({"r_id": r[0],
-                         "_name": r[1],
-                         "address": r[2],
-                         "yelpUrl": r[3],
-                         "dog": r[4],
-                         "food": r[5],
-                         "other": r[6],
-                         "total": r[7],
-                         "city": r[8]})
+        for r in recommendations:
+            rec_list.append({"r_id": r[0],
+                             "_name": r[1],
+                             "address": r[2],
+                             "yelpUrl": r[3],
+                             "dog": r[4],
+                             "food": r[5],
+                             "other": r[6],
+                             "total": r[7],
+                             "city": r[8]})
+
+    else:
+        rec_list = ["San Francisco"]
 
     rec_dict = {"recs": rec_list}
 

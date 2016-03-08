@@ -1,21 +1,6 @@
-div#map {
+#map {
     height: 400px;
-    width: 50%;
 }
-
-/*#floating-panel {
-    position: absolute;
-    top: 38.5%;
-    left: 12%;
-    z-index: 5;
-    background-color: #fff;
-    padding: 5px;
-    border: 1px solid #999;
-    text-align: center;
-    font-family: 'ubuntu','sans-serif';
-    line-height: 30px;
-    padding-left: 10px;
-}*/
 
 #someCategories, #moreCategories {
     -webkit-column-count: 3; /* Chrome, Safari, Opera */
@@ -26,22 +11,6 @@ div#map {
        -moz-column-width: 50px; /* Firefox */
             column-width: 50px;
 }
-
-/*.more {
-  display: none;
-}
-a.showLink, a.hideLink {
-  text-decoration: none;
-  color: #36f;
-  padding-left: 8px;
-  background: transparent url(down.gif) no-repeat left;
-}
-a.hideLink {
-    background: transparent url(up.gif) no-repeat left;
-}
-a.showLink:hover, a.hideLink:hover {
-    border-bottom: 1px dotted #36f;
-}*/
 
 div#rec-display {
     height: 225px;
