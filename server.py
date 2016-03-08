@@ -20,7 +20,7 @@ from model import (connect_to_db,
 
 from api import gmaps_key
 
-import operator
+import operator, collections
 
 app = Flask(__name__)
 
@@ -366,17 +366,37 @@ def user_detail():
         # Get favorites
         db_fav_restaurants = Favorite.query.filter(Favorite.user_id == user_id).all()
 
-        fav_restaurants_dict = {}
+        locations = []
 
         for d in db_fav_restaurants:
-            yelp_id = d.restaurant.yelp_id
+            city = d.restaurant.city
+            state = states_dict[d.restaurant.state_code]
+            location = city + ", " + state
+            if location not in locations:
+                locations.append(location)
+
+        fav_restaurants_dict = {}
+
+        for l in locations:
+            fav_restaurants_dict[l] = []
+
+        for d in db_fav_restaurants:
             restaurant_id = d.restaurant_id
             name = d.restaurant.name
+            city = d.restaurant.city
+            state = states_dict[d.restaurant.state_code]
+            location = city + ", " + state
 
             restaurant_dict = {"r_id": restaurant_id,
                                "name": name}
 
-            fav_restaurants_dict[yelp_id] = restaurant_dict
+            fav_restaurants_dict[location].append(restaurant_dict)
+
+        for k, v in fav_restaurants_dict.items():
+            v = sorted(v)
+            fav_restaurants_dict[k] = v
+
+        ordered_fav_restaurants_dict = collections.OrderedDict(sorted(fav_restaurants_dict.items()))
 
         # Get reviews
         db_reviews = Review.query.filter(Review.user_id == user_id).all()
@@ -399,7 +419,7 @@ def user_detail():
 
         return render_template('profile.html',
                                user=user,
-                               favorites=fav_restaurants_dict,
+                               favorites=ordered_fav_restaurants_dict,
                                reviews=reviews_dict)
 
     else:

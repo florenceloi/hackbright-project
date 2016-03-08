@@ -60,22 +60,29 @@
     <!-- Handling flash messages -->
     {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
-      {%- for msg in errors %}
-        <div class="alert alert-dismissible alert-danger">
-          <button type="button" class="close" data-dismiss="alert">x</button>
-          <strong>Oh snap!</strong> {{ msg }}
+      {% for msg in errors %}
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 alert alert-dismissible alert-danger">
+              <button type="button" class="close" data-dismiss="alert">x</button>
+              <strong>Oh snap!</strong> {{ msg }}
+            </div>
+          </div>
         </div>
-      {% endfor -%}
-    </div>
+      {% endfor %}
     {% endif %}
     {% endwith %}
 
     {% with successes = get_flashed_messages(category_filter=["success"]) %}
     {% if successes %}
-      {%- for msg in successes %}
-        <div class="alert alert-dismissible alert-success">
-          <button type="button" class="close" data-dismiss="alert">x</button>
-          <strong>Well done!</strong> {{ msg }}
+      {% for msg in successes %}
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 alert alert-dismissible alert-success">
+              <button type="button" class="close" data-dismiss="alert">x</button>
+              <strong>Well done!</strong> {{ msg }}
+            </div>
+          </div>
         </div>
       {% endfor -%}
     {% endif %}

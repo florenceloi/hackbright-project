@@ -7,29 +7,43 @@
 {% endblock %}
 
 {% block head %}
-    
 {% endblock %}
 
 
 {% block content %}
     
-    <h2>{{ user.fname }}'s Profile</h2>
-    
-    <p>Restaurants you've favorited:</p>
+    <div class="container">
 
-        <ul>
-            {% for value in favorites.values() %}
-                <li><a href='/restaurants/{{ value["r_id"] }}'>{{ value["name"] }}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>{{ user.fname }}'s Profile</h2>
+            </div>
+        </div>
 
-    <p>Restaurants you've reviewed:</p>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-md-6">
+                <p>Restaurants you've favorited: (click links to review)</p>
+                <ul>
+                    {% for location, restaurants in favorites.iteritems() %}
+                        <p>{{ location }}</p>
+                        {% for r in restaurants %}
+                            <li><a href='/restaurants/{{ r.r_id }}'>{{ r.name }}</a></li>
+                        {% endfor %}
+                        <br>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-6 col-md-6">
+                <p>Restaurants you've reviewed:</p>
+                <ul>
+                    {% for value in reviews.values() %}
+                        <li><a href='/restaurants/{{ value["r_id"] }}'>{{ value["name"] }}</a>: {{ value["rating"] }}</li>
+                        {{ value["body"] }}<br><br>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
-        <ul>
-            {% for value in reviews.values() %}
-                <li><a href='/restaurants/{{ value["r_id"] }}'>{{ value["name"] }}</a>: {{ value["rating"] }}</li>
-                {{ value["body"] }}<br><br>
-            {% endfor %}
-        </ul>
+    </div>
 
 {% endblock %}

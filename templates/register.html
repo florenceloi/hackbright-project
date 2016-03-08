@@ -3,22 +3,29 @@
 {% block title %}Register{% endblock %}
 
 {% block head %}
-
 {% endblock %}
 
 
 {% block content %}
     
-    <h1>Register</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-offset-5 col-xs-3">
 
-    <form id="register-form" action="/registered" method="POST">
-        <input class="control-label" id="username" type="text" name="username" placeholder="choose a username" required><br><br>
-        <input class="control-label" type="password" name="password" placeholder="password" required><br><br>
-        <input class="control-label" type="password" name="password1" placeholder="verify password" required><br><br>
-        <input class="control-label" type="text" name="fname" placeholder="first name" required><br><br>
-        <input class="control-label" type="text" name="lname" placeholder="last name" required><br><br>
-        <span>*all fields are required</span><br><br>
-        <input type="submit">
-    </form>
+                <h1>Register</h1>
+
+                <form id="register-form" action="/registered" method="POST">
+                    <input class="control-label" id="username" type="text" name="username" placeholder="choose a username" required><br><br>
+                    <input class="control-label" type="password" name="password" placeholder="password" required><br><br>
+                    <input class="control-label" type="password" name="password1" placeholder="verify password" required><br><br>
+                    <input class="control-label" type="text" name="fname" placeholder="first name" required><br><br>
+                    <input class="control-label" type="text" name="lname" placeholder="last name" required><br><br>
+                    <span>*all fields are required</span><br><br>
+                    <input class="btn btn-primary btn-sm" type="submit">
+                </form>
+
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

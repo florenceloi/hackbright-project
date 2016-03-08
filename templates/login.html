@@ -3,21 +3,28 @@
 {% block title %}Login{% endblock %}
 
 {% block head %}
-    
 {% endblock %}
 
 
 {% block content %}
-    
-    <h2>Sign In</h2>
 
-    <form action="/loggedin" method="POST">
-        <input class="control-label" type="text" name="username" placeholder="username" required><br><br>
-        <input class="control-label" type="password" name="password" placeholder="password" required><br><br>
-        <input type="submit">
-    </form>
-    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-offset-5 col-xs-3">
 
-    <a href="/register">Click here to register</a>
+                <h2>Sign In</h2>
+
+                <form action="/loggedin" method="POST">
+                    <input class="control-label" type="text" name="username" placeholder="username" required><br><br>
+                    <input class="control-label" type="password" name="password" placeholder="password" required><br><br>
+                    <input class="btn btn-primary btn-sm" type="submit">
+                </form>
+                <br>
+
+                <a href="/register">Click here to register</a>
+
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
