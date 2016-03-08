@@ -342,12 +342,10 @@ def normalize_sa_scores():
     """Normalize sa scores and add new scores as new fields in new columns."""
 
     min_scores = db.session.query(db.func.min(SA_Score.dog_score),
-                                  db.func.min(SA_Score.food_score),
-                                  db.func.min(SA_Score.other_score)).all()
+                                  db.func.min(SA_Score.food_score)).all()
 
     max_scores = db.session.query(db.func.max(SA_Score.dog_score),
-                                  db.func.max(SA_Score.food_score),
-                                  db.func.max(SA_Score.other_score)).all()
+                                  db.func.max(SA_Score.food_score)).all()
 
     min_score = min(min_scores[0])
     max_score = max(max_scores[0])
@@ -355,21 +353,20 @@ def normalize_sa_scores():
     sa_scores = SA_Score.query.all()
 
     for s in sa_scores:
-        dog = normalize_data(s.dog_score, min_score, max_score)
-        food = normalize_data(s.food_score, min_score, max_score)
-        other = normalize_data(s.other_score, min_score, max_score)
+        dog = normalize_data(s.dog_score, min_score, max_score) * 5
+        food = normalize_data(s.food_score, min_score, max_score) * 5
 
-        dog, food, other = str(dog), str(food), str(other)
+        dog, food = str(dog), str(food)
 
         STMT = """UPDATE sa_scores
                   SET norm_dog_score=%s,
-                      norm_food_score=%s,
-                      norm_other_score=%s
-                  WHERE sa_score_id=%s;""" % (dog, food, other, str(s.sa_score_id))
+                      norm_food_score=%s
+                  WHERE sa_score_id=%s;""" % (dog, food, str(s.sa_score_id))
 
         db.session.execute(STMT)
 
     db.session.commit()
+
 
 def total_norm_scores():
     """Add new column to SA Scores table and insert total of normalized sa scores."""
@@ -379,12 +376,10 @@ def total_norm_scores():
     # db.session.execute(STMT)
 
     min_scores = db.session.query(db.func.min(SA_Score.dog_score),
-                                  db.func.min(SA_Score.food_score),
-                                  db.func.min(SA_Score.other_score)).all()
+                                  db.func.min(SA_Score.food_score)).all()
 
     max_scores = db.session.query(db.func.max(SA_Score.dog_score),
-                                  db.func.max(SA_Score.food_score),
-                                  db.func.max(SA_Score.other_score)).all()
+                                  db.func.max(SA_Score.food_score)).all()
 
     min_score = min(min_scores[0])
     max_score = max(max_scores[0])
@@ -392,11 +387,10 @@ def total_norm_scores():
     sa_scores = SA_Score.query.all()
 
     for s in sa_scores:
-        dog = normalize_data(s.dog_score, min_score, max_score)
-        food = normalize_data(s.food_score, min_score, max_score)
-        other = normalize_data(s.other_score, min_score, max_score)
+        dog = normalize_data(s.dog_score, min_score, max_score) * 5
+        food = normalize_data(s.food_score, min_score, max_score) * 5
 
-        total_norm_score = dog + food + other
+        total_norm_score = dog + food
 
         s_STMT = """UPDATE sa_scores
                   SET total_norm_score=%s
@@ -500,5 +494,5 @@ if __name__ == "__main__":
     # import_reviews_from_dataset()
     # populate_sa_scores_table()
     # extend_sa_scores_table()
-    # normalize_sa_scores()
+    normalize_sa_scores()
     total_norm_scores()

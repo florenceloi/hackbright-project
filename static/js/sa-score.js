@@ -4,10 +4,10 @@ function dashboard(id, fData){
     var barColor = 'steelblue';
 
     // Set colors for updates from pie chart
-    function segColor(c){ return {"Dog Friendliness":"#807dba", "Food Quality":"#e08214", "Other":"#41ab5d"}[c]; }
+    function segColor(c){ return {"Dog Friendliness":"#807dba", "Food Quality":"#41ab5d"}[c]; }
     
     // Compute total for each state in the list by passing each value in list to anonymous function
-    fData.forEach(function(d){d.total=d.score["Dog Friendliness"]+d.score["Food Quality"]+d.score["Other"];});
+    fData.forEach(function(d){d.total=d.score["Dog Friendliness"]+d.score["Food Quality"];});
     
     // Function to handle histogram
     function histoGram(fD){
@@ -182,15 +182,11 @@ function dashboard(id, fData){
 
         // create the second column for each segment.
         tr.append("td").text(function(d){
-            // var firstWord = d.type.split("_")[0];
-            // firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
-            // return firstWord + " Related";
             return d.type;
         });
 
         // create the third column for each segment.
         tr.append("td").attr("class",'legendScore')
-            // .text(function(d){ return d3.format(",")(d.score);});
             .text(function(d){ return d3.format(".3f")(d.score);});
 
         // create the fourth column for each segment.
@@ -217,7 +213,7 @@ function dashboard(id, fData){
     }
 
     // calculate total scores by segment for all state.
-    var tF = ['Dog Friendliness','Food Quality','Other'].map(function(d){
+    var tF = ['Dog Friendliness','Food Quality'].map(function(d){
         return {type:d, score: d3.sum(fData.map(function(t){ return t.score[d];}))};
     });
     

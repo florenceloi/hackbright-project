@@ -483,8 +483,7 @@ def import_overall_scores():
     QUERY = """SELECT restaurants.state_code,
                       restaurants.country_code,
                       avg(sa_scores.norm_dog_score) as avg_dog_score,
-                      avg(sa_scores.norm_food_score) as avg_food_score,
-                      avg(sa_scores.norm_other_score) as avg_other_score
+                      avg(sa_scores.norm_food_score) as avg_food_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
@@ -503,8 +502,7 @@ def import_overall_scores():
 
         score_data.append({"State": location,
                            "score": {"Dog Friendliness": r[2],
-                                     "Food Quality": r[3],
-                                     "Other": r[4]}})
+                                     "Food Quality": r[3]}})
 
     scoreData_dict = {"scoreData": score_data}
 
@@ -538,8 +536,7 @@ def import_state_scores():
 
     QUERY = """SELECT restaurants.city,
                       avg(sa_scores.norm_dog_score) as avg_dog_score,
-                      avg(sa_scores.norm_food_score) as avg_food_score,
-                      avg(sa_scores.norm_other_score) as avg_other_score
+                      avg(sa_scores.norm_food_score) as avg_food_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
@@ -556,8 +553,7 @@ def import_state_scores():
     for r in results:
         score_data.append({"State": r[0],
                            "score": {"Dog Friendliness": r[1],
-                                     "Food Quality": r[2],
-                                     "Other": r[3]}})
+                                     "Food Quality": r[2]}})
 
     scoreData_dict = {"scoreData": score_data}
 
@@ -588,8 +584,7 @@ def import_city_scores():
 
     QUERY = """SELECT restaurants.name,
                       avg(sa_scores.norm_dog_score) as avg_dog_score,
-                      avg(sa_scores.norm_food_score) as avg_food_score,
-                      avg(sa_scores.norm_other_score) as avg_other_score
+                      avg(sa_scores.norm_food_score) as avg_food_score
                FROM sa_scores
                JOIN restaurants
                     USING (restaurant_id)
@@ -606,8 +601,7 @@ def import_city_scores():
     for r in results:
         score_data.append({"State": r[0],
                            "score": {"Dog Friendliness": r[1],
-                                     "Food Quality": r[2],
-                                     "Other": r[3]}})
+                                     "Food Quality": r[2]}})
 
     scoreData_dict = {"scoreData": score_data}
 
