@@ -94,7 +94,7 @@ function dashboard(id, fData){
         function click() {
             var restaurant = this.id.split(",")[0];
             var city = $('body > div:nth-child(7) > div > ul > li.active').text();
-            window.location = '/home?restaurant=' + restaurant + '&city=' + city;
+            window.location = '/home?city=' + city;
         }
 
         // create function to update the bars. This will be used by pie-chart.

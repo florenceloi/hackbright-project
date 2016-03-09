@@ -34,12 +34,18 @@ app.jinja_env.undefined = StrictUndefined
 ###############################################################################
 # Flask routes
 
-@app.route('/home')
+@app.route('/')
 def index():
+    """Redirect to homepage"""
+
+    return redirect('/home')
+
+
+@app.route('/home')
+def go_to_homepage():
     """Homepage."""
 
     city = request.args.get("city")
-    restaurant = request.args.get("restaurant")
 
     us_az_cities = {(r.city) for r in Restaurant.query.all()
                     if r.country_code == "US" and r.state_code == "AZ"}
