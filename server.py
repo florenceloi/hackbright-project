@@ -38,6 +38,7 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
+    city = request.args.get("city")
     restaurant = request.args.get("restaurant")
 
     us_az_cities = {(r.city) for r in Restaurant.query.all()
@@ -76,6 +77,7 @@ def index():
         "Steakhouse", "Thai", "Vietnamese"]
 
     return render_template("home.html",
+                           city=city,
                            gmaps_key=gmaps_key,
                            us_az_cities=us_az_cities,
                            us_ca_cities=us_ca_cities,
@@ -162,7 +164,7 @@ def restaurant_info():
 @app.route('/get-recs')
 def get_recs():
     """Given a city, get top restaurants from database for AJAX response"""
-    # import pdb; pdb.set_trace()
+
     city = request.args.get("city")
 
     if city != "San Francisco":
@@ -172,7 +174,6 @@ def get_recs():
                           restaurants.yelp_url,
                           sa_scores.norm_dog_score,
                           sa_scores.norm_food_score,
-                          sa_scores.norm_other_score,
                           sa_scores.total_norm_score,
                           restaurants.city
                    FROM restaurants
@@ -195,9 +196,8 @@ def get_recs():
                              "yelpUrl": r[3],
                              "dog": r[4],
                              "food": r[5],
-                             "other": r[6],
-                             "total": r[7],
-                             "city": r[8]})
+                             "total": r[6],
+                             "city": r[7]})
 
     else:
         rec_list = ["San Francisco"]
@@ -667,7 +667,7 @@ states_dict = {"AZ": "Arizona",
 if __name__ == "__main__":
 
     # Set debug=True here to invoke the DebugToolbarExtension later
-    app.debug = True
+    # app.debug = True
 
     connect_to_db(app)
 

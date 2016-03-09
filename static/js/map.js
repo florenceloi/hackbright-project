@@ -22,8 +22,15 @@ function initMap() {
   // Instantiate geocoder object
   var geocoder = new google.maps.Geocoder();
 
+  // Call geocodeCity when document loads
+  $( document ).ready(function() {
+    var city = $('#city option:selected').text();
+    geocodeCity(geocoder, map);
+    updateRecommendations(city);
+  });
+
   // Call geocodeCity when "Center map" button is clicked
-  $('#city').change( function() {
+  $('#city').change(function() {
     var city = $('#city option:selected').text();
     geocodeCity(geocoder, map);
     updateRecommendations(city);
@@ -208,9 +215,9 @@ function updateRecommendations(city) {
                             recs[i].address + '<br>' +
                             '<a href="' + recs[i].yelpUrl +'"> ' +
                               '<img src="/static/img/yelp_review_btn_red.png" alt="' +
-                              recs[i]._name + '" style="width:125px;"></a><br>' +
-                            'Dog-friendliness: ' + recs[i].dog.toFixed(2) + ' Food Quality: ' + recs[i].food.toFixed(2) + ' Other: ' + recs[i].other.toFixed(2) + '<br>' +
-                            'Total: ' + recs[i].total.toFixed(2) +
+                              recs[i]._name + '" style="width:125px;"></a><br><br>' +
+                            '<b>Dog-friendliness</b>: ' + recs[i].dog.toFixed(2) + ' <b>Food Quality</b>: ' + recs[i].food.toFixed(2) + '<br>' +
+                            '<b>Total score</b>: ' + recs[i].total.toFixed(2) +
                           '</div><hr>';
         finalHtml = finalHtml.concat(currentHtml);
       }

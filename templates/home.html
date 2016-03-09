@@ -16,6 +16,95 @@
     <div class="container">
 
         Select a city to see its dog-friendly restaurants:
+
+        {% if city %}
+
+                <select id="city" name="location" required>
+
+                <optgroup label="Arizona, United States">
+                    {% for us_az_city in us_az_cities %}
+                        {% if us_az_city == city %}
+                            <option value="{{ us_az_city }}, Arizona, United States" selected="selected">{{ us_az_city }}</option>
+                        {% else %}
+                            <option value="{{ us_az_city }}, Arizona, United States">{{ us_az_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                <optgroup label="California, United States">
+                    {% for us_ca_city in us_ca_cities %}
+                        {% if us_ca_city == city %}
+                            <option value="{{ us_ca_city }}, California, United States" selected="selected">{{ us_ca_city }}</option>
+                        {% else %}
+                            <option value="{{ us_ca_city }}, California, United States">{{ us_ca_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                <optgroup label="Illinois, United States">
+                    {% for us_il_city in us_il_cities %}
+                        {% if us_il_city == city %}
+                            <option value="{{ us_il_city }}, Illinois, United States" selected="selected">{{ us_il_city }}</option>
+                        {% else %}
+                            <option value="{{ us_il_city }}, Illinois, United States">{{ us_il_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                <optgroup label="Nevada, United States">
+                    {% for us_nv_city in us_nv_cities %}
+                        {% if us_nv_city == city %}
+                            <option value="{{ us_nv_city }}, Nevada, United States" selected="selected">{{ us_nv_city }}</option>
+                        {% else %}
+                            <option value="{{ us_nv_city }}, Nevada, United States">{{ us_nv_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                <optgroup label="North Carolina, United States">
+                    {% for us_nc_city in us_nc_cities %}
+                        {% if us_nc_city == city %}
+                            <option value="{{ us_nc_city }}, North Carolina, United States" selected="selected">{{ us_nc_city }}</option>
+                        {% else %}    
+                            <option value="{{ us_nc_city }}, North Carolina, United States">{{ us_nc_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                <optgroup label="Pennsylvania, United States">
+                    {% for us_pa_city in us_pa_cities %}
+                        {% if us_pa_city == city %}
+                            <option value="{{ us_pa_city }}, Pennsylvania, United States" selected="selected">{{ us_pa_city }}</option>
+                        {% else %}  
+                            <option value="{{ us_pa_city }}, Pennsylvania, United States">{{ us_pa_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+                <optgroup label="Wisconsin, United States">
+                    {% for us_wi_city in us_wi_cities %}
+                        {% if us_wi_city == city %}
+                            <option value="{{ us_wi_city }}, Wisconsin, United States" selected="selected">{{ us_wi_city }}</option>
+                        {% else %} 
+                            <option value="{{ us_wi_city }}, Wisconsin, United States">{{ us_wi_city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+                
+                <optgroup label="Canada">
+                    {% for ca_city in ca_cities %}
+                        {% if ca_city == city %}
+                            <option value="{{ ca_city[0] }}, {{ ca_city[1] }}, Canada" selected="selected">{{ ca_city[0] }}, {{ ca_city[1] }}</option>
+                        {% else %} 
+                            <option value="{{ ca_city[0] }}, {{ ca_city[1] }}, Canada">{{ ca_city[0] }}, {{ ca_city[1] }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+
+            </select>
+
+        {% else %}
+
             <select id="city" name="location" required>
 
                 <optgroup label="Arizona, United States">
@@ -67,6 +156,8 @@
                 </optgroup>
 
             </select>
+        
+        {% endif %}
 
         <button id="current-location" class="btn btn-primary btn-sm" type="button">Center on current location</button>
     </div>
