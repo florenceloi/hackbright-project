@@ -38,6 +38,8 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
+    restaurant = request.args.get("restaurant")
+
     us_az_cities = {(r.city) for r in Restaurant.query.all()
                     if r.country_code == "US" and r.state_code == "AZ"}
     us_ca_cities = {(r.city) for r in Restaurant.query.all()
@@ -537,10 +539,13 @@ def import_overall_scores():
 def display_state_scores():
     """Display state-level sentiment analysis scores."""
 
-    abbrev_state = request.args.get("location")
-    session["state"] = abbrev_state
+    state = request.args.get("location")
 
-    state = states_dict[abbrev_state]
+    for abbrev, full in states_dict.iteritems():
+        if full == state:
+            abbrev_state = abbrev
+
+    session["state"] = abbrev_state
 
     # Instantiate city set using set comprehension
     locations = {r.city for r in Restaurant.query.all() if r.state_code == abbrev_state}
@@ -596,7 +601,6 @@ def display_city_scores():
 
     return render_template("sa-score-restaurants.html",
                            city=city,
-                           abbrev_state=abbrev_state,
                            state=state)
 
 

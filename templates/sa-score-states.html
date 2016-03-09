@@ -5,7 +5,7 @@
 {% block head %}
     
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="/static/js/sa-score.js"></script>
+    <script src="/static/js/sa-score-states.js"></script>
 
     <div class="container">
         <div class="row">
@@ -33,26 +33,6 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <form action="/analysis/state">
-                    Pick a state:
-                        <select id="state" name="location" required>
-                            <option value="" selected="selected">Select your option</option>
-
-                            <optgroup label="US">
-                                {% for us_location in us_locations %}
-                                    <option value="{{ us_location[0] }}">{{ us_location[1] }}</option>
-                                {% endfor %}
-                            </optgroup>
-                            
-                            <optgroup label="CA">
-                                {% for ca_location in ca_locations %}
-                                    <option value="{{ ca_location[0] }}">{{ ca_location[1] }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        </select>
-                        <input type="submit">
-                <form>
-
                 <h3>Dog Friendly Restaurants in the United States and Canada</h3>
             </div>
         </div>

@@ -192,26 +192,6 @@ function colorHeart(evt) {
 ///////////////////////////////////////////////////////////////////////////////
 // Handle recommendations
 
-// function updateRecommendations(city) {
-//   $.get('/get-recs', {"city": city}, function (rec_dict) {
-//     var recs = rec_dict["recs"];
-//     var finalHtml = '<h3 style="text-align:center;">FETCH Recommendations for '+ recs[0].city + '</h3><hr>';
-//     for (var i = 0; i < recs.length; i++) {
-//       var currentHtml = '<div>' +
-//                           '<p><b>' + (i+1) + ". " + recs[i]._name + '</b></p>' +
-//                           recs[i].address + '<br>' +
-//                           '<a href="' + recs[i].yelpUrl +'"> ' +
-//                             '<img src="/static/img/yelp_review_btn_red.png" alt="' +
-//                             recs[i]._name + '" style="width:100px;"></a><br>' +
-//                           'Dog-friendliness: ' + recs[i].dog.toFixed(2) + ' Food Quality: ' + recs[i].food.toFixed(2) + ' Other: ' + recs[i].other.toFixed(2) + '<br>' +
-//                           'Total: ' + recs[i].total.toFixed(2) +
-//                         '</div><hr>';
-//       finalHtml = finalHtml.concat(currentHtml);
-//     }
-//     $('#rec-display').html(finalHtml);
-//   })
-// }
-
 function updateRecommendations(city) {
   $.get('/get-recs', {"city": city}, function (rec_dict) {
     var recs = rec_dict["recs"];

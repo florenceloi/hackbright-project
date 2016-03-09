@@ -5,13 +5,13 @@
 {% block head %}
     
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="/static/js/sa-score.js"></script>
+    <script src="/static/js/sa-score-restaurants.js"></script>
 
     <div class="container">
         <div class="row">
             <ul class="breadcrumb">
                 <li><a href="/analysis">States</a></li>
-                <li><a href="/analysis/state?location={{ abbrev_state }}">{{ state }}</a></li>
+                <li><a href="/analysis/state?location={{ state }}">{{ state }}</a></li>
                 <li class="active">{{ city }}</li>
             </ul>
         </div>
@@ -30,6 +30,14 @@
 {% endblock %}
 
 {% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Dog Friendly Restaurants in {{ city }}</h3>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
