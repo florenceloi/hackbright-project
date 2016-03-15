@@ -4,229 +4,117 @@
 
 {% block head %}
     
-    <!-- Map scripts -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_key }}&libraries=visualization&callback=initMap"></script>
-    <script src="/static/js/map.js"></script>
+  <!-- Map scripts -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_key }}&libraries=visualization&callback=initMap"></script>
+  <script src="/static/js/map.js"></script>
 
 {% endblock %}
 
 
 {% block content %}
-    
-    <div class="container">
+  
+  <div class="container">
 
-        Select a city to see its dog-friendly restaurants:
+    <!-- Dropdown menu for cities with dog-friendly restaurants -->    
+    Select a city to see its dog-friendly restaurants:
+    <select id="city" name="location" required>
 
-        {% if city %}
+      {% for states_countries, cities in locations.items() %}
+        <optgroup label="{{ states_countries[0] }}, {{ states_countries[1] }}">
+          {% for city in cities %}
+            {% if city == redirect_city %}
+              <option value="{{ city }}, {{ states_countries[0] }}, {{ states_countries[1] }}" selected="selected">{{ city }}</option>
+            {% else %}
+              <option value="{{ city }}, {{ states_countries[0] }}, {{ states_countries[1] }}">{{ city }}</option>
+            {% endif %}
+          {% endfor %}
+        </optgroup>
+      {% endfor %}
 
-                <select id="city" name="location" required>
+    </select>
 
-                <optgroup label="Arizona, United States">
-                    {% for us_az_city in us_az_cities %}
-                        {% if us_az_city == city %}
-                            <option value="{{ us_az_city }}, Arizona, United States" selected="selected">{{ us_az_city }}</option>
-                        {% else %}
-                            <option value="{{ us_az_city }}, Arizona, United States">{{ us_az_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+    <button id="current-location" class="btn btn-primary btn-sm" type="button">Center on current location</button>
+  </div>
+  <br>
 
-                <optgroup label="California, United States">
-                    {% for us_ca_city in us_ca_cities %}
-                        {% if us_ca_city == city %}
-                            <option value="{{ us_ca_city }}, California, United States" selected="selected">{{ us_ca_city }}</option>
-                        {% else %}
-                            <option value="{{ us_ca_city }}, California, United States">{{ us_ca_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+  <!-- Top panel -->
+  <div class="container">
+    <div class="row">
 
-                <optgroup label="Illinois, United States">
-                    {% for us_il_city in us_il_cities %}
-                        {% if us_il_city == city %}
-                            <option value="{{ us_il_city }}, Illinois, United States" selected="selected">{{ us_il_city }}</option>
-                        {% else %}
-                            <option value="{{ us_il_city }}, Illinois, United States">{{ us_il_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+      <!-- FETCH Recommendations for city selected in dropdown menu (San Francisco = default) -->
+      <div class="col-xs-12 col-md-6 col-md-push-6 round" id="rec-display">
+        <h3 style="text-align:center;">FETCH Recommendations for San Francisco</h3><hr>
+        <div>
+          <p>Sorry, sentiment analysis scores are not yet available for San Francisco.</p>
+        </div>
+      </div>
 
-                <optgroup label="Nevada, United States">
-                    {% for us_nv_city in us_nv_cities %}
-                        {% if us_nv_city == city %}
-                            <option value="{{ us_nv_city }}, Nevada, United States" selected="selected">{{ us_nv_city }}</option>
-                        {% else %}
-                            <option value="{{ us_nv_city }}, Nevada, United States">{{ us_nv_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+      <!-- Allow filtering by category -->
+      <div class="col-xs-12 col-md-6 col-md-pull-6">
 
-                <optgroup label="North Carolina, United States">
-                    {% for us_nc_city in us_nc_cities %}
-                        {% if us_nc_city == city %}
-                            <option value="{{ us_nc_city }}, North Carolina, United States" selected="selected">{{ us_nc_city }}</option>
-                        {% else %}    
-                            <option value="{{ us_nc_city }}, North Carolina, United States">{{ us_nc_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+        <h3>Filter by Categories</h3>
 
-                <optgroup label="Pennsylvania, United States">
-                    {% for us_pa_city in us_pa_cities %}
-                        {% if us_pa_city == city %}
-                            <option value="{{ us_pa_city }}, Pennsylvania, United States" selected="selected">{{ us_pa_city }}</option>
-                        {% else %}  
-                            <option value="{{ us_pa_city }}, Pennsylvania, United States">{{ us_pa_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+        <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All
+            </p>
 
-                <optgroup label="Wisconsin, United States">
-                    {% for us_wi_city in us_wi_cities %}
-                        {% if us_wi_city == city %}
-                            <option value="{{ us_wi_city }}, Wisconsin, United States" selected="selected">{{ us_wi_city }}</option>
-                        {% else %} 
-                            <option value="{{ us_wi_city }}, Wisconsin, United States">{{ us_wi_city }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
-                
-                <optgroup label="Canada">
-                    {% for ca_city in ca_cities %}
-                        {% if ca_city == city %}
-                            <option value="{{ ca_city[0] }}, {{ ca_city[1] }}, Canada" selected="selected">{{ ca_city[0] }}, {{ ca_city[1] }}</option>
-                        {% else %} 
-                            <option value="{{ ca_city[0] }}, {{ ca_city[1] }}, Canada">{{ ca_city[0] }}, {{ ca_city[1] }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </optgroup>
+        <!-- Display selected categories -->
+        <div id="someCategories">
+        {% for category in categories %}
+            {% if category in selected_categories %}          
+              <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
+            {% endif %}
+        {% endfor %}
+        </div>
 
-            </select>
+        <!-- Display modal window for more categories -->
+        <a data-toggle="modal" href="#myModal">See more categories</a>
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">More Categories</h4>
+              </div>
+              <div class="modal-body">
 
-        {% else %}
+                <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All</p>
 
-            <select id="city" name="location" required>
-
-                <optgroup label="Arizona, United States">
-                    {% for us_az_city in us_az_cities %}
-                        <option value="{{ us_az_city }}, Arizona, United States">{{ us_az_city }}</option>
-                    {% endfor %}
-                </optgroup>
-
-                <optgroup label="California, United States">
-                    {% for us_ca_city in us_ca_cities %}
-                        <option value="{{ us_ca_city }}, California, United States" selected="selected">{{ us_ca_city }}</option>
-                    {% endfor %}
-                </optgroup>
-
-                <optgroup label="Illinois, United States">
-                    {% for us_il_city in us_il_cities %}
-                        <option value="{{ us_il_city }}, Illinois, United States">{{ us_il_city }}</option>
-                    {% endfor %}
-                </optgroup>
-
-                <optgroup label="Nevada, United States">
-                    {% for us_nv_city in us_nv_cities %}
-                        <option value="{{ us_nv_city }}, Nevada, United States">{{ us_nv_city }}</option>
-                    {% endfor %}
-                </optgroup>
-
-                <optgroup label="North Carolina, United States">
-                    {% for us_nc_city in us_nc_cities %}
-                        <option value="{{ us_nc_city }}, North Carolina, United States">{{ us_nc_city }}</option>
-                    {% endfor %}
-                </optgroup>
-
-                <optgroup label="Pennsylvania, United States">
-                    {% for us_pa_city in us_pa_cities %}
-                        <option value="{{ us_pa_city }}, Pennsylvania, United States">{{ us_pa_city }}</option>
-                    {% endfor %}
-                </optgroup>
-
-                <optgroup label="Wisconsin, United States">
-                    {% for us_wi_city in us_wi_cities %}
-                        <option value="{{ us_wi_city }}, Wisconsin, United States">{{ us_wi_city }}</option>
-                    {% endfor %}
-                </optgroup>
-                
-                <optgroup label="Canada">
-                    {% for ca_city in ca_cities %}
-                        <option value="{{ ca_city[0] }}, {{ ca_city[1] }}, Canada">{{ ca_city[0] }}, {{ ca_city[1] }}</option>
-                    {% endfor %}
-                </optgroup>
-
-            </select>
-        
-        {% endif %}
-
-        <button id="current-location" class="btn btn-primary btn-sm" type="button">Center on current location</button>
-    </div>
-    <br>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-md-push-6 round" id="rec-display">
-                <h3 style="text-align:center;">FETCH Recommendations for San Francisco</h3><hr>
-                <div>
-                    <p>Sorry, sentiment analysis scores are not yet available for San Francisco.</p>
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-md-6 col-md-pull-6">
-
-                <h3>Filter by Categories</h3>
-
-                    <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All
-                    </p>
-
-                <div id="someCategories">
-                {% for category in categories %}
-                    {% if category in selected_categories %}          
-                        <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
+                <!-- Display more categories -->
+                <div id="moreCategories">
+                  {% for category in categories %}
+                    {% if category not in selected_categories %}         
+                      <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
                     {% endif %}
-                {% endfor %}
+                  {% endfor %}
                 </div>
 
-                <a data-toggle="modal" href="#myModal">See more categories</a>
-
-                <div class="modal fade" id="myModal" role="dialog">
-                <div class="modal-dialog">
-
-                  <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">More Categories</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p><input class="selectAll" type="checkbox" name="all-categories" value="Check all" checked>Select All</p>
-                        <div id="moreCategories">
-                            {% for category in categories %}
-                                {% if category not in selected_categories %}         
-                                    <input class="category" type="checkbox" name="category" value="{{ category }}" checked>{{ category }}<br>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                  
-                </div>
-                </div>
-
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-    <br>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-md-6 left round" id="map">Map should render here</div>
-            <div class="col-xs-12 col-md-6 col-md-6 right round" id="review-display">
-                <br>Click on a restaurant to display its reviews.
-            </div>
-        </div>
+      </div>
     </div>
+
+  </div>
+  <br>
+
+  <!-- Bottom panel -->
+  <div class="container">
+      <div class="row">
+
+          <!-- Display Google Map -->
+          <div class="col-xs-12 col-md-6 col-md-6 left round" id="map">Map should render here</div>
+          
+          <!-- Display selected restaurant's reviews -->
+          <div class="col-xs-12 col-md-6 col-md-6 right round" id="review-display">
+              <br>Click on a restaurant to display its reviews.
+          </div>
+          
+      </div>
+  </div>
 
 {% endblock %}

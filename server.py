@@ -1,3 +1,9 @@
+# Order of imports:
+
+# standard library imports
+# related third party imports
+# local application/library specific imports
+
 import os
 
 from jinja2 import StrictUndefined
@@ -20,7 +26,8 @@ from model import (connect_to_db,
 
 from api import gmaps_key
 
-import operator, collections
+import operator
+import collections
 
 app = Flask(__name__)
 
@@ -44,34 +51,31 @@ def index():
 @app.route('/home')
 def go_to_homepage():
     """Homepage."""
+    
+    # Get city value from URL, if any
+    redirect_city = request.args.get("city", "San Francisco")
 
-    city = request.args.get("city")
+    # Get a set of tuples containing unique cities
+    locations = {
+        (r.city, states_dict[r.state_code], countries_dict[r.country_code])
+        for r in Restaurant.query.all()
+    }
 
-    us_az_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "AZ"}
-    us_ca_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "CA"}
-    us_il_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "IL"}
-    us_nc_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "NC"}
-    us_nv_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "NV"}
-    us_pa_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "PA"}
-    us_wi_cities = {(r.city) for r in Restaurant.query.all()
-                    if r.country_code == "US" and r.state_code == "WI"}
-    ca_cities = {(r.city, states_dict[r.state_code])
-                  for r in Restaurant.query.all() if r.country_code == "CA"}
+    # Initialize dictionary of states with empty lists
+    cities_by_state = {
+        (location[1], location[2]): [] for location in locations
+    }
 
-    us_az_cities = sorted(us_az_cities)
-    us_ca_cities = sorted(us_ca_cities)
-    us_il_cities = sorted(us_il_cities)
-    us_nc_cities = sorted(us_nc_cities)
-    us_nv_cities = sorted(us_nv_cities)
-    us_pa_cities = sorted(us_pa_cities)
-    us_wi_cities = sorted(us_wi_cities)
-    ca_cities = sorted(ca_cities)
+    # Insert tuples of city, country for corresponding state
+    for location in locations:
+        cities_by_state[(location[1], location[2])].append(location[0])
+    
+    # Sort values in dictionary of cities grouped by states
+    for v in cities_by_state.values():
+        v.sort()
+
+    # Sort dictionary by key
+    ordered_cities_by_state = collections.OrderedDict(sorted(cities_by_state.items()))
 
     # Instantiate category list using list comprehension
     categories = [category.category
@@ -82,19 +86,14 @@ def go_to_homepage():
         "Japanese", "Korean", "Mediterranean", "Mexican", "Pizza", "Southern",
         "Steakhouse", "Thai", "Vietnamese"]
 
-    return render_template("home.html",
-                           city=city,
-                           gmaps_key=gmaps_key,
-                           us_az_cities=us_az_cities,
-                           us_ca_cities=us_ca_cities,
-                           us_il_cities=us_il_cities,
-                           us_nc_cities=us_nc_cities,
-                           us_nv_cities=us_nv_cities,
-                           us_pa_cities=us_pa_cities,
-                           us_wi_cities=us_wi_cities,
-                           ca_cities=ca_cities,
-                           categories=categories,
-                           selected_categories=selected_categories)
+    return render_template(
+        "home.html",
+        redirect_city=redirect_city,
+        gmaps_key=gmaps_key,
+        locations=ordered_cities_by_state,
+        categories=categories,
+        selected_categories=selected_categories,
+    )
 
 
 @app.route('/home.json')
@@ -659,21 +658,28 @@ def logout():
 
 # import pdb; pdb.set_trace()
 
-states_dict = {"AZ": "Arizona",
-               "CA": "California",
-               "IL": "Illinois",
-               "NC": "North Carolina",
-               "NV": "Nevada",
-               "ON": "Ontario",
-               "PA": "Pennsylvania",
-               "QC": "Quebec",
-               "WI": "Wisconsin"}
+states_dict = {
+    "AZ": "Arizona",
+    "CA": "California",
+    "IL": "Illinois",
+    "NC": "North Carolina",
+    "NV": "Nevada",
+    "ON": "Ontario",
+    "PA": "Pennsylvania",
+    "QC": "Quebec",
+    "WI": "Wisconsin",
+}
+
+countries_dict = {
+    "US": "United States",
+    "CA": "Canada",
+}
 
 
 if __name__ == "__main__":
 
     # Set debug=True here to invoke the DebugToolbarExtension later
-    # app.debug = True
+    app.debug = True
 
     connect_to_db(app)
 

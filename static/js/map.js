@@ -236,8 +236,8 @@ function populateReviews(marker, id) {
     var finalHtml = '<h3 style="text-align:center;">FETCH Reviews for '+ name + '</h3><hr>';
     for (var i = 0; i < reviews.length; i++) {
       var currentHtml = '<div class="two-columns">' +
-                          '<div class="left">User ' + reviews[i].username + '</div>' +
-                          '<div class="right"><b>Rating: ' + reviews[i].rating + '</b><br>' +
+                          '<div class="col-xs-12 col-md-6 col-md-6">User ' + reviews[i].username + '</div>' +
+                          '<div class="col-xs-12 col-md-6 col-md-6"><b>Rating: ' + reviews[i].rating + '</b><br>' +
                           reviews[i]._body + '</div>' +
                         '</div><hr>';
       finalHtml = finalHtml.concat(currentHtml);
