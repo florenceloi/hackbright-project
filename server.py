@@ -5,29 +5,36 @@
 # local application/library specific imports
 
 import os
+import operator
+import collections
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from flask import (
+    Flask,
+    render_template,
+    redirect,
+    request,
+    flash,
+    session,
+    jsonify,
+)
 
 from sqlalchemy.sql import func
 
-from model import (connect_to_db,
-                   db,
-                   User,
-                   Restaurant,
-                   Category,
-                   Favorite,
-                   Review,
-                   SA_Score)
-
-# from normalize_scores import min_score, max_score, normalize_data
-
 from api import gmaps_key
 
-import operator
-import collections
+from model import (
+    connect_to_db,
+    db,
+    User,
+    Restaurant,
+    Category,
+    Favorite,
+    Review,
+    SA_Score
+)
 
 app = Flask(__name__)
 
@@ -63,7 +70,8 @@ def go_to_homepage():
 
     # Initialize dictionary of states with empty lists
     cities_by_state = {
-        (location[1], location[2]): [] for location in locations
+        (location[1], location[2]): []
+        for location in locations
     }
 
     # Insert tuples of city, country for corresponding state
@@ -81,6 +89,7 @@ def go_to_homepage():
     categories = [category.category
                   for category in Category.query.order_by('category').all()]
 
+    # Selected categories to display on homepage
     selected_categories = ["American (New)", "American (Traditional)", "Breakfast & Brunch",
         "Chinese", "Diners", "French", "German", "Greek", "Indian", "Italian",
         "Japanese", "Korean", "Mediterranean", "Mexican", "Pizza", "Southern",
@@ -123,43 +132,48 @@ def restaurant_info():
             # Get a list of restaurant's categories
             categories = [category.category for category in r.categories]
 
+            # For each unique category, make a list of restaurant objects
             for i in range(len(categories)):
-                restaurants_lst.append({"db_id": r.restaurant_id,
-                                        "_name": r.name,
-                                        "address": r.address,
-                                        "phone": r.phone,
-                                        "yelpUrl": r.yelp_url,
-                                        "yelpImgUrl": r.yelp_img_url,
-                                        "yelpRating": r.yelp_rating,
-                                        "yelpRatingImg": r.yelp_rating_img,
-                                        "reviewCount": r.yelp_review_count,
-                                        "lat": r.lat,
-                                        "lng": r.lng,
-                                        "favorite": fav,
-                                        "category": categories[i]})
+                restaurants_lst.append({
+                    "db_id": r.restaurant_id,
+                    "_name": r.name,
+                    "address": r.address,
+                    "phone": r.phone,
+                    "yelpUrl": r.yelp_url,
+                    "yelpImgUrl": r.yelp_img_url,
+                    "yelpRating": r.yelp_rating,
+                    "yelpRatingImg": r.yelp_rating_img,
+                    "reviewCount": r.yelp_review_count,
+                    "lat": r.lat,
+                    "lng": r.lng,
+                    "favorite": fav,
+                    "category": categories[i],
+                })
 
     else:
 
         # Get all restaurants in database
         restaurants = Restaurant.query.all()
 
-        # For each restaurant, get a list of its categories
+        # For each unique category, make a list of restaurant objects
         for r in restaurants:
             categories = [category.category for category in r.categories]
 
             for i in range(len(categories)):
-                restaurants_lst.append({"db_id": r.restaurant_id,
-                                        "_name": r.name,
-                                        "address": r.address,
-                                        "phone": r.phone,
-                                        "yelpUrl": r.yelp_url,
-                                        "yelpImgUrl": r.yelp_img_url,
-                                        "yelpRating": r.yelp_rating,
-                                        "yelpRatingImg": r.yelp_rating_img,
-                                        "reviewCount": r.yelp_review_count,
-                                        "lat": r.lat,
-                                        "lng": r.lng,
-                                        "category": categories[i]})
+                restaurants_lst.append({
+                    "db_id": r.restaurant_id,
+                    "_name": r.name,
+                    "address": r.address,
+                    "phone": r.phone,
+                    "yelpUrl": r.yelp_url,
+                    "yelpImgUrl": r.yelp_img_url,
+                    "yelpRating": r.yelp_rating,
+                    "yelpRatingImg": r.yelp_rating_img,
+                    "reviewCount": r.yelp_review_count,
+                    "lat": r.lat,
+                    "lng": r.lng,
+                    "category": categories[i],
+                    })
 
     restaurants_dict = {"restaurants": restaurants_lst}
 
@@ -216,13 +230,16 @@ def get_recs():
 def get_reviews():
     """Given a restaurant id, get reviews from database for AJAX response"""
 
+    # Given restaurant id, get Restaurant object
     restaurant_id = int(request.args.get("restaurant_id"))
     restaurant = Restaurant.query.filter(Restaurant.restaurant_id == restaurant_id).one()
 
+    # Get list of reviews objects for Restaurant object
     reviews = restaurant.reviews
 
     reviews_lst = []
 
+    # Insert reviews' content as dictionaries into list
     for r in reviews:
         reviews_lst.append({"username": r.user.username,
                             "rating": str(r.rating),
