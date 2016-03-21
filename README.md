@@ -36,6 +36,11 @@ The user can view all the restaurants he/she has favorited or reviewed on the pr
 
 #### Browse different dog-friendly restaurants by map
 
+###### Center on Current Location
+If the browser is allowed to access the user's location, the user can center the map on the user's current location.
+
+![gif of centering on current location](/static/img/geolocation.gif)
+
 ###### Filter by Category
 
 ![gif of category filtering](/static/img/filter-by-category.gif)
@@ -65,5 +70,11 @@ Detailed description coming soon.
 
 ![gif of analysis navigation](/static/img/analysis.gif)
 
+## Features in Version 2.0
+- [ ] Testing
+- [ ] Encrypt passwords in database OR implement OAuth 2.0
+- [ ] Make mobile app version
+- [ ] Incorporate Twilio API to text user when user is walking near a dog-friendly restaurant
+
 ## Author
-Florence Loi is a software engineer from San Francisco, CA.
+**Florence Loi** is a software engineer from San Francisco, CA.
