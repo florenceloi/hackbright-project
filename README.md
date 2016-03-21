@@ -1,7 +1,7 @@
 **Fetch**
 =======
  
-Want to grab a bite during an outing with your dog? Fetch helps you choose from 300+ dog-friendly restaurants in 30+ cities. **Natural language processing** extracts content from reviews in **Yelp's Challenge Database** regarding restaurants' dog-friendliness and food quality. Then, scores from 0 (negative) to 1 (positive) are computed based on the **sentiment** for each category. **Dynamic visualizations** allow users to seamlessly compare individual restaurants, cities, and states. Restaurants are displayed on an interactive map using the **Google Maps and Yelp APIs**.
+Want to grab a bite during an outing with your dog? Fetch helps you choose from 300+ dog-friendly restaurants in 30+ cities. **Natural language processing** extracts content from reviews in **Yelp's Challenge Database** regarding restaurants' dog-friendliness and food quality. Then, scores from 0 (negative) to 5 (positive) are computed based on the **sentiment** for each category. **Dynamic visualizations** allow users to seamlessly compare individual restaurants, cities, and states. Restaurants are displayed on an interactive map using the **Google Maps and Yelp APIs**.
 
 ## Table of Contents
 * [Technologies Used](#technologies)
@@ -24,7 +24,8 @@ Want to grab a bite during an outing with your dog? Fetch helps you choose from 
 
 Dependencies are listed in [requirements.txt](requirements.txt).
 
-## <a name="data"></a>Data Sources
+## <a name="data"></a>Data
+#### <a name="sources"></a>Sources
 The **[Yelp Challenge Dataset](https://www.yelp.com/dataset_challenge)** contains 2.2 million full-length reviews for 77,000 businesses. From this dataset, I was able to extract a list of 300+ dog-friendly restaurants from 30+ cities and their respective reviews (46,000+ total). Then, Yelp API calls were used to gather additional restaurant information.
 
 As a dog-lover who lives in San Francisco, I was disappointed to see that San Francisco was included in Yelp's Challenge Dataset so I hardcoded a list of its dog-friendly restaurants in [restaurants.txt](data/restaurants.txt). As with the Dataset restaurants, Yelp API calls were used to get more information about San Francisco restaurants.
@@ -83,7 +84,9 @@ The user can select a city (separated by state/province) in the dropdown menu. T
 ![gif of city selection](/static/img/select-city.gif)
 
 #### <a name="browse-by-sentiment"></a>Browse dog-friendly restaurants by sentiment analysis
-On the initial analysis page, the average scores for restaurants in certain US states and Canadian provinces are displayed with a histogram and pie chart using the D3.js library. The user can hover over the restaurant and see which percentage of the total score each category makes up. Alternatively, the user can hover over a pie slice (dog-friendliness or food quality) and see only that individual score in the histogram. If the user wants more information, he/she can click on a bar in the histogram to see similar information for the cities in that state/province. Then, the city bar can be clicked to see the scores for restaurants in that city.
+On the initial analysis page, the average scores for restaurants in certain US states and Canadian provinces are displayed with a histogram and pie chart using the D3.js library. The user can hover over the restaurant and see which percentage of the total score each category makes up. Alternatively, the user can hover over a pie slice (dog-friendliness or food quality) and see only that individual score in the histogram. 
+
+If the user wants more information, he/she can click on a bar in the histogram to see similar information for the cities in that state/province. Then, the city bar can be clicked to see the scores for restaurants in that city. Clicking on a restaurant will redirect the user to the homepage, where the Google map will automatically recenter on the appropriate restaurant.
 
 ![gif of analysis navigation](/static/img/analysis.gif)
 
