@@ -5,8 +5,15 @@ Want to grab a bite during an outing with your dog? Fetch helps you choose from 
 
 ## Table of Contents
 * [Technologies Used](#technologies)
-* [Data Sources](#data)
+* [Data](#data)
+    * [Sources](#sources)
+    * [Classification](#classification)
+    * [Sentiment Analysis](#sentiment-analysis)
 * [How to Use Fetch](#how-to-use)
+    * [Homepage](#homepage)
+    * [Register for an account](#register)
+    * [Browse dog-friendly restaurants by map](#browse-by-map)
+    * [Browse dog-friendly restaurants by sentiment analysis](#browse-by-sentiment)
 
 ## <a name="technologies"></a>Technologies Used
 * **Back-end**: [Python](https://www.python.org/), [Flask](http://flask.pocoo.org/)
@@ -20,13 +27,23 @@ Dependencies are listed in [requirements.txt](requirements.txt).
 ## <a name="data"></a>Data Sources
 The **[Yelp Challenge Dataset](https://www.yelp.com/dataset_challenge)** contains 2.2 million full-length reviews for 77,000 businesses. From this dataset, I was able to extract a list of 300+ dog-friendly restaurants from 30+ cities and their respective reviews (46,000+ total). Then, Yelp API calls were used to gather additional restaurant information.
 
-As a dog-lover who lives in San Francisco, I was disappointed to see that San Francisco was included in Yelp's Challenge Dataset so I hardcoded a list of its dog-friendly restaurants in [restaurants.txt](data/restaurants.txt). As above, Yelp API calls were used to get more restaurant information.
+As a dog-lover who lives in San Francisco, I was disappointed to see that San Francisco was included in Yelp's Challenge Dataset so I hardcoded a list of its dog-friendly restaurants in [restaurants.txt](data/restaurants.txt). As with the Dataset restaurants, Yelp API calls were used to get more information about San Francisco restaurants.
+
+#### <a name="classification"></a>Classification
+I generate two different scores for each restaurant to provide information regarding its dog-friendliness and food quality. Because reviews can describe different characteristics, each sentence in a restaurant's reviews is classified as dog-friendliness, food quality, or disregarded as neiher.
+
+This is done using the Naive Bayes Classifier in the Textblob wrapper for the Natural Language Toolkit (NLTK) library. Prior to classifying each sentence, the classifier was trained following the 80:20 rule of thumb split. Based on the test set, the classifier was 75% accurate.
+
+After each sentence is classified as describing dog-friendliness or food quality, a list of each category is generated per restaurant.
+
+#### <a name="sentiment-analysis"></a>Sentiment Analysis
+The Textblob wrapper includes a sentiment analyzer that was pre-trained on movie ratings. After two lists of sentences are generated per restaurant, sentiment analysis is performed on each sentence and then an average score for each category is computed for each restaurant.
 
 ## <a name="how-to-use"></a>How to Use Fetch
-#### Homepage
+#### <a name="homepage"></a>Homepage
 ![image of homepage](/static/img/homepage.png)
 
-#### Register for an account
+#### <a name="register"></a>Register for an account
 Upon succesful registration, the user is redirected to the homepage.
 
 ###### User profile
@@ -34,7 +51,7 @@ The user can view all the restaurants he/she has favorited or reviewed on the pr
 
 ![image of user profile](/static/img/user-profile.png)
 
-#### Browse different dog-friendly restaurants by map
+#### <a name="browse-by-map"></a>Browse dog-friendly restaurants by map
 
 ###### Center on Current Location
 If the browser is allowed to access the user's location, the user can center the map on the user's current location.
@@ -65,16 +82,18 @@ The user can select a city (separated by state/province) in the dropdown menu. T
 
 ![gif of city selection](/static/img/select-city.gif)
 
-#### Browse different dog-friendly restaurants by sentiment analysis
-Detailed description coming soon.
+#### <a name="browse-by-sentiment"></a>Browse dog-friendly restaurants by sentiment analysis
+On the initial analysis page, the average scores for restaurants in certain US states and Canadian provinces are displayed with a histogram and pie chart using the D3.js library. The user can hover over the restaurant and see which percentage of the total score each category makes up. Alternatively, the user can hover over a pie slice (dog-friendliness or food quality) and see only that individual score in the histogram. If the user wants more information, he/she can click on a bar in the histogram to see similar information for the cities in that state/province. Then, the city bar can be clicked to see the scores for restaurants in that city.
 
 ![gif of analysis navigation](/static/img/analysis.gif)
 
 ## Features in Version 2.0
 - [ ] Testing
+- [ ] Train Textblob's sentiment analyzer with restaurant reviews instead of movie reviews
+- [ ] Train/test enough data to add another category (i.e., service, ambiance, etc)
 - [ ] Encrypt passwords in database OR implement OAuth 2.0
 - [ ] Make mobile app version
 - [ ] Incorporate Twilio API to text user when user is walking near a dog-friendly restaurant
 
 ## Author
-**Florence Loi** is a software engineer from San Francisco, CA.
+**Florence Loi** is a software engineer in San Francisco, CA.  She lives with her partner along with their dog Zorro, and two cats.
