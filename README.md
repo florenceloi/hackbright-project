@@ -99,4 +99,6 @@ If the user wants more information, he/she can click on a bar in the histogram t
 - [ ] Incorporate Twilio API to text user when user is walking near a dog-friendly restaurant
 
 ## Author
-**Florence Loi** is a software engineer in San Francisco, CA.  She lives with her partner along with their dog Zorro, and two cats.
+**Florence Loi** [LinkedIn](https://www.linkedin.com/in/florenceloi) is a software engineer in San Francisco, CA.  She lives with her partner along with their dog Zorro (her inspiration for this project!, see below), and two cats. If you have any questions about Fetch, feel free to reach out: <florence.c.loi@gmail.com>
+
+![gif of Zorro at Land's End](/static/img/zorro-at-lands-end.gif)
