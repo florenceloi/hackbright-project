@@ -99,4 +99,4 @@ If the user wants more information, he/she can click on a bar in the histogram t
 - [ ] Incorporate Twilio API to text user when user is walking near a dog-friendly restaurant
 
 ## Author
-**Florence Loi** is a software engineer in San Francisco, CA.  She lives with her partner along with their dog Zorro, and two cats.
+**Florence Loi** ([LinkedIn](https://www.linkedin.com/in/florenceloi)) is a software engineer in San Francisco, CA. She lives with her partner along with their dog [Zorro](/static/img/zorro-at-lands-end.gif) (her inspiration for this project!), and two cats.
