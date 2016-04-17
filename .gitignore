@@ -7,3 +7,4 @@ env/
 .*/
 classifier.py
 *.mov
+.coverage
