@@ -9,6 +9,7 @@ Want to grab a bite during an outing with your dog? Fetch helps you choose from 
     * [Sources](#sources)
     * [Classification](#classification)
     * [Sentiment Analysis](#sentiment-analysis)
+    * [Data Model](#data-model)
 * [How to Use Fetch](#how-to-use)
     * [Homepage](#homepage)
     * [Register for an account](#register)
@@ -39,6 +40,9 @@ After each sentence is classified as describing dog-friendliness or food quality
 
 #### <a name="sentiment-analysis"></a>Sentiment Analysis
 The Textblob wrapper includes a sentiment analyzer that was pre-trained on movie ratings. After two lists of sentences are generated per restaurant, sentiment analysis is performed on each sentence and then an average score for each category is computed for each restaurant.
+
+#### <a name="data-model"></a>Data Model
+![image of data model](/static/img/data-model.png)
 
 ## <a name="how-to-use"></a>How to Use Fetch
 #### <a name="homepage"></a>Homepage
@@ -91,7 +95,7 @@ If the user wants more information, he/she can click on a bar in the histogram t
 ![gif of analysis navigation](/static/img/analysis.gif)
 
 ## Features in Version 2.0
-- [ ] Testing
+- [ ] Write more tests
 - [ ] Train Textblob's sentiment analyzer with restaurant reviews instead of movie reviews
 - [ ] Train/test enough data to add another category (i.e., service, ambiance, etc)
 - [ ] Encrypt passwords in database OR implement OAuth 2.0
