@@ -60,9 +60,9 @@ function dashboard(id, fData){
             .attr("width", x.rangeBand())
             .attr("height", function(d) { return hGDim.h - y(d[1]); })
             .attr('fill',barColor) // defined above
-            .on("mouseover",mouseover) // mouseover is defined below.
-            .on("mouseout",mouseout) // mouseout is defined below.
-            .on("click",click); // click is defined below.
+            .on("mouseover",mouseover) // defined below.
+            .on("mouseout",mouseout) // defined below.
+            .on("click",click); // defined below.
             
         // Create the score labels above the rectangles.
         bars.append("text").text(function(d){ return d3.format(".3f")(d[1])})
@@ -73,8 +73,8 @@ function dashboard(id, fData){
             .attr("font-size", "13px")
             .attr("text-anchor", "middle");
 
-        function mouseover(d){  // utility function to be called on mouseover.
-            // filter for selected state.
+        // On mouseover of specific state, update pie-chart and legend with state info
+        function mouseover(d){
             // Filter by state and get state object
             var st = fData.filter(function(s){ return s.State == d[0];})[0],
                 // From state object, get type and value
@@ -85,18 +85,19 @@ function dashboard(id, fData){
             leg.update(nD);
         }
         
-        function mouseout(d){    // utility function to be called on mouseout.
-            // reset pie-chart and legend.    
+        // On mouseout, reset pie-chart and legend
+        function mouseout(d){
             pC.update(tF);
             leg.update(tF);
         }
         
+        // Allow user to dive deeper into specific state
         function click() {
             var location = this.id.split(",")[0];
             window.location = '/analysis/state?location=' + location;
         }
 
-        // create function to update the bars. This will be used by pie-chart.
+        // Update histogram when hovering over pie chart
         hG.update = function(nD, color){
             // Update the domain of the y-axis map to reflect change in scores.
             y.domain([0, d3.max(nD, function(d) { return d[1]; })]);
@@ -232,7 +233,12 @@ function dashboard(id, fData){
     // calculate total score by state for all segment.
     var sF = fData.map(function(d){return [d.State,d.total];});
 
-    var hG = histoGram(sF), // create the histogram.
-        pC = pieChart(tF), // create the pie-chart.
-        leg= handlelegend(tF);  // create the legend.
+    var hG = histoGram(sF), // display histogram.
+        pC = pieChart(tF), // display pie-chart.
+        leg= handlelegend(tF);  // display legend.
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// Learning Notes:
+
+// Using SVG instead of Canvas because SVG already selectable.
