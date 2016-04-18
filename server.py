@@ -509,19 +509,7 @@ def process_review(restaurant_id):
 def display_overall_scores():
     """Display overall sentiment analysis scores."""
 
-    # Instantiate city set using set comprehension
-    locations = {(r.state_code, states_dict[r.state_code], r.country_code)
-                  for r in Restaurant.query.all() if r.state_code != 'CA'}
-
-    us_locations = {l[0]: l[1] for l in locations if l[2] == "US"}
-    ca_locations = {l[0]: l[1] for l in locations if l[2] == "CA"}
-
-    us_locations = sorted(us_locations.items(), key=operator.itemgetter(1))
-    ca_locations = sorted(ca_locations.items(), key=operator.itemgetter(1))
-
-    return render_template("sa-score-states.html",
-                           us_locations=us_locations,
-                           ca_locations=ca_locations)
+    return render_template("sa-score-states.html")
 
 
 @app.route('/analysis.json')
