@@ -58,7 +58,7 @@ def index():
 @app.route('/home')
 def go_to_homepage():
     """Homepage."""
-    
+
     # Get city value from URL, if any
     redirect_city = request.args.get("city", "San Francisco")
 
@@ -77,7 +77,7 @@ def go_to_homepage():
     # Insert tuples of city, country for corresponding state
     for location in locations:
         cities_by_state[(location[1], location[2])].append(location[0])
-    
+
     # Sort values in dictionary of cities grouped by states
     for v in cities_by_state.values():
         v.sort()

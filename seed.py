@@ -36,7 +36,6 @@ def import_restaurants_from_hardcode_list():
         elapsed_time = (time() * 1000) - start_time
         print "API request %d: %d ms" % (i, elapsed_time)
 
-
         # Return single business in response dictionary that matches the
         # name and address from restaurants.txt
         yelp_object = validate_single_business(yelp_dict, name, address)
@@ -83,7 +82,7 @@ def import_restaurants_from_hardcode_list():
 
 
 def import_restaurants_from_dataset():
-    """Import dog-friendly restaurant from Yelp Challenge Dataset."""
+    """Import dog-friendly restaurants from Yelp Challenge Dataset."""
 
     ds_yelp_object_list = []
 
@@ -146,12 +145,12 @@ def import_restaurants_from_dataset():
                             db.session.add(restaurant)
                             db.session.commit()
 
-                    except (sqlalchemy.exc.IntegrityError,
-                            sqlalchemy.exc.DataError,
-                            IndexError):
+                    except (sqlalchemy.exc.IntegrityError,  # if not unique
+                            sqlalchemy.exc.DataError,   # if null values
+                            IndexError):    # if weird formatting with address/phone
                         db.session.rollback()
 
-        except KeyError:
+        except KeyError:    # if no "Dogs Allowed" attribute
             continue
 
     return ds_yelp_object_list
@@ -264,8 +263,6 @@ def populate_sa_scores_table():
 
             start_time = time() * 1000
 
-            # import pdb; pdb.set_trace()
-
             sentences = sent_tokenize(review.body) # This is a list of sentences ['hi', 'my food is good']
             for sentence in sentences:
                 if sentence != "" and type(sentence) == unicode:
@@ -338,6 +335,7 @@ def extend_sa_scores_table():
 
     return None
 
+
 def normalize_sa_scores():
     """Normalize sa scores and add new scores as new fields in new columns."""
 
@@ -403,8 +401,6 @@ def total_norm_scores():
 
 ###############################################################################
 # Helper functions
-
-# import pdb; pdb.set_trace()
 
 def validate_single_business(yelp_dict, name, address):
     """Takes in dictionary of corresponding business(es) for phone number,
